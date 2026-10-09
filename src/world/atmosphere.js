@@ -1,5 +1,5 @@
 import { Color, Vector3, Quaternion, FogExp2 } from 'three/webgpu'
-import { CLOUDS, DAY, PLANET, SKY_KEYS } from '../config.js'
+import { CLOUDS, DAY, LIGHTNING, PLANET, SKY_KEYS } from '../config.js'
 import { uniforms } from '../uniforms.js'
 
 const COLOR_PROPS = ['zenith', 'horizon', 'sunColor', 'hemiSky', 'hemiGround', 'deep', 'shallow', 'foam']
@@ -20,6 +20,7 @@ const noon = new Vector3(...DAY.noon)
 const moonLightColor = new Color(DAY.moonColor)
 const fairCloud = new Color(CLOUDS.fairColor)
 const stormCloud = new Color(CLOUDS.stormColor)
+const flashColor = new Color(LIGHTNING.color)
 
 // Overcast: pull a colour towards a blue-grey of the same brightness and darken it.
 const grey = new Color()
@@ -104,8 +105,8 @@ export function createAtmosphere({ scene, sun, moon, fill }) {
     // `localUp`: unit vector at the boat. `cameraHeight`: distance of the camera
     // from the planet centre. `spaceAmount`: 0 in the chase camera, 1 in planet
     // view (the sky becomes a star field and the haze is removed). `weather`: the
-    // levels from world/weather.js ({ storm, cover, rain }).
-    update(timeOfDay, localUp, cameraHeight, spaceAmount, weather) {
+    // levels from world/weather.js ({ storm, cover, rain }). `flash`: lightning brightness 0..1.
+    update(timeOfDay, localUp, cameraHeight, spaceAmount, weather, flash = 0) {
       if (!started) {
         lastUp.copy(localUp)
         started = true
@@ -135,6 +136,19 @@ export function createAtmosphere({ scene, sun, moon, fill }) {
       state.hemiIntensity *= 1 + 0.1 * cover
       state.stars *= 1 - cover
       uniforms.cloudColor.value.lerpColors(fairCloud, stormCloud, gloom)
+
+      // Lightning: for a moment the sky, haze and clouds go towards a blue-white, the water gets a
+      // little lighter, and extra light falls on everything from above. Not seen from space.
+      const lit = flash * (1 - spaceAmount)
+      if (lit > 0) {
+        state.zenith.lerp(flashColor, lit * LIGHTNING.sky * 0.8)
+        state.horizon.lerp(flashColor, lit * LIGHTNING.sky)
+        state.hemiSky.lerp(flashColor, lit)
+        state.deep.lerp(flashColor, lit * 0.12)
+        state.shallow.lerp(flashColor, lit * 0.12)
+        state.hemiIntensity += lit * LIGHTNING.light
+        uniforms.cloudColor.value.lerp(flashColor, lit)
+      }
 
       // In planet view the local mood no longer applies: the planet is lit by the
       // real sun (day side, night side and a terminator) and uses the day palette.

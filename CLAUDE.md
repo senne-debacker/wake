@@ -38,11 +38,12 @@ src/
     lightCone.js       additive TSL material for the bow lamp's light cone
     skyMaterial.js     TSL sky dome: gradient, sun/moon discs, procedural stars
     rainMaterial.js    instanced rain: positions computed in the vertex shader from the instance index and the clock
-    wake.js            wakeFoam(dir): foam rings from the boat's trail
+    wake.js            wakeFoam(dir): propeller wash + bow splash foam from the boat's trail
+    wakeWaves.js       the fourth Shadertoy port (wake shader): wakeWaves(dir) = sum of dispersive waves emitted along the trail, per pixel
     shore.js           shoreFoam(dir): foam bands around islands and rocks
     boids.js           the Shadertoy "Schooling" (Buf B) port: boids simulation as a compute shader
     fishShadows.js     fishShadow(): the fish as soft dark ellipses, painted into the water's colour (no meshes)
-    raindrops.js       rainRipples(dir): the Shadertoy ldjyWw port, ripples from rain as a bump on the water (per pixel)
+    raindrops.js       rainHeight(dir) (the Shadertoy ldjyWw port) + surfaceBump(height): ripples as a bump on the water (per pixel); the wake waves share surfaceBump
 ```
 
 ## Key design decisions
@@ -157,7 +158,7 @@ Legend: [x] done, [~] in progress, [ ] todo
 - Known: islands read as tall pillars from planet view (heights 0.5-1.2 on a radius-5 planet); tweak `height` in `WORLD.landmarks` / the scatter in `layout.js` if you want them flatter
 
 ### Step 9 — Polish + delivery  *(done)*
-- [x] Post-processing (`src/post.js`): `RenderPipeline` with a multisampled scene pass, `bloom` (HDR threshold 1.0, so only the sun, lamps and glints glow) and a TSL vignette, then tone mapping. `P` toggles it; 60 fps with it on
+- [x] Post-processing (`src/post.js`): `RenderPipeline` with a multisampled scene pass, `bloom` (HDR threshold 1.0, so only the sun, lamps and glints glow) and a TSL vignette, then tone mapping. always on (the P toggle was removed in step 22); 60 fps
 - [x] HUD: compass (the dial turns, the bow marker stays up; heading from the sphere frame, north = towards +Y), clock, weather / speed / anchor / lamp / camera status
 - [x] Loading overlay (removed after the first frame) and error handling (no WebGPU, or any startup failure, shows a message instead of a blank page)
 - [x] Favicon, page description, `vite.config.js` (`base: './'` so `dist/` works from any folder; chunk warning limit raised, three.js is ~1 MB)
@@ -246,6 +247,27 @@ User asked for: start/pause screen, better driving interface, heavier boat, horn
 - TODO for the user: the Shadertoy URL of Schooling in the README ("Third-party code"); it was not in the pasted code
 - Not done / ideas: fish do not react to the lamp; at night the shadows are almost invisible (they are dark on dark water); the shader loops over every fish per water pixel, which is fine for 120 but would need culling (e.g. only fish near the camera) for thousands
 
+### Step 21 — Realistic wake (fourth Shadertoy port)  *(done)*
+- [x] User pasted a Shadertoy wake shader (no title/author/URL in the paste) and asked for a more realistic wake. `tsl/wakeWaves.js` is a statement-by-statement port with the GLSL in comments: for every past boat position, a cosine pulse `cos(pi - sqrt(g k) t) / l * exp(-.5 ((l - l0)/W)^2)` with `k = pi / l` (deep-water dispersion), summed; the V (Kelvin wake) emerges from the interference. Mapping: the past path = the 64-entry stern trail (`uniforms.wakeTrail`), `t` = the entry's age, `l` = distance over the sea (chord x radius, floor `minLength`), step `dx` = speed x interval (the trail's `w` = speed / top speed, so a still boat emits nothing). CHANGED: oldest entries fade out (`fadeAge`), the waves fade out right on the path (`pathFade`: the sampling is coarser than the waves there and shows as a lattice; the wash foam covers it), world units and `g`, `l0`, `W` in `WAKE.waves` (the original's metres/screen scales are meaningless here)
+- [x] Parameters were tuned offline first (a Node script summing the same formula on a flat plane, written as PNG): `gravity` 12, `peak` 0.65, `width` 0.2 give clean arms and a bow wave; peak 0.45 / width 0.25 filled the track with moire; one sample per 0.1 s interval is enough off the path (a second sample, `substeps` 2, did not change the arms)
+- [x] Use: the height (signed, ~0.05 at most) is added to the raindrop height and bump-mapped (`raindrops.js` now exports `rainHeight` + `surfaceBump`; `rainRipples` still exists as their composition); crests lighten and troughs darken the colour (`shade`), the highest crests + noise break into white lace (`foam`, `foamStrength`). The old foam *arms* (expanding rings) are removed from `tsl/wake.js`: the rings piled up into a huge white blob after a few seconds of sailing; wash and bow stay. The rain lightening (`bump.w`) now comes from the rain alone
+- [x] Cost: per-pixel loop over 63 trail segments, so it is culled hard: nothing is computed beyond `WAKE.waves.visible` (5-10 units from the camera: in planet view the waves are off), only segments with strength > 0.01 and closer than `peak + 2.7 width + 0.15` to the pixel are summed. Measured in headless Chrome: 58-61 fps chase view calm and storm, 60 in planet view; with the fade at 9-22 (waves in planet view) it dropped to 35-40 fps, hence the short range
+- Checked: straight run and turn (curved wake with crest lace), calm, storm, night; `npm run check` 39 passing, build clean, forbidden-API grep clean
+- Test gotchas: `input.weather` accepts only `calm` / `breezy` / `storm` (anything else throws inside the weather update and freezes the start swing in state `starting`); teleport the boat before pressing "Set sail", never after
+- TODO for the user: title, author and URL of the wake shader in the README ("Third-party code")
+- Not done / ideas: the chase camera mostly shows the wake only at the bottom edge; no waves in planet view (cost); no check at 4K
+
+### Step 22 — Quick fixes: look round, bloom always on, smaller fish  *(done)*
+- [x] Chase view: drag with the left mouse button to look round the boat (`chaseCamera.look(dx, dy)`: yaw round the boat, unlimited; pitch changes the height, limited by `CAMERA.minPitch/maxPitch`; `CAMERA.dragSpeed`); relative to the boat's heading; it eases back slowly (`lookReturnRate`) 3 s after the last drag (`lookReturnDelay`) or as soon as the throttle is forward, and double-click resets at once (`resetLook`). Only drags that start on the canvas count (the HUD buttons are above it); not during the title/swing, not in planet view (OrbitControls does that). Verified with CDP mouse events: camera swung to the boat's side
+- [x] The `P` toggle is gone: bloom + vignette are always on (`post.js` has no fallback render; key, HUD strip, pause-screen line, `input.post`, README and the unused sparkle icon removed)
+- [x] Fish smaller: `FISH.size` 0.18 -> 0.14
+
+### Step 23 — Lightning  *(done)*
+- [x] `world/lightning.js` (`LIGHTNING` in `config.js`): a countdown that only runs while `rain > 0.6` and `storm > 0.6` and the game is playing (first strike 2-6 s after the storm builds, then every 5-14 s). A strike = 2-3 flickers (fast rise 0.02 s, fade time constant 0.1 s, random brightness); `lightning.flash` 0..1. `atmosphere.update(..., flash)` pulls zenith / horizon / hemisphere sky colour and the clouds towards `#dbe6ff`, lightens the water a little and adds `LIGHTNING.light` to the hemisphere light (the sun is below the horizon at night, so only light from above reaches the boat); none in planet view. `audio.thunder(delay, strength)`: crack (when close) + two low-pass noise rumbles + a 55 Hz tone, started `delay` 0.4-3.2 s after the flash
+- Checked: flash looked at by day and night with `__game.lightning.hold = 0.9` (dev override that keeps the flash up for a screenshot); the first values (sky 0.75, light 3.2) whited out a day storm, now 0.5 / 2.2; 5 natural strikes in 40 s of storm; no console errors. Thunder was not listened to
+- [x] `public/audio/thunder.mp3` (user's file): decoded in `audio.js loadThunder()` at start, looped through a low-pass into the `env` bus (so pause / planet view treat it like the other layers), gain `THUNDER_VOLUME` 0.35 x smoothstep(0.45, 0.95, min(rain, storm)), eased over 1.2 s; the synthesised thunder is 40% quieter when it is loaded
+- Not done: no visible bolt (just the flash)
+
 ## Final requirements check (re-run before handing in)
 
 ```
@@ -264,6 +286,9 @@ npm run check                                                                   
 
 ## Progress log
 
+- 2026-10-09: Step 23: lightning and thunder in storms.
+- 2026-10-09: Step 22: drag to look round the boat in chase view, bloom always on (P removed), fish smaller.
+- 2026-10-09: Step 21: realistic boat wake from a fourth Shadertoy shader (`tsl/wakeWaves.js`), old foam arms removed (wash and bow stay), `raindrops.js` split into `rainHeight` + `surfaceBump`.
 - 2026-10-09: Boat lantern halved (spot 40 -> 20, glass 0.4, windows 0.45, cone 0.08, pool 0.12). Before: about 25% dimmer (spot 70 -> 52, glass 1.6 -> 1.1, windows 1.2, cone 0.3 -> 0.22, pool 0.42 -> 0.32; the lighthouse is untouched) and a real loading screen (`loader.js`).
 - 2026-10-09: Boat lowered again (`rideHeight` 0.05: brief spray in a full storm, 0.6% of the time, up to 5 cm; dry in calmer weather). Before that 0.08 and the ocean made smaller (`fraction` 0.22, `distance` 2.2: 7 islands, 9 rocks, 6 buoys left). Step 14: boat lifted 0.12 so storms no longer swamp it, the bow lamp's pool of light follows the curved sea (`tsl/lampPool.js`), and a 30% ocean without islands behind the start (`WORLD.ocean`). 26 checks.
 - 2026-10-09: Quick fixes: sound-effect levels retuned and sea/wash sound off (`USE_WATER_SOUND`), top speed 5 knots (`BOAT.maxSpeed` 1.0), planet view follows the boat (`cameraRig.js`), rain dimmed at night / under cloud (`RAIN.nightLight`). Not checked visually: planet-view follow and the night rain.

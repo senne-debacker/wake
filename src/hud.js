@@ -116,7 +116,6 @@ export function createHud() {
         $('sound-button-label').textContent = v ? 'Sound off' : 'Sound on'
         $('sound-button').classList.toggle('off', v)
       })
-      change('post', s.post, (v) => $('strip-effects').classList.toggle('off', !v))
     },
   }
 }

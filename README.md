@@ -60,7 +60,9 @@ A full day lasts 3.5 minutes, with this schedule: morning twilight 04:00-06:00, 
 
 The weather cycles automatically between clear, overcast, storm and clearing (or force it with `1`-`3`). Three numbers (storm, cloud cover, rain) drive the wave height and foam in the water shader, the sky and light colours, the low-poly clouds and the rain. The rain is instanced geometry whose positions are computed entirely in the vertex shader ([src/tsl/rainMaterial.js](src/tsl/rainMaterial.js)): every streak falls towards the planet centre.
 
-The boat leaves a wake. Its last 64 stern positions are sent to the water shader as a uniform array. The shader draws an expanding foam ring around each one (together they form the V of the wake), a churned strip of propeller wash behind the stern, and a splash at the bow ([src/tsl/wake.js](src/tsl/wake.js)). So that it stands out from the wave foam, the smooth wake value is broken up with the ported simplex noise at pixel resolution and cut off sharply ([src/tsl/waterMaterial.js](src/tsl/waterMaterial.js)): lacy, bright white foam with a lighter, aerated halo, instead of flat coloured triangles. The faster you sail, the stronger the foam, and an anchored boat leaves none.
+In a full storm (heavy rain and high seas) there is **lightning** ([src/world/lightning.js](src/world/lightning.js)): every 5 to 14 seconds a strike makes two or three quick flickers that turn the sky, haze and clouds blue-white and light the boat and the sea from above, followed a moment later by thunder (the delay is the distance), synthesised in [src/audio/audio.js](src/audio/audio.js). If there is a `public/audio/thunder.mp3`, it also plays in a quiet loop for as long as the storm lasts (fading in and out with it; `THUNDER_VOLUME` in `audio.js`). Tuning: `LIGHTNING` in [src/config.js](src/config.js).
+
+The boat leaves a wake, and it is the **fourth Shadertoy shader** in the project, ported to TSL: a physically motivated wake ([src/tsl/wakeWaves.js](src/tsl/wakeWaves.js), see [Third-party code](#third-party-code); the GLSL is kept as comments). It does not draw a V: it adds up the waves the boat emitted at every point of its past path, each travelling by the deep-water dispersion relation (long waves run faster than short ones), and the V-shaped Kelvin wake with its bow waves appears by itself. Here the "past path" is the boat's last 64 stern positions (every 0.1 s), sent to the water shader as a uniform array; the sum is computed per pixel, bends with the boat when you turn and is as strong as you are fast (an anchored boat leaves none). The result is used three ways: it tilts the lighting normal (screen-space bump mapping, shared with the raindrops, so the waves catch the sun, moon and lamp), lightens crests and darkens troughs, and the highest crests near the boat break into white lace. On top of that the older foam layers remain: a churned strip of propeller wash behind the stern and a splash at the bow ([src/tsl/wake.js](src/tsl/wake.js)), broken up with the ported simplex noise at pixel resolution and cut off sharply ([src/tsl/waterMaterial.js](src/tsl/waterMaterial.js)). Tune it in `WAKE.waves` in [src/config.js](src/config.js) (`gravity`, `peak`, `width`, `gain`).
 
 ## The world
 
@@ -121,7 +123,7 @@ Start-up shows a loading screen with a progress bar and the current stage. The g
 
 ## Post-processing
 
-The scene is rendered once into a texture, then a TSL node graph adds bloom (only really bright HDR pixels glow: the sun, the lamps, the lantern) and a soft vignette, followed by tone mapping ([src/post.js](src/post.js)). Press `P` to compare with the plain render.
+The scene is rendered once into a texture, then a TSL node graph adds bloom (only really bright HDR pixels glow: the sun, the lamps, the lantern) and a soft vignette, followed by tone mapping ([src/post.js](src/post.js)).
 
 ## Assignment requirements
 
@@ -148,10 +150,10 @@ The start screen shows only the five essentials; `Esc` pauses (so does switching
 | `L` | Bow lamp on / off (spotlight on the water, glowing windows, light cone) |
 | Hold `T` | Fast-forward the day/night cycle |
 | `C` | Switch between the chase camera and a free orbit around the planet |
-| Mouse wheel | Zoom the chase camera (drag to orbit in planet view) |
+| Mouse wheel | Zoom the chase camera |
+| Drag (left button) | Look round the boat in chase view (it swings back behind the boat after 3 s, or as soon as you drive forward; double-click puts it back at once); orbit in planet view |
 | `1` / `2` / `3` | Force calm / breezy / storm weather |
 | `4` | Automatic weather again (clear, overcast, storm, clearing, repeat) |
-| `P` | Bloom and vignette on / off |
 | `M` | Mute / unmute all sound (works on every screen; the start and pause screens also have a Sound button, and the setting is remembered) |
 | `Esc` | Pause / resume |
 
@@ -194,6 +196,13 @@ tests/             physics checks (npm run check)
 ```
 
 ## Third-party code
+
+### Boat wake waves (fourth Shadertoy shader)
+
+[src/tsl/wakeWaves.js](src/tsl/wakeWaves.js) is a port of a Shadertoy wake shader that sums cosine wave pulses emitted along the boat's past path, with deep-water dispersion (Wikipedia's "Dispersion (water waves)" is linked in its comments).
+
+<!-- TODO (fill in from the Shadertoy page): title, author and URL of the wake shader; the pasted code had none. -->
+Original: TITLE by AUTHOR, https://www.shadertoy.com/view/XXXXXX. The header of the pasted code states no licence, so Shadertoy's default licence (CC BY-NC-SA 3.0) is assumed; this is a non-commercial student project and the port is credited here and in the file header.
 
 ### Fish schooling (third Shadertoy shader)
 

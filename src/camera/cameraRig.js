@@ -65,6 +65,21 @@ export function createCameraRig(camera, domElement, state) {
     if (!orbit && opening.phase === 'done') chase.zoomBy(Math.exp(event.deltaY * 0.001)) // not during the title and the swing round
   }, { passive: true })
 
+  // Drag with the mouse to look round the boat; double-click puts the camera back behind it.
+  let dragging = false
+  addEventListener('pointerdown', (event) => {
+    if (event.target !== domElement || event.button !== 0 || orbit || opening.phase !== 'done') return
+    dragging = true
+    domElement.setPointerCapture(event.pointerId)
+  })
+  addEventListener('pointermove', (event) => {
+    if (dragging) chase.look(-event.movementX * CAMERA.dragSpeed, event.movementY * CAMERA.dragSpeed)
+  })
+  for (const type of ['pointerup', 'pointercancel']) addEventListener(type, () => (dragging = false))
+  addEventListener('dblclick', (event) => {
+    if (event.target === domElement) chase.resetLook()
+  })
+
   function enterOrbit() {
     camera.up.set(0, 1, 0)
     camera.position.copy(state.dir).multiplyScalar(PLANET.radius * 2.8).add({ x: 0.3, y: 0.8, z: 0.3 })
@@ -107,7 +122,7 @@ export function createCameraRig(camera, domElement, state) {
       opening.onDone = onDone
     },
 
-    update(delta, planetView, time = 0) {
+    update(delta, planetView, time = 0, driving = false) {
       if (opening.phase !== 'done') {
         if (opening.phase === 'panning') opening.t += delta / opening.seconds
         const finished = opening.t >= 1
@@ -133,7 +148,7 @@ export function createCameraRig(camera, domElement, state) {
         followBoat()
         orbit.update()
         truePos.copy(camera.position)
-      } else chase.update(state, delta)
+      } else chase.update(state, delta, dragging, driving)
 
       if (glide.active) applyGlide(delta)
       glide.restore = glide.active && orbit !== null

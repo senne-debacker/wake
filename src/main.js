@@ -14,6 +14,7 @@ import { createRain } from './scene/rain.js'
 import { createClock } from './world/clock.js'
 import { createAtmosphere } from './world/atmosphere.js'
 import { createWeather } from './world/weather.js'
+import { createLightning } from './world/lightning.js'
 import { createWake } from './world/wake.js'
 import { createLayout } from './world/layout.js'
 import { createWorld } from './scene/world.js'
@@ -72,6 +73,7 @@ async function main() {
   const weather = createWeather()
   const wake = createWake()
   const atmosphere = createAtmosphere({ scene, sun, moon, fill })
+  const lightning = createLightning({ onStrike: (delay, brightness) => audio.thunder(delay, brightness) })
   let spaceAmount = 0 // 0 = chase camera (sky), 1 = planet view (space); eases between them
 
   const boatState = createBoatState(layout.start.dir, layout.start.heading)
@@ -150,7 +152,7 @@ async function main() {
   }
   setState('menu')
 
-  if (import.meta.env.DEV) window.__game = { boatState, boatPose, input: interaction.input, uniforms, lights: { sun, moon, fill }, clock, atmosphere, weather, layout, world, scene, camera, audio, fish, getState: () => state } // for debugging in the console
+  if (import.meta.env.DEV) window.__game = { boatState, boatPose, input: interaction.input, uniforms, lights: { sun, moon, fill }, clock, atmosphere, weather, lightning, layout, world, scene, camera, audio, fish, getState: () => state } // for debugging in the console
 
   // `?fish` checks the fish simulation on the GPU (see src/debug/fishTest.js).
   if (new URLSearchParams(location.search).has('fish')) {
@@ -208,11 +210,12 @@ async function main() {
     uniforms.lampDir.value.copy(boatState.dir)
     uniforms.lampForward.value.copy(boatState.heading).addScaledVector(boatState.dir, -boatState.heading.dot(boatState.dir)).normalize()
     uniforms.lampLevel.value = boat.lampLevel
-    rig.update(delta, input.planetView, elapsed)
+    rig.update(delta, input.planetView, elapsed, input.throttle > 0)
 
     clock.update(sim, input.fastForward)
     spaceAmount += ((input.planetView ? 1 : 0) - spaceAmount) * (1 - Math.exp(-delta * 4))
-    atmosphere.update(clock.timeOfDay, boatState.dir, camera.position.length(), spaceAmount, weather.levels) // lights, fog, sky and water colours
+    lightning.update(delta, weather.levels, playing)
+    atmosphere.update(clock.timeOfDay, boatState.dir, camera.position.length(), spaceAmount, weather.levels, lightning.flash) // lights, fog, sky and water colours
     sky.update(camera)
     clouds.update(delta, weather.levels.cover, spaceAmount)
 
@@ -258,11 +261,9 @@ async function main() {
       storm: weather.levels.storm,
       camera: rig.mode,
       muted: audio.muted,
-      post: input.post,
     })
 
-    post.enabled = input.post
-    post.render() // scene + bloom + vignette (or a plain render while effects are off)
+    post.render() // scene + bloom + vignette
 
     if (warmupFrames >= 0 && ++warmupFrames === 30) {
       warmupFrames = -1

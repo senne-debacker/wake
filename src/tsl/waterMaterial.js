@@ -8,7 +8,8 @@ import { wakeFoam } from './wake.js'
 import { shoreFoam } from './shore.js'
 import { simplex3d } from './simplexNoise.js'
 import { lampPool } from './lampPool.js'
-import { rainRipples } from './raindrops.js'
+import { rainHeight, surfaceBump } from './raindrops.js'
+import { wakeWaves } from './wakeWaves.js'
 import { fishShadow } from './fishShadows.js'
 
 export function createWaterMaterial(fish) {
@@ -64,9 +65,20 @@ export function createWaterMaterial(fish) {
 
   // Raindrops: the ported Shadertoy ripple field (tsl/raindrops.js) tilts the lighting normal, so
   // the ripples catch the sun, moon and lamp, and lightens the water colour on them a little.
-  const rain = rainRipples(fragmentDir)
-  material.normalNode = rain.xyz
-  material.colorNode = mix(surface, mix(uniforms.shallowColor.mul(2), uniforms.foamColor, 0.5), rain.w)
+  // The boat's wake waves (tsl/wakeWaves.js) are a second height field on the same surface, so
+  // both bump the normal together and both lighten the crests.
+  const waves = wakeWaves(fragmentDir)
+  const rainOnly = rainHeight(fragmentDir)
+  const bump = surfaceBump(rainOnly.add(waves))
+  material.normalNode = bump.xyz
+  // How the waves look: crests lighten the water, troughs darken it, and the highest crests near
+  // the boat break into white lace (broken up with the same noise as the foam).
+  const level = waves.mul(WAKE.waves.scale).clamp(-1, 1) // -1 (trough) .. 1 (crest)
+  const lit = mix(surface, uniforms.shallowColor.mul(1.8), level.max(0).mul(WAKE.waves.shade))
+  const shaded = mix(lit, uniforms.deepColor.mul(0.6), level.negate().max(0).mul(WAKE.waves.shade))
+  const crestFoam = smoothstep(float(WAKE.waves.foam[0]), float(WAKE.waves.foam[1]), level.add(lace.mul(WAKE.breakup))).mul(WAKE.waves.foamStrength)
+  const withCrests = mix(shaded, uniforms.foamColor.mul(1.25), crestFoam)
+  material.colorNode = mix(withCrests, mix(uniforms.shallowColor.mul(2), uniforms.foamColor, 0.5), surfaceBump(rainOnly).w) // the rain, not the wake, lightens the colour
 
   // The bow lamp's pool of light, along the curved surface (see tsl/lampPool.js). Strong at night,
   // faint by day. Added as emitted light so it does not depend on the lights.

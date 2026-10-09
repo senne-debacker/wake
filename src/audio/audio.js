@@ -23,6 +23,7 @@ const USE_GENERATED_MUSIC = false
 // The sea and hull-wash layers are switched off (the music already has water in it). The code is
 // kept: set to true to hear them again.
 const USE_WATER_SOUND = false
+const THUNDER_VOLUME = 0.35 // the looped recording at the height of a storm (1 = full scale), kept low on purpose
 const clamp = (x, min = 0, max = 1) => Math.min(max, Math.max(min, x))
 const smoothstep = (a, b, x) => {
   const t = clamp((x - a) / (b - a))
@@ -238,6 +239,28 @@ export function createAudio() {
     meter('wash', w.out)
   }
 
+  // The recorded thunder (public/audio/thunder.mp3): loaded once, played in a loop that is silent
+  // until a storm builds up, then fades in and out with it. Optional: without the file there is
+  // only the synthesised thunder that goes with each lightning flash (`api.thunder`).
+  async function loadThunder() {
+    try {
+      const response = await fetch(new URL('audio/thunder.mp3', document.baseURI))
+      const type = response.headers.get('content-type') ?? ''
+      if (!response.ok || !(type.startsWith('audio') || type.includes('ogg') || type.includes('octet-stream'))) return
+      const buffer = await ctx.decodeAudioData(await response.arrayBuffer())
+      const t = (layer.thunder = {})
+      t.out = gain(0)
+      t.source = ctx.createBufferSource()
+      t.source.buffer = buffer
+      t.source.loop = true
+      t.source.connect(filter('lowpass', 5000, 0.5)).connect(t.out).connect(bus.env)
+      t.source.start()
+      meter('thunder', t.out)
+    } catch {
+      /* no recorded thunder: keep the synthesised one */
+    }
+  }
+
   function buildRain() {
     const r = (layer.rain = {})
     r.out = gain(0)
@@ -269,6 +292,7 @@ export function createAudio() {
       bus.music.gain.setValueAtTime(0, ctx.currentTime) // the music fades in while the camera swings round
       bus.music.gain.linearRampToValueAtTime(settings.music * (paused ? 0.4 : 1), ctx.currentTime + 3.5)
       if (USE_GENERATED_MUSIC) music.start()
+      loadThunder()
       music.loadCustomTrack(new URL('audio/music.mp3', document.baseURI)) // optional: your own track replaces the generated music
     },
 
@@ -306,6 +330,9 @@ export function createAudio() {
       // Rain.
       glide(layer.rain.out.gain, 0.09 * rain ** 1.1, 0.5)
       glide(layer.rain.patter.gain, 0.06 * rain ** 1.2, 0.5)
+
+      // Recorded thunder: only in a real storm (heavy rain and high seas), kept low.
+      if (layer.thunder) glide(layer.thunder.out.gain, THUNDER_VOLUME * smoothstep(0.45, 0.95, Math.min(rain, storm)), 1.2)
 
       // Planet view: muffled and quieter, as if heard from outside the atmosphere. Pause: silent.
       glide(bus.envFilter.frequency, 450 + 19000 * (1 - space) ** 3, 0.3)
@@ -372,6 +399,19 @@ export function createAudio() {
         noiseBurst({ when: span, duration: 0.25, type: 'lowpass', frequency: 600, Q: 0.7, volume: 0.8 })
         tone({ when: span, duration: 0.2, frequency: 120, endFrequency: 55, volume: 1.0 })
       }
+    },
+
+    // Thunder `delay` seconds after the flash (sound is slower than light): a sharp crack when it
+    // is close, then a long low rumble that rolls and fades.
+    thunder(delay = 1, strength = 1) {
+      if (!ctx) return
+      const s = clamp(strength, 0.4, 1)
+      const near = clamp(1 - delay / 3.2, 0, 1) // a short delay = a close strike = louder and sharper
+      const v = s * (0.5 + 0.5 * near) * (layer.thunder ? 0.6 : 1) // quieter when the recording is also playing
+      if (near > 0.45) noiseBurst({ when: delay, duration: 0.3, type: 'bandpass', frequency: 1200, Q: 0.7, volume: 0.35 * v })
+      noiseBurst({ when: delay, duration: 3.6, type: 'lowpass', frequency: 260, endFrequency: 50, Q: 0.8, volume: 0.9 * v, attack: 0.12 })
+      noiseBurst({ when: delay + 0.7, duration: 2.8, type: 'lowpass', frequency: 160, endFrequency: 45, Q: 0.8, volume: 0.6 * v, attack: 0.3 }) // the roll
+      tone({ when: delay, duration: 2.6, frequency: 55, endFrequency: 32, volume: 0.35 * v, attack: 0.1 })
     },
 
     // The boat knocks a buoy over: a dull clang of its bell and a thump of the hull on the float.

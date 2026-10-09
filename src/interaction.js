@@ -14,14 +14,13 @@ const RIGHT = ['KeyD', 'ArrowRight']
 //   planetView bool   C toggles the free planet camera
 //   fastForward bool  hold T to speed up the day/night clock
 //   boost     bool    Shift, true while held
-//   post      bool    P toggles bloom + vignette
 //   weather   'auto' | 'calm' | 'breezy' | 'storm'   keys 4 / 1 / 2 / 3, read by world/weather.js
 // App-level keys call back into main.js: Escape -> handlers.onMenu(), M -> handlers.onMute().
 // While `interaction.enabled` is false (start screen, pause) only Escape works and the input
 // settles to neutral.
 export function setupInteraction(handlers = {}) {
   const down = new Set()
-  const input = { throttle: 0, steer: 0, anchored: false, lights: false, horn: false, planetView: false, fastForward: false, boost: false, post: true, weather: 'auto' }
+  const input = { throttle: 0, steer: 0, anchored: false, lights: false, horn: false, planetView: false, fastForward: false, boost: false, weather: 'auto' }
   const interaction = { input, enabled: true }
 
   // Which key was pressed? A letter key is identified by the letter printed on it
@@ -51,7 +50,6 @@ export function setupInteraction(handlers = {}) {
     if (key === 'KeyL') input.lights = !input.lights
     if (key === 'KeyH') input.horn = true
     if (key === 'KeyC') input.planetView = !input.planetView
-    if (key === 'KeyP') input.post = !input.post
   }
   function release(key, code = key) {
     down.delete(code)

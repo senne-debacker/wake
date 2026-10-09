@@ -124,10 +124,8 @@ function rainPlane(dir) {
   return { plane: vec3(uv.add(faceOffset), 0), awayFromSeam }
 }
 
-// Result of the rain on the water at one pixel, as a vec4:
-//   xyz  the lighting normal (view space), tilted by the ripples' slope
-//   w    0..1, how much the ripples there should lighten the water colour
-export const rainRipples = Fn(([dir]) => {
+// Height of the rain's ripples at one pixel (negative where the surface is pushed down).
+export const rainHeight = Fn(([dir]) => {
   const height = float(0).toVar()
   // Far away the ripples would be thinner than a pixel and shimmer: fade them with distance.
   const { plane, awayFromSeam } = rainPlane(dir)
@@ -143,10 +141,17 @@ export const rainRipples = Fn(([dir]) => {
   If(uniforms.rain.greaterThan(DROPS.fade[0]), () => {
     height.assign(rippleHeight(plane).mul(DROPS.scale * DROPS.height).mul(faded).mul(rainStrength))
   })
+  return height
+})
 
-  // Screen-space bump mapping (Mikkelsen's "surface gradient" method): the height's slope across
-  // the screen, together with how the surface's position changes across the screen, gives the
-  // gradient of the height along the surface; subtract it from the facet's normal.
+// Screen-space bump mapping (Mikkelsen's "surface gradient" method): the height's slope across
+// the screen, together with how the surface's position changes across the screen, gives the
+// gradient of the height along the surface; subtract it from the facet's normal.
+// Result as a vec4:
+//   xyz  the lighting normal (view space), tilted by the height's slope
+//   w    0..1, how tilted it is (the original shows this slope as the colour)
+// Takes any height, so the boat's wake waves (tsl/wakeWaves.js) share it with the raindrops.
+export const surfaceBump = Fn(([height]) => {
   const surfaceNormal = normalFlat
   const dpdx = dFdx(positionView)
   const dpdy = dFdy(positionView)
@@ -156,7 +161,9 @@ export const rainRipples = Fn(([dir]) => {
   const gradient = sign(det).mul(dFdx(height).mul(r1).add(dFdy(height).mul(r2)))
   const normal = normalize(abs(det).mul(surfaceNormal).sub(gradient))
 
-  // How tilted it is: the original shows this slope as the colour.
   const tilt = length(normal.sub(surfaceNormal))
   return vec4(normal, tilt.mul(DROPS.shine).min(1))
 })
+
+// Result of the rain alone on the water at one pixel (see surfaceBump).
+export const rainRipples = Fn(([dir]) => surfaceBump(rainHeight(dir)))

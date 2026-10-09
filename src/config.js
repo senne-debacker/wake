@@ -29,8 +29,9 @@ export const PALETTE = {
 // Schools of fish under the water: a boids simulation ported from Shadertoy "[SH17C] Schooling"
 // by P_Malin (tsl/boids.js), painted as soft shadows into the water (tsl/fishShadows.js).
 export const FISH = {
+  
   count: 120,
-  schoolSize: 20, // fish are placed in schools at the start: the original relies on a dense crowd
+  schoolSize: 10, // fish are placed in schools at the start: the original relies on a dense crowd
   // The original works in its own units: a 10 x 10 world, speeds per animation frame. These map it
   // onto the planet:
   lengthScale: 0.5, // world units per unit of the original (its neighbour radius 0.75 becomes 0.375)
@@ -44,7 +45,7 @@ export const FISH = {
   fleeRadius: 1.2, // world units
   fleeWeight: 0.006,
   // Drawing: the fish are soft dark ellipses painted into the water (tsl/fishShadows.js)
-  size: 0.18, // length of a shadow, world units (the boat is 0.9)
+  size: 0.14, // length of a shadow, world units (the boat is 0.9)
   shadow: 0.62, // how dark the shadows are (0 = invisible, 1 = as dark as the deep water)
   nearSchools: 3, // this many schools start close to where the game starts, so there are fish to see
 }
@@ -120,6 +121,11 @@ export const CAMERA = {
   minZoom: 0.5,
   maxZoom: 2.5,
   switchSeconds: 1.4, // the glide between the chase view and the planet view
+  dragSpeed: 0.006, // radians per pixel when dragging to look round the boat
+  lookReturnDelay: 3, // seconds after the last drag before the camera starts to swing back behind the boat
+  lookReturnRate: 1.2, // 1 / s, how quickly it returns (slow: about 2 s to get most of the way)
+  minPitch: -0.6, // lowest the dragged camera goes, as a fraction of `height` below the normal height
+  maxPitch: 0.8, // highest, above it
 }
 
 // The title screen: a close-up of the boat from in front and to port (the sun is ahead of the boat at
@@ -253,6 +259,21 @@ export const SKY_KEYS = [
 ]
 
 // --- Weather ----------------------------------------------------------------
+// Lightning (world/lightning.js): only while it pours and the sea is high.
+export const LIGHTNING = {
+  minRain: 0.6,
+  minStorm: 0.6,
+  firstWait: [2, 6], // seconds from the storm starting to the first strike
+  interval: [5, 14], // seconds between strikes
+  brightness: [0.7, 1],
+  rise: 0.02, // seconds a flicker takes to reach full brightness
+  fade: 0.1, // seconds for a flicker to fade (time constant)
+  thunderDelay: [0.4, 3.2], // seconds from flash to thunder
+  color: '#dbe6ff',
+  sky: 0.5, // how far the sky and haze go towards the flash colour
+  light: 2.2, // extra light from above on the boat and water
+}
+
 // Three numbers describe the weather: `storm` (wave height and foam, see
 // uniforms.storm), `cover` (cloud cover / overcast sky) and `rain`.
 export const WEATHER = {
@@ -307,19 +328,13 @@ export const RAIN = {
 
 // --- Boat wake ----------------------------------------------------------------
 // The last `points` stern positions (one every `interval` seconds) are passed to
-// the water shader, which draws an expanding foam ring around each of them.
-// The envelope of all those rings is the V-shaped wake.
+// the water shader: the waves emitted from each of them add up to the V-shaped wake
+// (tsl/wakeWaves.js), and a strip of foam follows them (tsl/wake.js).
 export const WAKE = {
   points: 64,
   interval: 0.1,
   sternOffset: 0.3, // emit from behind the middle of the boat
-  // V-shaped arms: an expanding ring per remembered point.
-  spread: 0.6, // ring growth, units / s (about the 19 degree Kelvin angle at top speed)
-  width: 0.17, // ring thickness when born ...
-  widthGrowth: 0.04, // ... and how much thicker it gets per second
-  decay: 0.9, // 1 / s, the arms fade with age
-  strength: 0.2, // overall foam amount (the rings of neighbouring points add up)
-  // Propeller wash: churned water right behind the stern, lasts longer than the arms.
+  // Propeller wash: churned water right behind the stern, a continuous strip of foam.
   washWidth: 0.16,
   washGrowth: 0.03,
   washDecay: 0.4,
@@ -334,6 +349,23 @@ export const WAKE = {
   breakupScale: 3.4, // noise frequency, in cells per world unit
   edge: [0.26, 0.4], // wake value where the foam starts and where it is fully white
   halo: 0.55, // how much the water around the wake is lightened (wet, aerated look)
+  // Wake waves (tsl/wakeWaves.js, the Shadertoy wake shader): the sum of the waves the boat
+  // emitted along its past path, shown as a bump on the water and a light/dark shading.
+  waves: {
+    substeps: 1, // samples per stored interval (more = smoother, slower; 1 is enough off the path)
+    gravity: 12, // g in game units / s^2: sets how quickly waves of each length run
+    peak: 0.65, // l0: the boat emits most strongly waves with half-wavelength about this (units)
+    width: 0.2, // W: how wide that peak is (units)
+    pathFade: [0.12, 0.4], // the waves fade out this close to the boat's path (units); see wakeWaves.js
+    minLength: 0.12, // closest distance used (1/l would blow up on the path)
+    fadeAge: [4.5, 6.2], // the oldest entries fade out between these ages (s)
+    gain: 0.05, // overall size of the height
+    scale: 20, // height -> -1 .. 1 for the colouring (1 / the tallest crest)
+    shade: 0.5, // how much crests lighten and troughs darken the colour
+    foam: [0.55, 0.85], // crest level where white lace starts and where it is full
+    foamStrength: 0.8,
+    visible: [5, 10], // fades out with distance from the camera (units)
+  },
 }
 
 // --- World ----------------------------------------------------------------------

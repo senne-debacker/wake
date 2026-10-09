@@ -9,7 +9,6 @@ import { POST } from './config.js'
 //                  HDR values, before tone mapping, so only really bright pixels glow
 //   vignette    -> darkens the corners a little
 // The pipeline applies tone mapping and the colour-space conversion at the end.
-// `render()` falls back to a plain renderer.render() while the effects are off (key P).
 export function createPostProcessing(renderer, scene, camera) {
   const pipeline = new RenderPipeline(renderer)
 
@@ -23,11 +22,5 @@ export function createPostProcessing(renderer, scene, camera) {
   const lit = color.add(glow)
   pipeline.outputNode = vec4(lit.rgb.mul(vignette), lit.a)
 
-  return {
-    enabled: true,
-    render() {
-      if (this.enabled) pipeline.render()
-      else renderer.render(scene, camera)
-    },
-  }
+  return { render: () => pipeline.render() }
 }
