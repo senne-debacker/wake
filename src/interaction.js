@@ -13,6 +13,7 @@ const RIGHT = ['KeyD', 'ArrowRight']
 //   horn      bool    H, true while the key is held
 //   planetView bool   C toggles the free planet camera
 //   fastForward bool  hold T to speed up the day/night clock
+//   boost     bool    Shift, true while held
 //   post      bool    P toggles bloom + vignette
 //   weather   'auto' | 'calm' | 'breezy' | 'storm'   keys 4 / 1 / 2 / 3, read by world/weather.js
 // App-level keys call back into main.js: Escape -> handlers.onMenu(), M -> handlers.onMute().
@@ -20,7 +21,7 @@ const RIGHT = ['KeyD', 'ArrowRight']
 // settles to neutral.
 export function setupInteraction(handlers = {}) {
   const down = new Set()
-  const input = { throttle: 0, steer: 0, anchored: false, lights: false, horn: false, planetView: false, fastForward: false, post: true, weather: 'auto' }
+  const input = { throttle: 0, steer: 0, anchored: false, lights: false, horn: false, planetView: false, fastForward: false, boost: false, post: true, weather: 'auto' }
   const interaction = { input, enabled: true }
 
   // Which key was pressed? A letter key is identified by the letter printed on it
@@ -34,19 +35,15 @@ export function setupInteraction(handlers = {}) {
     return event.code // Space, digits, arrows, and letters of other alphabets (physical position)
   }
 
-  addEventListener('keydown', (event) => {
-    if (event.repeat) return // toggles must not flicker while a key is held
-    if (event.code === 'Escape') return handlers.onMenu?.()
-    if (event.ctrlKey || event.metaKey || event.altKey) return // leave browser shortcuts (Cmd+W, Ctrl+M ...) alone
-
-    const key = label(event)
+  // One place that knows what each control does, used by the keyboard and by the clickable HUD.
+  // `key` is a label like 'KeyL', 'Space', 'Digit3' (see label() above).
+  function press(key, code = key) {
+    if (key === 'Escape') return handlers.onMenu?.()
     if (key === 'KeyM') return handlers.onMute?.() // works on every screen, not only while sailing
-    if (!interaction.enabled) return // (menus keep the browser's own key behaviour: Space presses a focused button, arrows move sliders)
-    if (event.code === 'Space' || event.code.startsWith('Arrow')) event.preventDefault() // no page scrolling
-
+    if (!interaction.enabled) return
     // Movement keys are tracked by both the label and the position, so on an AZERTY keyboard
     // both the keys labelled WASD and the ones in the WASD position (labelled ZQSD) steer.
-    down.add(event.code)
+    down.add(code)
     down.add(key)
 
     if (key in WEATHER_KEYS) input.weather = WEATHER_KEYS[key]
@@ -55,12 +52,22 @@ export function setupInteraction(handlers = {}) {
     if (key === 'KeyH') input.horn = true
     if (key === 'KeyC') input.planetView = !input.planetView
     if (key === 'KeyP') input.post = !input.post
+  }
+  function release(key, code = key) {
+    down.delete(code)
+    down.delete(key)
+    if (key === 'KeyH') input.horn = false
+  }
+  interaction.press = press
+  interaction.release = release
+
+  addEventListener('keydown', (event) => {
+    if (event.repeat) return // toggles must not flicker while a key is held
+    if (event.ctrlKey || event.metaKey || event.altKey) return // leave browser shortcuts (Cmd+W, Ctrl+M ...) alone
+    if (interaction.enabled && (event.code === 'Space' || event.code.startsWith('Arrow'))) event.preventDefault() // no page scrolling (menus keep the browser's key behaviour: Space presses a focused button, arrows move sliders)
+    press(event.code === 'Escape' ? 'Escape' : label(event), event.code)
   })
-  addEventListener('keyup', (event) => {
-    down.delete(event.code)
-    down.delete(label(event))
-    if (label(event) === 'KeyH') input.horn = false
-  })
+  addEventListener('keyup', (event) => release(label(event), event.code))
   addEventListener('blur', () => {
     down.clear() // no stuck keys after alt-tab
     input.horn = false
@@ -77,6 +84,7 @@ export function setupInteraction(handlers = {}) {
     }
     input.throttle = axis(FORWARD, BACK)
     input.fastForward = down.has('KeyT')
+    input.boost = down.has('ShiftLeft') || down.has('ShiftRight')
     input.steer += (axis(RIGHT, LEFT) - input.steer) * (1 - Math.exp(-delta * 8))
   }
 

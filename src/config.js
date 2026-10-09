@@ -26,6 +26,29 @@ export const PALETTE = {
   background: '#1b2a3a',
 }
 
+// Schools of fish under the water: a boids simulation ported from Shadertoy "[SH17C] Schooling"
+// by P_Malin (tsl/boids.js), painted as soft shadows into the water (tsl/fishShadows.js).
+export const FISH = {
+  count: 120,
+  schoolSize: 20, // fish are placed in schools at the start: the original relies on a dense crowd
+  // The original works in its own units: a 10 x 10 world, speeds per animation frame. These map it
+  // onto the planet:
+  lengthScale: 0.5, // world units per unit of the original (its neighbour radius 0.75 becomes 0.375)
+  frameRate: 12, // frames of the original per second: its top speed (0.1 / frame) becomes 0.1 * 0.5 * 12 = 0.6 units/s
+  // Slider values of the original (their defaults were in the part of the code that was cut off,
+  // so 1 is assumed for each): the weights are scaled by these.
+  cohesion: 1,
+  separation: 1,
+  alignment: 1,
+  // Added: schools swim away from the boat.
+  fleeRadius: 1.2, // world units
+  fleeWeight: 0.006,
+  // Drawing: the fish are soft dark ellipses painted into the water (tsl/fishShadows.js)
+  size: 0.18, // length of a shadow, world units (the boat is 0.9)
+  shadow: 0.62, // how dark the shadows are (0 = invisible, 1 = as dark as the deep water)
+  nearSchools: 3, // this many schools start close to where the game starts, so there are fish to see
+}
+
 export const WATER = {
   foamThreshold: 0.3, // noise value above which foam appears (storm = 0)
   stormFoamThreshold: 0.24, // ... and at storm = 1
@@ -37,6 +60,11 @@ export const WATER = {
 export const BOAT = {
   length: 0.9,
   width: 0.38,
+  // How far the whole model is lifted above the waterline. The hull's dark underwater part is
+  // 0.12 deep, so at 0.05 a little of it shows above the water. Measured in a full storm over 4 minutes,
+  // water washes over the hull's edge: 7% of the time at 0, 0.6% at 0.05 (up to 5 cm, brief spray),
+  // 0.1% at 0.08. Calmer weather stays dry at 0.05. Lower = deeper in the water.
+  rideHeight: 0.05,
   // Where the waves are sampled to find the boat's height and tilt. Roughly the
   // hull footprint: front/back along the keel, left/right across the beam.
   sampleHalfLength: 0.38,
@@ -45,6 +73,7 @@ export const BOAT = {
   // Handling. The boat is a small rigid body on the sea: thrust along the hull, a keel
   // that resists sideways slip, and turning with inertia. (World units: planet radius = 5.)
   maxSpeed: 1.0, // units / second (the HUD shows units x 5 = 5 knots)
+  boostSpeed: 1.6, // units / second while Shift is held: 8 knots (the HUD shows units x 5 as knots)
   maxReverseSpeed: 0.35,
   acceleration: 0.65, // 1 / s, how fast speed approaches the throttle target (heavy hull: slow)
   drag: 0.4, // 1 / s, coasting with no throttle
@@ -90,6 +119,7 @@ export const CAMERA = {
   swing: 3.5, // 1 / s, how quickly it swings behind a turning boat
   minZoom: 0.5,
   maxZoom: 2.5,
+  switchSeconds: 1.4, // the glide between the chase view and the planet view
 }
 
 // The title screen: a close-up of the boat from in front and to port (the sun is ahead of the boat at
@@ -125,7 +155,7 @@ export const BOAT_PALETTE = {
 // local space (+Y up, bow towards -Z).
 export const BOAT_LIGHT = {
   color: '#ffe3ae',
-  intensity: 70, // candela
+  intensity: 20, // candela
   distance: 12, // light cut-off (world units)
   angle: 0.5, // half-angle of the beam, radians
   penumbra: 0.6,
@@ -135,14 +165,34 @@ export const BOAT_LIGHT = {
   // water curves away fast and a level beam would shoot off into space.
   aim: [0, -1.25, -3.9],
   coneLength: 5,
-  coneStrength: 0.3, // peak opacity of the additive cone
+  coneStrength: 0.08, // peak opacity of the additive cone
   windowGlow: '#ffc46e',
+  // The straight spotlight cannot reach water beyond the planet's horizon (1.7 units from the lamp,
+  // the sea curves away under the beam), so the water shader also draws the lamp's pool of light
+  // along the curved surface (tsl/lampPool.js).
+  pool: {
+    length: 7.5, // how far ahead of the bow the pool reaches, along the water
+    halfAngle: 0.38, // radians either side of the bow direction
+    strength: 0.12, // brightness of the pool
+    start: 0.35, // the pool begins this far ahead of the boat's centre (the lamp is on the bow)
+    daylight: 0.12, // fraction of its strength left in full daylight (the lamp barely shows by day)
+  },
 }
 
 // --- Day / night ------------------------------------------------------------
 export const DAY = {
   length: 210, // seconds for a full day
-  start: 0.71, // time of day at start: 0 = midnight, 0.25 = sunrise, 0.5 = noon, 0.75 = sunset
+  start: 0.7708, // time of day at start (18:30): 0 = midnight, 0.5 = noon
+  // The day's schedule, in hours. Between `dawn` and `day` it is morning twilight, between `dusk`
+  // and `night` evening twilight; `day` to `dusk` is full daylight and `night` to `dawn` full night.
+  // The same hours colour the dial at the top of the HUD.
+  hours: { dawn: 4, day: 6, dusk: 18, night: 20 },
+  // How high the sun is (degrees above the horizon, at the boat) when full day begins and when
+  // full night begins. They match the "day" and "night" keys of SKY_KEYS below (elevation 0.45 and
+  // -0.30, with the 0.99 factor of the noon tilt): the sun is moved so it reaches those heights
+  // exactly at the hours above, and is faster in the twilights than at noon.
+  sunDayDeg: 27,
+  sunNightDeg: -18,
   fastForward: 14, // speed multiplier while T is held
   // The sun travels on the great circle through `east` (where it rises) and
   // `noon` (where it peaks). They are perpendicular. The boat starts near the
@@ -232,6 +282,17 @@ export const CLOUDS = {
   stormColor: '#202632',
 }
 
+// Ripples where raindrops hit the sea (tsl/raindrops.js, ported from Shadertoy ldjyWw).
+export const DROPS = {
+  scale: 0.1, // the original's vorRainScale: size of one cell in world units (bigger = bigger ripples)
+  timeScale: 0.8, // the original's vorRainSpeed
+  chance: 0.1, // fraction of the cells that have a drop going at full rain (added; the original always rains)
+  height: 0.5, // strength of the ripples' slope (1 = as in the original, scaled to the cell size)
+  shine: 1, // how much the ripples lighten the water colour
+  fade: [0.04, 0.4], // rain level where the ripples are gone, and where they are at full strength: they fade out smoothly between these as the rain stops, in step with the rain streaks
+  visible: [3, 9], // distance from the camera (units) where they are fully visible and where they are gone
+}
+
 export const RAIN = {
   count: 2600,
   area: 11, // width of the rain patch around the boat
@@ -241,7 +302,7 @@ export const RAIN = {
   thickness: 0.008,
   color: '#b4c4d8', // the colour in full daylight; dimmed by the light level (tsl/rainMaterial.js)
   opacity: 0.22,
-  nightLight: 0.12, // fraction of the colour and opacity left on a dark night
+  nightLight: 0.55, // fraction of the colour and opacity left on a dark night (0 = invisible)
 }
 
 // --- Boat wake ----------------------------------------------------------------
@@ -289,6 +350,12 @@ export const WORLD = {
     { name: 'pines', bearing: -66, distance: 0.95, radius: 1.3, height: 0.8, trees: 34, treeKind: 'pine', ground: 'grass' },
     { name: 'autumn', bearing: 112, distance: 0.8, radius: 0.7, height: 0.6, trees: 10, treeKind: 'autumn', ground: 'autumn' },
   ],
+  // The big ocean: one circle of open water with no islands, rocks or buoys. Everything else is
+  // generated exactly as before and only what touches the circle is left out. `fraction` is the
+  // share of the planet's surface it covers (0.22 -> a circle 56 degrees across, 4.9 units radius);
+  // `bearing` / `distance` place its centre like the landmarks (degrees from the start heading,
+  // radians of arc from the start): 180 = straight behind the start.
+  ocean: { fraction: 0.22, bearing: 180, distance: 2.2 },
   scattered: { islands: 7, minRadius: 0.6, maxRadius: 1.9, gap: 0.7, seaRocks: 14 },
   // Buoys marking a route from the start towards the lighthouse, plus a few in open water.
   buoyRoute: [

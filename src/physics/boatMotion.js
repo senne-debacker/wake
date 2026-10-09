@@ -31,7 +31,9 @@ export function stepBoat(state, input, delta, time) {
   let along = vel.dot(forward)
   let across = vel.dot(port)
 
-  const target = input.anchored ? 0 : input.throttle * (input.throttle > 0 ? BOAT.maxSpeed : BOAT.maxReverseSpeed)
+  // Shift boosts the top speed, forwards only (and never while anchored).
+  const top = input.boost ? BOAT.boostSpeed : BOAT.maxSpeed
+  const target = input.anchored ? 0 : input.throttle * (input.throttle > 0 ? top : BOAT.maxReverseSpeed)
   const rate = input.anchored ? BOAT.anchorBrake : input.throttle !== 0 ? BOAT.acceleration : BOAT.drag
   along += (target - along) * (1 - Math.exp(-rate * delta))
   if (target === 0 && Math.abs(along) < 1e-3) along = 0

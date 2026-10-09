@@ -278,7 +278,7 @@ export function createAudio() {
     update({ speed, storm, rain, space }) {
       if (!ctx) return
       const now = ctx.currentTime
-      const f = clamp(Math.abs(speed) / BOAT.maxSpeed)
+      const f = clamp(Math.abs(speed) / BOAT.maxSpeed, 0, 1.3) // above 1 = boosting: a little louder and higher
       const glide = (param, value, seconds) => param.setTargetAtTime(value, now, seconds)
 
       // Engine: off when standing still, fading in over the first part of the speed range, then
@@ -372,6 +372,17 @@ export function createAudio() {
         noiseBurst({ when: span, duration: 0.25, type: 'lowpass', frequency: 600, Q: 0.7, volume: 0.8 })
         tone({ when: span, duration: 0.2, frequency: 120, endFrequency: 55, volume: 1.0 })
       }
+    },
+
+    // The boat knocks a buoy over: a dull clang of its bell and a thump of the hull on the float.
+    buoyHit(strength = 0.5) {
+      if (!ctx) return
+      const s = clamp(strength, 0.2, 1)
+      for (const [frequency, volume, length] of [[640, 0.26, 1.1], [1010, 0.14, 0.8], [1790, 0.07, 0.5]]) {
+        tone({ duration: length, frequency, endFrequency: frequency * 0.99, volume: volume * s })
+      }
+      noiseBurst({ duration: 0.08, frequency: 2600, Q: 2, volume: 0.25 * s })
+      tone({ duration: 0.16, frequency: 130, endFrequency: 60, volume: 0.45 * s })
     },
 
     // Hitting a shore: a hull-shaking boom, a sharp crack of splintering timber and a creak, louder

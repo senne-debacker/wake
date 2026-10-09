@@ -48,6 +48,7 @@ export function createBoat() {
   const root = new Group()
   root.name = 'boat'
   const model = new Group()
+  model.position.y = BOAT.rideHeight
   root.add(model)
 
   const sternZ = 0.12 // wheelhouse sits towards the stern
@@ -140,6 +141,9 @@ export function createBoat() {
 
   return {
     root,
+    get lampLevel() {
+      return level // 0..1, how far the lamp has faded on
+    },
     model,
     update(delta, lightsOn, hornOn = false, time = 0) {
       hornLevel += ((hornOn ? 1 : 0) - hornLevel) * (1 - Math.exp(-delta * 18))
@@ -148,8 +152,8 @@ export function createBoat() {
       level += ((lightsOn ? 1 : 0) - level) * (1 - Math.exp(-delta * 6))
       spot.intensity = L.intensity * level
       cone.level.value = level
-      lampGlass.emissiveIntensity = 1.6 * level
-      windows.emissiveIntensity = 1.6 * level
+      lampGlass.emissiveIntensity = 0.4 * level
+      windows.emissiveIntensity = 0.45 * level
     },
   }
 }

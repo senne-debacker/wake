@@ -1,6 +1,6 @@
 import { Quaternion, Vector3 } from 'three/webgpu'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
-import { PLANET } from '../config.js'
+import { PLANET, CAMERA } from '../config.js'
 import { createChaseCamera } from './chaseCamera.js'
 import { createIntroCamera } from './introCamera.js'
 
@@ -18,6 +18,46 @@ export function createCameraRig(camera, domElement, state) {
   let orbit = null
   const lastDir = new Vector3() // where the boat was last frame, to carry the planet view along
   const carry = new Quaternion()
+
+  // Switching between chase and planet view glides: the camera is blended from the pose it had
+  // when the key was pressed to the pose of the new view, which keeps moving with the boat. The
+  // orbit controls keep their own "true" pose underneath (they read the camera every frame), so
+  // that pose is saved and restored around the blend.
+  const glide = { active: false, t: 0, fromPos: new Vector3(), fromQuat: new Quaternion(), restore: false }
+  const truePos = new Vector3()
+  const toQuat = new Quaternion()
+  const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2)
+  const dirA = new Vector3()
+  const dirB = new Vector3()
+  const arc = new Quaternion()
+  const identity = new Quaternion()
+  const full = new Quaternion()
+
+  function startGlide() {
+    glide.active = true
+    glide.t = 0
+    glide.restore = false
+    glide.fromPos.copy(camera.position)
+    glide.fromQuat.copy(camera.quaternion)
+  }
+
+  function applyGlide(delta) {
+    glide.t += delta / CAMERA.switchSeconds
+    if (glide.t >= 1) {
+      glide.active = false
+      return
+    }
+    const k = ease(glide.t)
+    // Position: turn round the planet centre (not a straight line) while the distance changes.
+    dirA.copy(glide.fromPos)
+    dirB.copy(camera.position)
+    const [lengthA, lengthB] = [dirA.length(), dirB.length()]
+    full.setFromUnitVectors(dirA.normalize(), dirB.normalize())
+    arc.slerpQuaternions(identity, full, k) // the part of the way round that we are at
+    camera.position.copy(dirA).applyQuaternion(arc).multiplyScalar(lengthA + (lengthB - lengthA) * k)
+    toQuat.copy(camera.quaternion)
+    camera.quaternion.copy(glide.fromQuat).slerp(toQuat, k)
+  }
 
   chase.snap(state)
 
@@ -80,14 +120,23 @@ export function createCameraRig(camera, domElement, state) {
         return
       }
 
-      if (planetView && !orbit) enterOrbit()
-      else if (!planetView && orbit) leaveOrbit()
+      if (planetView && !orbit) {
+        startGlide()
+        enterOrbit()
+      } else if (!planetView && orbit) {
+        startGlide()
+        leaveOrbit()
+      }
 
       if (orbit) {
+        if (glide.restore) camera.position.copy(truePos) // undo last frame's blend
         followBoat()
         orbit.update()
-      }
-      else chase.update(state, delta)
+        truePos.copy(camera.position)
+      } else chase.update(state, delta)
+
+      if (glide.active) applyGlide(delta)
+      glide.restore = glide.active && orbit !== null
     },
   }
 }

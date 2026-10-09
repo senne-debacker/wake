@@ -16,7 +16,7 @@ export function createWake() {
     update(delta, boatState) {
       forward.copy(boatState.heading).addScaledVector(boatState.dir, -boatState.heading.dot(boatState.dir)).normalize()
       stern.copy(boatState.dir).multiplyScalar(PLANET.radius).addScaledVector(forward, -WAKE.sternOffset).normalize()
-      const strength = Math.min(1, boatState.vel.length() / BOAT.maxSpeed) // no foam when stopped or anchored
+      const strength = Math.min(1.3, boatState.vel.length() / BOAT.maxSpeed) // no foam when stopped or anchored
       trail[0].set(stern.x, stern.y, stern.z, strength)
 
       // The bow splash sits just ahead of the middle of the boat.

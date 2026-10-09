@@ -122,9 +122,10 @@ export function createWorld(layout) {
     group,
     lighthouse,
     // `darkness` 0..1: lamps on the lighthouse and buoys switch on with it.
-    update(elapsed, storm, darkness) {
+    // Returns how hard the boat hit a buoy this frame (0 = none).
+    update(elapsed, storm, darkness, boat, delta) {
       lighthouse?.update(elapsed, darkness)
-      buoys.update(elapsed, storm, darkness)
+      return buoys.update(elapsed, storm, darkness, boat, delta)
     },
   }
 }

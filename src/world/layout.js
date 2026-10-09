@@ -93,6 +93,19 @@ export function createLayout() {
     }
   }
 
+  // The big ocean (WORLD.ocean): everything that touches the circle is left out. This runs after
+  // the generation above, so the random numbers, and with them everything outside the circle,
+  // are exactly what they were before the ocean existed.
+  const oceanAngle = Math.acos(1 - 2 * WORLD.ocean.fraction) // cap of the sphere with that share of the surface
+  const ocean = { dir: fromStart(start, WORLD.ocean.bearing, WORLD.ocean.distance), radius: oceanAngle * R }
+  const outsideOcean = (dir, extent) => arc(dir, ocean.dir) > ocean.radius + extent
+  const keep = (list, extentOf) => {
+    for (let i = list.length - 1; i >= 0; i--) if (!outsideOcean(list[i].dir, extentOf(list[i]))) list.splice(i, 1)
+  }
+  keep(islands, (island) => footprint(island.radius))
+  keep(rocks, (rock) => rock.radius)
+  keep(buoys, () => 0.3)
+
   // What the boat cannot sail through, and what the water draws shore foam around.
   // Islands get their exact coastline (a table of shoreline distances per bearing);
   // rocks are plain circles.
@@ -106,5 +119,5 @@ export function createLayout() {
     ...rocks.map((rock) => ({ dir: rock.dir, radius: rock.radius })),
   ]
 
-  return { start, islands, rocks, buoys, colliders, bodies }
+  return { start, islands, rocks, buoys, colliders, bodies, ocean }
 }

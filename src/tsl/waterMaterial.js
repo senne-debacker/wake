@@ -1,13 +1,17 @@
 import { MeshStandardNodeMaterial } from 'three/webgpu'
-import { float, vec3, positionLocal, smoothstep, mix, vertexStage } from 'three/tsl'
-import { PLANET, WATER, WAKE } from '../config.js'
+import { float, vec3, color, positionLocal, positionView, smoothstep, mix, vertexStage } from 'three/tsl'
+import { PLANET, WATER, WAKE, BOAT_LIGHT, FISH } from '../config.js'
+import { Color } from 'three/webgpu'
 import { uniforms } from '../uniforms.js'
 import { waveNoise, waveAmplitude } from './waves.js'
 import { wakeFoam } from './wake.js'
 import { shoreFoam } from './shore.js'
 import { simplex3d } from './simplexNoise.js'
+import { lampPool } from './lampPool.js'
+import { rainRipples } from './raindrops.js'
+import { fishShadow } from './fishShadows.js'
 
-export function createWaterMaterial() {
+export function createWaterMaterial(fish) {
   const material = new MeshStandardNodeMaterial({
     roughness: 0.32,
     metalness: 0,
@@ -51,7 +55,24 @@ export function createWaterMaterial() {
 
   const wetBody = mix(body, uniforms.shallowColor.mul(1.6), wakeHalo)
   const withWaves = mix(wetBody, uniforms.foamColor, waveFoam)
-  material.colorNode = mix(withWaves, uniforms.foamColor.mul(1.25), wakeMask)
+  const surfaceWithoutFish = mix(withWaves, uniforms.foamColor.mul(1.25), wakeMask)
+
+  // The schools of fish under the water, seen as soft dark ellipses painted into the sea (see
+  // tsl/fishShadows.js). Not on foam (a shadow would look odd there), and not far away.
+  const fishDark = fishShadow(fish)(fragmentDir).mul(float(1).sub(waveFoam.max(wakeMask).mul(0.85))).mul(FISH.shadow)
+  const surface = mix(surfaceWithoutFish, uniforms.deepColor.mul(0.3), fishDark)
+
+  // Raindrops: the ported Shadertoy ripple field (tsl/raindrops.js) tilts the lighting normal, so
+  // the ripples catch the sun, moon and lamp, and lightens the water colour on them a little.
+  const rain = rainRipples(fragmentDir)
+  material.normalNode = rain.xyz
+  material.colorNode = mix(surface, mix(uniforms.shallowColor.mul(2), uniforms.foamColor, 0.5), rain.w)
+
+  // The bow lamp's pool of light, along the curved surface (see tsl/lampPool.js). Strong at night,
+  // faint by day. Added as emitted light so it does not depend on the lights.
+  const darkness = smoothstep(float(0.35), float(-0.05), uniforms.sunElevation)
+  const poolAmount = darkness.mul(1 - BOAT_LIGHT.pool.daylight).add(BOAT_LIGHT.pool.daylight)
+  material.emissiveNode = color(new Color(BOAT_LIGHT.color)).mul(lampPool(fragmentDir)).mul(poolAmount).mul(uniforms.lampLevel).mul(BOAT_LIGHT.pool.strength)
 
   return material
 }

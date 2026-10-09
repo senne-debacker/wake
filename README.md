@@ -54,7 +54,7 @@ The boat has to float on the waves the GPU draws, so the same noise also exists 
 
 ## Day and night
 
-A full day lasts 3.5 minutes. The sun and moon circle the planet, so one side is always dark; the sky colour, haze, light tint and water palette follow the sun's height at the boat, which means sailing around the planet changes your local time of day. The sky is a TSL material computed from the view direction (gradient, sun, moon, procedural stars), see [src/tsl/skyMaterial.js](src/tsl/skyMaterial.js).
+A full day lasts 3.5 minutes, with this schedule: morning twilight 04:00-06:00, full day 06:00-18:00, evening twilight 18:00-20:00, night 20:00-04:00 (`DAY.hours` in `src/config.js`; the ring at the top of the HUD uses the same hours). The game starts at 18:30. The sun and moon circle the planet, so one side is always dark; the sky colour, haze, light tint and water palette follow the sun's height at the boat. The sky is attached to the player, not to the planet: because the planet is tiny, a sun fixed in space would put you through sunset just by sailing round it. Instead the sun is carried along with the boat (see `skyFrame` in [src/world/atmosphere.js](src/world/atmosphere.js)), so the time on the clock is the time everywhere, and in planet view you see the day and night sides slide round as you sail. The sky is a TSL material computed from the view direction (gradient, sun, moon, procedural stars), see [src/tsl/skyMaterial.js](src/tsl/skyMaterial.js).
 
 ## Weather and wake
 
@@ -64,7 +64,7 @@ The boat leaves a wake. Its last 64 stern positions are sent to the water shader
 
 ## The world
 
-Ten low-poly islands with pines, autumn trees and rocks, a striped lighthouse whose beam sweeps the sea at night and in storms, buoys that float on the same waves as the boat and blink in the dark, and rocks in open water. The layout is seeded, so the world is the same every time. You cannot sail through land: the boat slides along the shore and loses speed ("BUMP!"). Where the water meets an island the water shader draws surf, computed from the island positions passed in as a uniform array ([src/tsl/shore.js](src/tsl/shore.js)).
+Seven low-poly islands (after the ocean below takes its share) with pines, autumn trees and rocks, a striped lighthouse whose beam sweeps the sea at night and in storms, buoys that float on the same waves as the boat, blink in the dark, and can be knocked over (they right themselves again; you sail straight through), and rocks in open water. The layout is seeded, so the world is the same every time. One big circle of open ocean, covering 22% of the planet and starting about 6 units behind where you begin, has no islands, rocks or buoys at all (`WORLD.ocean` in `src/config.js`); everything outside it is exactly as it would be without it. You cannot sail through land: the boat slides along the shore and loses speed ("BUMP!"). Where the water meets an island the water shader draws surf, computed from the island positions passed in as a uniform array ([src/tsl/shore.js](src/tsl/shore.js)).
 
 ## Boat physics
 
@@ -85,6 +85,40 @@ All sound is generated in the browser with the Web Audio API, so there are no so
 - **Music** is a slow generative piece (four chords in D minor, soft plucks from the pentatonic scale). To use your own track instead, put it at `public/audio/music.mp3` and it replaces the generated music automatically.
 - Volumes for music and effects are on the pause screen and are remembered; `M` mutes. In the dev build, `__game.audio.levels()` shows the level of every layer, which is how the mix was checked without listening.
 
+## The bow lamp on a curved world
+
+From a lamp 0.3 above the water, the horizon of this tiny planet is only about 1.7 units away: the sea curves away beneath any straight beam, so a spotlight alone can only light the water near the boat (and objects that stand up, like buoys and islands). So the lamp has two parts: the real `SpotLight` for objects and the hull, and a pool of light drawn by the water shader *along the curved surface*, reaching about 7.5 units ahead of the bow ([src/tsl/lampPool.js](src/tsl/lampPool.js)). It is strong at night and faint by day.
+
+## Fish
+
+Schools of fish swim under the sea, and you see them as soft dark **shadows on the water**, faded ellipses pointing the way each fish swims: 120 small fish in 6 schools, with three schools close to where you start. They swim away from the boat when you get close. This is the **third Shadertoy shader** in the project, ported to TSL: the boids simulation of "[SH17C] Schooling" by P_Malin, in [src/tsl/boids.js](src/tsl/boids.js), with the GLSL kept as comments.
+
+The idea comes from Craig Reynolds' 1987 paper: every fish only knows its position, its velocity and the fish near it, and three rules steer it. **Separation** pushes it away from fish that are too close, **cohesion** pulls it towards the middle of its neighbours and **alignment** turns it the way they are swimming, plus a little random wandering and avoidance of land. There is no leader, yet schools form by themselves, split and merge. The simulation runs in a compute shader: the state is in storage buffers (double buffered, where the Shadertoy keeps it in textures), and the water shader reads their positions straight from those buffers, so the CPU never touches them.
+
+What changed to fit this project:
+- **A sphere instead of a 10 x 10 wrap-around square.** Fish live on the planet, moving in the tangent plane, and lengths and speeds are scaled to it (`FISH.lengthScale`, `FISH.frameRate`).
+- **Real obstacles.** The three rocks and the walls of the original are replaced by the actual islands and rocks of the world, so the schools swim round them.
+- **Added:** the fish swim away from the boat (more so when you go fast), and they start in schools, since the original relies on a dense crowd. The slider defaults of the original were in code that was cut off when it was pasted, so each weight is assumed to be 1 (`FISH`).
+- **Drawn as shadows** ([src/tsl/fishShadows.js](src/tsl/fishShadows.js)): not as separate objects but painted into the water's own colour. For every point of the sea the shader loops over the fish, puts the point into each fish's frame (along and across the direction it swims) and darkens it by a soft ellipse. So a shadow always lies exactly on the surface and follows the waves, in any weather. Deeper fish give fainter and smaller shadows, and every school has its own size. The idea of showing them as shadows, and the look, are my own; the original only draws dots.
+
+`?fish` (e.g. `http://localhost:5173/?fish`) reads the fish back from the GPU and checks them for a minute: no bad numbers, still on the sphere, speeds within the original's limits, none inside land, and the schools holding together. Size, darkness and count are in `FISH` in [src/config.js](src/config.js).
+
+## Raindrops on the water
+
+While it rains, drops land on the sea and spread out as rings of ripples. This is the **second Shadertoy shader** in the project, ported to TSL: https://www.shadertoy.com/view/ldjyWw (a fork of https://www.shadertoy.com/view/4ldSRj, see [Third-party code](#third-party-code)), in [src/tsl/raindrops.js](src/tsl/raindrops.js), with the GLSL kept as comments next to each statement.
+
+How it works: the sea is cut into a grid of cells; every cell has a drop that lands at a random spot on its own timer and sends out a few concentric rings that spread and fade, and when they have faded a new drop lands somewhere else. The ripples of the 3 x 3 neighbouring cells are combined into a height field. The original shows the slope of that field as a colour on a flat plane. Here the slope tilts the water's lighting normal (screen-space bump mapping), so the ripples catch the sun, moon and lamp, and it lightens the water a little on them.
+
+What changed to fit this project:
+- **A sphere instead of a plane.** The sea is covered by three flat maps (one per axis, like a cube) and each pixel uses the one it is nearest to. Ripples are faded out right on the seams, and with distance (they would be thinner than a pixel and shimmer).
+- **Rain level.** The original always rains. The unused `y` channel of its grid hash now switches cells on and off, so a drizzle has a few drops and a downpour many; when it is dry nothing is computed at all.
+- **Fades with the rain.** The ripples' strength also follows the rain level (`DROPS.fade`), so they die away together with the rain streaks when a storm ends (about 9 seconds), instead of lingering while the level eases down.
+- **No plane term.** The constant `pl` in `dfRipples` is dropped; only the ripples remain. Variables the original never initialises (`s2.y`) are taken as 0.
+
+## Loading
+
+Start-up shows a loading screen with a progress bar and the current stage. The game compiles all its GPU shaders and draws a few frames underneath it before revealing itself, so it never appears half-drawn ([src/loader.js](src/loader.js)).
+
 ## Post-processing
 
 The scene is rendered once into a texture, then a TSL node graph adds bloom (only really bright HDR pixels glow: the sun, the lamps, the lantern) and a soft vignette, followed by tone mapping ([src/post.js](src/post.js)). Press `P` to compare with the plain render.
@@ -93,7 +127,7 @@ The scene is rendered once into a texture, then a TSL node graph adds bloom (onl
 
 - Three.js with `WebGPURenderer` (no `WebGLRenderer`; the app shows an error instead of falling back to WebGL2).
 - Shader written as TSL node materials (`MeshStandardNodeMaterial` with `positionNode` / `colorNode`), no `ShaderMaterial` or `RawShaderMaterial`.
-- The original Shadertoy URL is credited at the top of this file (and in the header of the shader files).
+- The original Shadertoy URLs are credited at the top of this file (the simplex noise), in "Raindrops on the water" (the rain ripples) and in "Third-party code" (the fish schooling), and in the header of the shader files.
 - The shader responds to user input: the weather keys change the wave amplitude and foam in real time, and the boat's wake is drawn into the water by the shader from where and how fast you sail.
 
 ## Start screen
@@ -108,6 +142,7 @@ The start screen shows only the five essentials; `Esc` pauses (so does switching
 | --- | --- |
 | `W` / `S` (or arrows) | Throttle / reverse |
 | `A` / `D` | Steer to port / starboard (needs speed) |
+| Hold `Shift` | Boost: top speed 8 knots instead of 5 (forwards only) |
 | `Space` or `X` | Drop / raise the anchor (stops the boat) |
 | `H` (hold) | Horn |
 | `L` | Bow lamp on / off (spotlight on the water, glowing windows, light cone) |
@@ -154,11 +189,27 @@ src/
   physics/           JavaScript copy of the noise and waves, boat motion, weight, island shapes, collisions
   noiseConstants.js  constants of the Shadertoy noise shared by TSL and JS
   post.js            bloom + vignette (RenderPipeline)
-  debug/             GPU-vs-CPU parity test (?parity)
+  debug/             GPU-vs-CPU parity test (?parity), fish check (?fish)
 tests/             physics checks (npm run check)
 ```
 
 ## Third-party code
+
+### Fish schooling (third Shadertoy shader)
+
+[src/tsl/boids.js](src/tsl/boids.js) is a port of the "Buf B" tab (the boid simulation) of the Shadertoy **"[SH17C] Schooling" by P_Malin** (@P_Malin), an entry for round 3 of the Shadertoy competition 2017. It cites Craig Reynolds, "Flocks, Herds, and Schools: A Distributed Behavioral Model" (1987) and "Steering Behaviors For Autonomous Characters" (1999). Its hash is "Hash without Sine" by Dave Hoskins (https://www.shadertoy.com/view/4djSRW).
+
+<!-- TODO (fill in): the URL of the Schooling shader on Shadertoy; it was not in the pasted code. -->
+URL: https://www.shadertoy.com/view/XXXXXX. The header states no licence, so Shadertoy's default licence (CC BY-NC-SA 3.0) is assumed; this is a non-commercial student project and the port is credited here and in the file header.
+
+### Rain ripples (second Shadertoy shader)
+
+[src/tsl/raindrops.js](src/tsl/raindrops.js) is a port of https://www.shadertoy.com/view/ldjyWw, which says it is a fork of https://www.shadertoy.com/view/4ldSRj; its `hash33` is credited in the original to https://www.shadertoy.com/view/4djSRW.
+
+<!-- TODO (fill in from the Shadertoy page): title and author of ldjyWw, and of 4ldSRj if you want to name the original too. -->
+Original: "voronoi rain splashes b" by ollj on Shadertoy. The header of the shader states no licence, so Shadertoy's default licence (CC BY-NC-SA 3.0: attribution, non-commercial, share-alike) is assumed; this is a non-commercial student project and the port is credited here and in the file header.
+
+### Simplex noise (first Shadertoy shader)
 
 The simplex noise in [src/tsl/simplexNoise.js](src/tsl/simplexNoise.js) and [src/physics/simplexNoise.js](src/physics/simplexNoise.js) is derived from https://www.shadertoy.com/view/XsX3zB, whose header states "The MIT License, Copyright © 2013 Nikita Miropolskiy". Standard MIT text:
 

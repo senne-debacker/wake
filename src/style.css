@@ -195,6 +195,8 @@ body {
 }
 
 .strip {
+  pointer-events: auto;
+  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 9px;
@@ -230,6 +232,8 @@ body {
 }
 
 .tool {
+  pointer-events: auto;
+  cursor: pointer;
   position: relative;
   width: 64px;
   height: 64px;
@@ -655,14 +659,65 @@ body.show-sound #sound-button {
   position: fixed;
   inset: 0;
   z-index: 30;
-  display: grid;
-  place-content: center;
-  background: #1b2a3a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  background: radial-gradient(ellipse at 50% 45%, #22384c 0%, #121f2c 70%, #0b131b 100%);
   color: var(--cream);
-  font-size: 18px;
-  letter-spacing: 0.3em;
   text-transform: uppercase;
-  transition: opacity 0.6s ease;
+  transition: opacity 0.7s ease;
+}
+
+#loading h1 {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 400;
+  font-size: clamp(40px, 9vh, 84px);
+  letter-spacing: 0.3em;
+  padding-left: 0.3em;
+  text-shadow: 0 0 40px rgba(127, 214, 230, 0.25);
+}
+
+#loading-bar {
+  position: relative;
+  width: min(320px, 60vw);
+  height: 3px;
+  overflow: hidden;
+  background: rgba(241, 236, 224, 0.14);
+}
+
+/* The bar fills as the stages finish; a soft shine keeps moving so it never looks frozen. */
+#loading-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4%;
+  background: var(--teal-light);
+  box-shadow: 0 0 12px rgba(127, 214, 230, 0.7);
+  transition: width 0.5s ease;
+}
+
+#loading-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  animation: loading-shine 1.2s linear infinite;
+}
+
+@keyframes loading-shine {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+#loading-label {
+  margin: 0;
+  min-height: 1.2em;
+  font-size: 13px;
+  letter-spacing: 0.4em;
+  padding-left: 0.4em;
+  color: rgba(241, 236, 224, 0.65);
 }
 
 #loading.done {
@@ -690,4 +745,35 @@ body.show-sound #sound-button {
   margin: 0 auto;
   font-size: 13px;
   opacity: 0.7;
+}
+
+/* Clickable HUD buttons react to the pointer. */
+.strip[data-key]:hover,
+.tool:hover .diamond {
+  filter: brightness(1.35);
+}
+
+.strip[data-key]:active,
+.tool:active .diamond {
+  transform: translateY(1px);
+}
+
+.tool:active .diamond {
+  transform: rotate(45deg) scale(0.94);
+}
+
+/* The mouse pointer hides while sailing when it has not moved for a while (see src/cursor.js). */
+body.cursor-hidden,
+body.cursor-hidden * {
+  cursor: none !important;
+}
+
+/* A held key shown as active on its strip (boost). */
+.strip.active {
+  background: #12505f;
+  box-shadow: 0 0 14px rgba(127, 214, 230, 0.55);
+}
+
+.strip.active .strip-label {
+  color: #fff;
 }

@@ -5,6 +5,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wake</title>
+    <link rel="stylesheet" href="/src/style.css" />
     <meta name="description" content="A low-poly fishing boat on a tiny ocean planet: Three.js WebGPURenderer, TSL, and a ported Shadertoy simplex noise." />
   </head>
   <body>
@@ -56,12 +57,13 @@
       <div id="toast"></div>
 
       <div id="left">
-        <div class="strip" id="strip-camera"><svg class="icon"><use href="#i-eye" /></svg><span class="key">C</span><span class="strip-label" id="camera-label">Chase</span></div>
-        <div class="strip" id="strip-time"><svg class="icon"><use href="#i-clock" /></svg><span class="key">T</span><span class="strip-label">Hold</span></div>
+        <div class="strip" id="strip-camera" data-key="KeyC"><svg class="icon"><use href="#i-eye" /></svg><span class="key">C</span><span class="strip-label" id="camera-label">Chase</span></div>
+        <div class="strip" id="strip-boost" data-key="ShiftLeft" data-hold><svg class="icon"><use href="#i-gauge" /></svg><span class="key wide">Shift</span><span class="strip-label">Boost</span></div>
+        <div class="strip" id="strip-time" data-key="KeyT" data-hold><svg class="icon"><use href="#i-clock" /></svg><span class="key">T</span><span class="strip-label">Hold</span></div>
         <div id="tools">
-          <div class="tool" id="tool-lamp"><div class="diamond"><svg class="icon"><use href="#i-bulb" /></svg></div><span class="key">L</span></div>
-          <div class="tool" id="tool-anchor"><div class="diamond"><svg class="icon"><use href="#i-anchor" /></svg></div><span class="key wide">Space</span></div>
-          <div class="tool" id="tool-horn"><div class="diamond"><svg class="icon"><use href="#i-horn" /></svg></div><span class="key">H</span></div>
+          <div class="tool" id="tool-lamp" data-key="KeyL"><div class="diamond"><svg class="icon"><use href="#i-bulb" /></svg></div><span class="key">L</span></div>
+          <div class="tool" id="tool-anchor" data-key="Space"><div class="diamond"><svg class="icon"><use href="#i-anchor" /></svg></div><span class="key wide">Space</span></div>
+          <div class="tool" id="tool-horn" data-key="KeyH" data-hold><div class="diamond"><svg class="icon"><use href="#i-horn" /></svg></div><span class="key">H</span></div>
           <div id="stats">
             <div class="stat"><svg class="icon"><use href="#i-gauge" /></svg><b id="stat-speed">0</b><small>kn</small></div>
             <div class="stat"><svg class="icon"><use href="#i-waves" /></svg><b id="stat-sea" class="good">Calm</b></div>
@@ -70,9 +72,9 @@
       </div>
 
       <div id="right">
-        <div class="strip right" id="strip-menu"><span class="key">Esc</span><svg class="icon"><use href="#i-menu" /></svg></div>
-        <div class="strip right" id="strip-sound"><span class="key">M</span><svg class="icon"><use id="sound-icon" href="#i-speaker" /></svg></div>
-        <div class="strip right" id="strip-effects"><span class="key">P</span><svg class="icon"><use href="#i-sparkle" /></svg></div>
+        <div class="strip right" id="strip-menu" data-key="Escape"><span class="key">Esc</span><svg class="icon"><use href="#i-menu" /></svg></div>
+        <div class="strip right" id="strip-sound" data-key="KeyM"><span class="key">M</span><svg class="icon"><use id="sound-icon" href="#i-speaker" /></svg></div>
+        <div class="strip right" id="strip-effects" data-key="KeyP"><span class="key">P</span><svg class="icon"><use href="#i-sparkle" /></svg></div>
       </div>
     </div>
 
@@ -110,6 +112,7 @@
               <div><dt><kbd>W</kbd><kbd>S</kbd></dt><dd>Throttle / reverse</dd></div>
               <div><dt><kbd>A</kbd><kbd>D</kbd></dt><dd>Steer (you need speed)</dd></div>
               <div><dt><kbd class="wide">Space</kbd></dt><dd>Drop / raise the anchor</dd></div>
+              <div><dt><kbd class="wide">Shift</kbd></dt><dd>Boost (8 knots)</dd></div>
               <div><dt><kbd>H</kbd></dt><dd>Horn (hold it)</dd></div>
               <div><dt><kbd>L</kbd></dt><dd>Bow lamp</dd></div>
               <div><dt><kbd>C</kbd></dt><dd>Chase camera / planet view</dd></div>
@@ -145,7 +148,11 @@
       <span class="key">M</span>
     </button>
 
-    <div id="loading">Loading the sea&hellip;</div>
+    <div id="loading">
+      <h1>Wake</h1>
+      <div id="loading-bar"><i id="loading-fill"></i></div>
+      <p id="loading-label">Starting up</p>
+    </div>
     <div id="error" hidden>
       <h1>WebGPU is not available</h1>
       <p>This project needs a browser with WebGPU (recent Chrome, Edge or Safari&nbsp;26).</p>

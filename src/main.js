@@ -1,11 +1,11 @@
-import './style.css'
 import {
   WebGPURenderer, Scene, PerspectiveCamera, Color, Vector3, ACESFilmicToneMapping,
 } from 'three/webgpu'
 
-import { PALETTE, INTRO } from './config.js'
+import { PALETTE, INTRO, BOAT } from './config.js'
 import { uniforms } from './uniforms.js'
 import { createPlanet } from './scene/planet.js'
+import { createFish } from './scene/fish.js'
 import { createLighting } from './scene/lighting.js'
 import { createBoat } from './scene/boat.js'
 import { createSky } from './scene/sky.js'
@@ -24,6 +24,8 @@ import { resolveCollisions } from './physics/collision.js'
 import { createCameraRig } from './camera/cameraRig.js'
 import { createHud, compassHeading } from './hud.js'
 import { createMenu } from './menu.js'
+import { createCursorHider } from './cursor.js'
+import { createLoader } from './loader.js'
 import { createAudio } from './audio/audio.js'
 import { createPostProcessing } from './post.js'
 import { setupInteraction } from './interaction.js'
@@ -36,6 +38,9 @@ async function main() {
     return
   }
 
+  const loader = createLoader()
+  await loader.stage(0.08, 'Starting the engine')
+
   // --- Renderer ---------------------------------------------------------------
   const renderer = new WebGPURenderer({ antialias: true })
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
@@ -44,13 +49,14 @@ async function main() {
   document.querySelector('#app').appendChild(renderer.domElement)
   await renderer.init() // WebGPU adapter/device are requested asynchronously
 
+  await loader.stage(0.25, 'Building the world')
+
   // --- Scene + camera ---------------------------------------------------------
   const scene = new Scene()
   scene.background = new Color(PALETTE.background)
 
   const camera = new PerspectiveCamera(55, innerWidth / innerHeight, 0.1, 200)
 
-  const planet = createPlanet()
   const { sun, moon, fill } = createLighting()
   const boat = createBoat()
   const layout = createLayout() // where islands, rocks and buoys are (also used for collisions)
@@ -58,6 +64,8 @@ async function main() {
   const sky = createSky()
   const clouds = createClouds()
   const rain = createRain()
+  const fish = createFish(renderer, layout)
+  const planet = createPlanet(fish) // the water paints the fish's shadows
   scene.add(sky.mesh, planet, world.group, clouds.group, rain.mesh, sun, moon, fill, boat.root)
 
   const clock = createClock()
@@ -113,8 +121,24 @@ async function main() {
     },
     onResume: () => setState('playing'),
   })
+  const cursor = createCursorHider()
+  // The clickable HUD: every button triggers the same action as its key; buttons marked data-hold
+  // (horn, hold-for-time) act while the mouse button is down.
+  for (const element of document.querySelectorAll('#hud [data-key]')) {
+    const key = element.dataset.key
+    const held = 'hold' in element.dataset
+    element.addEventListener('pointerdown', (event) => {
+      event.preventDefault()
+      interaction.press(key)
+      if (held) element.setPointerCapture(event.pointerId)
+    })
+    if (held) {
+      for (const type of ['pointerup', 'pointercancel']) element.addEventListener(type, () => interaction.release(key))
+    }
+  }
   function setState(next) {
     state = next
+    cursor.setEnabled(next === 'playing')
     interaction.enabled = next === 'playing'
     hud.show(next === 'playing' || next === 'paused')
     menu.showSound(next === 'menu' || next === 'paused')
@@ -126,7 +150,13 @@ async function main() {
   }
   setState('menu')
 
-  if (import.meta.env.DEV) window.__game = { boatState, boatPose, input: interaction.input, uniforms, lights: { sun, moon, fill }, clock, atmosphere, weather, layout, world, scene, camera, audio, getState: () => state } // for debugging in the console
+  if (import.meta.env.DEV) window.__game = { boatState, boatPose, input: interaction.input, uniforms, lights: { sun, moon, fill }, clock, atmosphere, weather, layout, world, scene, camera, audio, fish, getState: () => state } // for debugging in the console
+
+  // `?fish` checks the fish simulation on the GPU (see src/debug/fishTest.js).
+  if (new URLSearchParams(location.search).has('fish')) {
+    // (a few seconds in: the GPU buffers only exist once the first frames have run)
+    setTimeout(() => import('./debug/fishTest.js').then(({ runFishTest }) => runFishTest(fish, layout)), 4000)
+  }
 
   // `?parity` runs the GPU-vs-CPU wave comparison (see src/debug/parityTest.js).
   if (new URLSearchParams(location.search).has('parity')) {
@@ -134,10 +164,16 @@ async function main() {
     await runParityTest(renderer)
   }
 
+  // Compile every shader now, behind the loading screen (otherwise the GPU compiles them lazily
+  // during the first frames, which shows up as half-drawn, flickering frames).
+  await loader.stage(0.55, 'Compiling the shaders')
+  await renderer.compileAsync(scene, camera)
+  await loader.stage(0.85, 'Warming up')
+
   // --- Loop -------------------------------------------------------------------
   let last = performance.now()
   let elapsed = 0
-  let firstFrame = true
+  let warmupFrames = 0 // frames drawn under the loading screen before it fades out
   let previous = { lights: false, anchored: false, horn: false }
   let bumpCooldown = 0
   let darkHinted = false
@@ -166,7 +202,12 @@ async function main() {
       }
     }
     placeBoat(elapsed, delta) // CPU twin of the waves (same clock and weather as the shader), then the hull's weight
+    fish.update(delta, Math.min(1.6, boatState.vel.length() / BOAT.maxSpeed), input.anchored) // the schools of fish swim on the GPU
     boat.update(delta, input.lights, input.horn, elapsed)
+    // The lamp's pool of light on the water (tsl/lampPool.js) follows the boat over the curved surface.
+    uniforms.lampDir.value.copy(boatState.dir)
+    uniforms.lampForward.value.copy(boatState.heading).addScaledVector(boatState.dir, -boatState.heading.dot(boatState.dir)).normalize()
+    uniforms.lampLevel.value = boat.lampLevel
     rig.update(delta, input.planetView, elapsed)
 
     clock.update(sim, input.fastForward)
@@ -177,7 +218,8 @@ async function main() {
 
     // Lamps (lighthouse, buoys) come on at night and during storms.
     const night = Math.min(1, Math.max(0, (0.1 - atmosphere.state.elevation) / 0.22))
-    world.update(elapsed, weather.levels.storm, Math.max(night, 0.6 * weather.levels.storm * weather.levels.cover))
+    const buoyHit = world.update(elapsed, weather.levels.storm, Math.max(night, 0.6 * weather.levels.storm * weather.levels.cover), boatState, delta)
+    if (playing && buoyHit > 0) audio.buoyHit(buoyHit) // the boat sails through it and tips it over
     rain.update(boatState)
     wake.update(sim, boatState)
 
@@ -211,6 +253,7 @@ async function main() {
       anchored: input.anchored,
       lights: input.lights,
       horn: input.horn,
+      boost: input.boost,
       speed: boatState.vel.length(),
       storm: weather.levels.storm,
       camera: rig.mode,
@@ -221,9 +264,9 @@ async function main() {
     post.enabled = input.post
     post.render() // scene + bloom + vignette (or a plain render while effects are off)
 
-    if (firstFrame) {
-      firstFrame = false
-      document.querySelector('#loading').classList.add('done')
+    if (warmupFrames >= 0 && ++warmupFrames === 30) {
+      warmupFrames = -1
+      loader.finish()
     }
   })
 

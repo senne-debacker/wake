@@ -1,4 +1,5 @@
 import { Vector3 } from 'three/webgpu'
+import { DAY } from './config.js'
 
 // The in-game interface, modelled on Dredge's: a ring that turns with the time of day with the
 // anchor marker as "now", a pill with the day and the clock, a compass, diamond buttons for the
@@ -22,12 +23,13 @@ export function compassHeading(boatState) {
 }
 
 const RING = 92
-const PHASES = [ // [start, end] as a fraction of the day, and the colour
-  [0, 0.22, '#17233d'], // night
-  [0.22, 0.3, '#e0855a'], // dawn
-  [0.3, 0.7, '#cfe6ee'], // day
-  [0.7, 0.8, '#d9764f'], // dusk
-  [0.8, 1, '#17233d'], // night
+const { dawn, day, dusk, night } = DAY.hours
+const PHASES = [ // [start, end] as a fraction of the day, and the colour; the hours come from DAY.hours
+  [0, dawn / 24, '#17233d'], // night
+  [dawn / 24, day / 24, '#e0855a'], // morning twilight
+  [day / 24, dusk / 24, '#cfe6ee'], // day
+  [dusk / 24, night / 24, '#d9764f'], // evening twilight
+  [night / 24, 1, '#17233d'], // night
 ]
 const onRing = (t) => [RING * Math.sin(t * Math.PI * 2), -RING * Math.cos(t * Math.PI * 2)] // midnight at the top, noon at the bottom
 const arc = (t0, t1) => {
@@ -95,6 +97,7 @@ export function createHud() {
         $('tool-anchor').classList.toggle('on', v)
       })
       change('lamp', s.lights, (v) => $('tool-lamp').classList.toggle('on', v))
+      change('boost', s.boost, (v) => $('strip-boost').classList.toggle('active', v))
       change('horn', s.horn, (v) => $('tool-horn').classList.toggle('on', v))
 
       change('speed', Math.round(s.speed * 5), (v) => ($('stat-speed').textContent = v)) // 1 unit/s reads as 5 knots

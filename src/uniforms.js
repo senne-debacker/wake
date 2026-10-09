@@ -37,6 +37,12 @@ export const uniforms = {
   wakeSince: uniform(0),
   wakeBow: uniform(new Vector4(0, 1, 0, 0)), // direction of the bow splash, w = strength
 
+  // The bow lamp's pool of light on the water: the boat's position (a direction from the planet
+  // centre), its heading (tangent) and how switched on the lamp is (0..1). Written by main.js.
+  lampDir: uniform(new Vector3(0, 1, 0)),
+  lampForward: uniform(new Vector3(0, 0, -1)),
+  lampLevel: uniform(0),
+
   // Islands and rocks the water draws shore foam around: x, y, z = direction from the
   // planet centre, w = shoreline radius (world units); w < 0 = unused slot.
   shoreBodies: uniformArray(Array.from({ length: WORLD.maxBodies }, () => new Vector4(0, 1, 0, -10)), 'vec4'),

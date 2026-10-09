@@ -1,4 +1,4 @@
-import { Color, Vector3, FogExp2 } from 'three/webgpu'
+import { Color, Vector3, Quaternion, FogExp2 } from 'three/webgpu'
 import { CLOUDS, DAY, PLANET, SKY_KEYS } from '../config.js'
 import { uniforms } from '../uniforms.js'
 
@@ -29,9 +29,33 @@ function overcast(color, amount, dim = 1) {
   color.lerp(grey, amount).multiplyScalar(dim)
 }
 
+// Where the sun is on its circle (radians: 0 = rising through the horizon, pi/2 = noon, pi = setting,
+// 3pi/2 = midnight), for an hour of the day. The sun does not move at a constant pace: it is
+// placed so that it reaches the heights of the "day" and "night" sky keys exactly at the hours of
+// the schedule (DAY.hours): full day from `day` to `dusk`, evening twilight from `dusk` to `night`,
+// full night until `dawn`, morning twilight until `day`. Piecewise linear between these points.
+const DEG = Math.PI / 180
+const { dawn, day: dayStart, dusk, night: nightStart } = DAY.hours
+const SUN_PATH = [ // [hour, angle in degrees], increasing
+  [0, 270],
+  [dawn, 360 + DAY.sunNightDeg],
+  [dayStart, 360 + DAY.sunDayDeg],
+  [12, 450],
+  [dusk, 540 - DAY.sunDayDeg],
+  [nightStart, 540 - DAY.sunNightDeg],
+  [24, 630],
+]
+export function sunAngle(timeOfDay) {
+  const hour = timeOfDay * 24
+  let i = 0
+  while (i < SUN_PATH.length - 2 && hour > SUN_PATH[i + 1][0]) i++
+  const [[h0, a0], [h1, a1]] = [SUN_PATH[i], SUN_PATH[i + 1]]
+  return (a0 + ((a1 - a0) * (hour - h0)) / (h1 - h0)) * DEG
+}
+
 // Unit vector from the planet centre towards the sun.
 export function sunDirection(timeOfDay, target) {
-  const angle = (timeOfDay - 0.25) * Math.PI * 2 // 0 = sunrise, pi/2 = noon, pi = sunset
+  const angle = sunAngle(timeOfDay)
   return target.copy(east).multiplyScalar(Math.cos(angle)).addScaledVector(noon, Math.sin(angle))
 }
 
@@ -58,6 +82,18 @@ export function createAtmosphere({ scene, sun, moon, fill }) {
 
   const sunDir = new Vector3()
   const moonDir = new Vector3()
+
+  // The sun follows the player, not the planet. The planet is so small that sailing round it
+  // would otherwise carry you through sunset and sunrise while the clock stands still. Instead
+  // the whole sky is carried along with the boat: `skyFrame` is the sum of the little rotations
+  // the boat makes round the planet (a rotation that takes where it started to where it is), and
+  // the sun, moon and stars are turned by it. So the sun's height above the boat depends only
+  // on the clock, and the HUD time is the time wherever you are. Turning on the spot does not
+  // change it, and in planet view you see the day and night sides slide round as you sail.
+  const skyFrame = new Quaternion()
+  const step = new Quaternion()
+  const lastUp = new Vector3()
+  let started = false
   const state = { elevation: 1 }
   for (const prop of COLOR_PROPS) state[prop] = new Color()
   for (const prop of NUMBER_PROPS) state[prop] = 0
@@ -70,7 +106,15 @@ export function createAtmosphere({ scene, sun, moon, fill }) {
     // view (the sky becomes a star field and the haze is removed). `weather`: the
     // levels from world/weather.js ({ storm, cover, rain }).
     update(timeOfDay, localUp, cameraHeight, spaceAmount, weather) {
-      sunDirection(timeOfDay, sunDir)
+      if (!started) {
+        lastUp.copy(localUp)
+        started = true
+      }
+      step.setFromUnitVectors(lastUp, localUp) // how far the boat moved round the planet since last frame
+      skyFrame.premultiply(step).normalize()
+      lastUp.copy(localUp)
+
+      sunDirection(timeOfDay, sunDir).applyQuaternion(skyFrame)
       moonDir.copy(sunDir).negate()
       state.elevation = sunDir.dot(localUp)
       blend(state.elevation, state)
