@@ -274,6 +274,24 @@ export const LIGHTNING = {
   light: 2.2, // extra light from above on the boat and water
 }
 
+// Dolphins (scene/dolphin.js): now and then one leaps out of the water near the boat and is gone.
+export const DOLPHIN = {
+  enabled: false, // switched off for now: nothing is created or loaded, the code stays
+  model: 'models/dolphin.glb', // optional, in public/; without it a low-poly dolphin is built in code
+  length: 0.8, // nose to tail, world units (the boat is 0.9)
+  nose: [0, 0, 1], // which way the nose points in the model file (glTF from Blender: usually +Z)
+  interval: [0, 1], // seconds between jumps
+  maxStorm: 0.7, // no jumping in a bigger storm than this
+  duration: 1.5, // seconds from leaving the water to going back in
+  distance: 1.9, // how far it travels over the water
+  height: 0.7, // how high above the water it gets
+  dip: 0.35, // how far below the surface the leap starts and ends (hidden by the water)
+  spawn: { distance: [1.0, 2.5], bearing: [30, 100] }, // from the boat: units, degrees off the bow (either side)
+  wag: { amplitude: 0.07, speed: 14, wavelength: 0.2 }, // tail beat: size (x length), rad/s, along the body
+  concurrent: 2,
+  splash: { size: 3.2, seconds: 0.9 }, // the ring of foam where it enters and leaves the water
+}
+
 // Three numbers describe the weather: `storm` (wave height and foam, see
 // uniforms.storm), `cover` (cloud cover / overcast sky) and `rain`.
 export const WEATHER = {

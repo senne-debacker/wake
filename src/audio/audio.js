@@ -401,6 +401,14 @@ export function createAudio() {
       }
     },
 
+    // A dolphin enters or leaves the water: a short splash and a soft whoosh.
+    splash(strength = 0.5) {
+      if (!ctx) return
+      const s = clamp(strength, 0.1, 1)
+      noiseBurst({ duration: 0.4, type: 'bandpass', frequency: 2200, endFrequency: 700, Q: 0.8, volume: 0.2 * s })
+      noiseBurst({ duration: 0.6, type: 'lowpass', frequency: 700, endFrequency: 200, Q: 0.7, volume: 0.25 * s, attack: 0.03 })
+    },
+
     // Thunder `delay` seconds after the flash (sound is slower than light): a sharp crack when it
     // is close, then a long low rumble that rolls and fades.
     thunder(delay = 1, strength = 1) {

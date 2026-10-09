@@ -268,6 +268,14 @@ User asked for: start/pause screen, better driving interface, heavier boat, horn
 - [x] `public/audio/thunder.mp3` (user's file): decoded in `audio.js loadThunder()` at start, looped through a low-pass into the `env` bus (so pause / planet view treat it like the other layers), gain `THUNDER_VOLUME` 0.35 x smoothstep(0.45, 0.95, min(rain, storm)), eased over 1.2 s; the synthesised thunder is 40% quieter when it is loaded
 - Not done: no visible bolt (just the flash)
 
+### Step 24 — Dolphins  *(done)*
+- User gave a Blender asset id (`7269cd99-...`, "model"), which cannot be resolved from here (no file in the project, no connector): so the system works without it. `scene/dolphin.js` loads `public/models/dolphin.glb` if present (GLTFLoader; each mesh baked into model space, turned so `DOLPHIN.nose` points to -Z, centred, scaled to length 1, base colour + map kept) and otherwise builds a low-poly dolphin from a lathe body + cone fins merged into one geometry (two-tone colour from the model height). **No skeleton**: each mesh gets a TSL `positionNode` that adds a travelling sine wave along the body, growing with t^2 towards the tail (`phase` uniform per dolphin, `DOLPHIN.wag`); this is the "rig" and works on any static mesh
+- Leap: parabola `h(u) = (height + dip)(1 - (2u-1)^2) - dip` (starts and ends below the surface, hidden by the opaque water), travelled along a great circle (`start` + `tangent`, `distance`) on top of the wave height from `physics/waves.js`; orientation from two close points on the curve; spawn 1.0-2.5 units from the boat, 30-100 degrees off the bow, leaping across its way, only if 5 samples along it are clear of every collider by 0.6; timer 7-16 s runs only while playing (chase and planet view alike; the splash is quieter from space) and for `storm < 0.7`; up to `concurrent` 2; foam rings (`RingGeometry`, `MeshBasicNodeMaterial`) at the two surface crossings; `audio.splash`
+- Checked: frames of a leap (shape, bend, ring, direction of travel nose first), no console errors; the GLB path with a hand-written test box (node scale 5, offset): loaded, normalised, bent; the test file was deleted. NOT checked: the real model (orientation `DOLPHIN.nose`, size, colours) and the splash sound by ear
+- Dev: `__game.dolphins.jumpNow()`
+- **Switched off** by the user (`DOLPHIN.enabled: false`, "they're ugly, we'll work further next time"): `createDolphins` returns an inert stub, nothing is loaded or added to the scene. Set it to true to bring them back; next time: a better model/shape
+
+
 ## Final requirements check (re-run before handing in)
 
 ```
@@ -286,6 +294,7 @@ npm run check                                                                   
 
 ## Progress log
 
+- 2026-10-09: Step 24: leaping dolphins (procedural fallback, GLB loader, shader bend instead of a rig). Real model not received yet.
 - 2026-10-09: Step 23: lightning and thunder in storms.
 - 2026-10-09: Step 22: drag to look round the boat in chase view, bloom always on (P removed), fish smaller.
 - 2026-10-09: Step 21: realistic boat wake from a fourth Shadertoy shader (`tsl/wakeWaves.js`), old foam arms removed (wash and bow stay), `raindrops.js` split into `rainHeight` + `surfaceBump`.

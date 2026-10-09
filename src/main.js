@@ -14,6 +14,7 @@ import { createRain } from './scene/rain.js'
 import { createClock } from './world/clock.js'
 import { createAtmosphere } from './world/atmosphere.js'
 import { createWeather } from './world/weather.js'
+import { createDolphins } from './scene/dolphin.js'
 import { createLightning } from './world/lightning.js'
 import { createWake } from './world/wake.js'
 import { createLayout } from './world/layout.js'
@@ -92,6 +93,7 @@ async function main() {
   const rig = createCameraRig(camera, renderer.domElement, boatState)
   const hud = createHud()
   const audio = createAudio()
+  const dolphins = createDolphins({ scene, layout, audio })
   atmosphere.update(clock.timeOfDay, boatState.dir, camera.position.length(), spaceAmount, weather.levels) // correct lighting from the first frame
 
   // --- Game state: start screen -> starting -> playing <-> paused -----------------------------------
@@ -152,7 +154,7 @@ async function main() {
   }
   setState('menu')
 
-  if (import.meta.env.DEV) window.__game = { boatState, boatPose, input: interaction.input, uniforms, lights: { sun, moon, fill }, clock, atmosphere, weather, lightning, layout, world, scene, camera, audio, fish, getState: () => state } // for debugging in the console
+  if (import.meta.env.DEV) window.__game = { boatState, boatPose, input: interaction.input, uniforms, lights: { sun, moon, fill }, clock, atmosphere, weather, lightning, dolphins, layout, world, scene, camera, audio, fish, getState: () => state } // for debugging in the console
 
   // `?fish` checks the fish simulation on the GPU (see src/debug/fishTest.js).
   if (new URLSearchParams(location.search).has('fish')) {
@@ -214,6 +216,7 @@ async function main() {
 
     clock.update(sim, input.fastForward)
     spaceAmount += ((input.planetView ? 1 : 0) - spaceAmount) * (1 - Math.exp(-delta * 4))
+    dolphins.update(delta, elapsed, boatState, weather.levels.storm, playing, spaceAmount)
     lightning.update(delta, weather.levels, playing)
     atmosphere.update(clock.timeOfDay, boatState.dir, camera.position.length(), spaceAmount, weather.levels, lightning.flash) // lights, fog, sky and water colours
     sky.update(camera)
