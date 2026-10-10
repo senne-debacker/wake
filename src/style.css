@@ -777,3 +777,140 @@ body.cursor-hidden * {
 .strip.active .strip-label {
   color: #fff;
 }
+
+/* ---------------------------------------------------------------------------------------------
+   Touch mode (body.touch, see src/touch.js): on-screen pads, no keyboard hints
+   --------------------------------------------------------------------------------------------- */
+
+#touch {
+  display: none;
+}
+
+body.touch #touch {
+  display: block;
+}
+
+#app canvas {
+  touch-action: none; /* the page itself never scrolls or zooms: drags look round the boat */
+}
+
+body.touch {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+.pad {
+  position: absolute;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+}
+
+#pad-steer {
+  left: max(18px, env(safe-area-inset-left));
+}
+
+#pad-drive {
+  right: max(18px, env(safe-area-inset-right));
+}
+
+.pad .column {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.tbtn {
+  --size: clamp(60px, 17vmin, 92px);
+  pointer-events: auto;
+  touch-action: none;
+  display: grid;
+  place-items: center;
+  width: var(--size);
+  height: var(--size);
+  box-sizing: border-box;
+  border-radius: 50%;
+  background: rgba(5, 7, 10, 0.62);
+  border: 2px solid rgba(241, 236, 224, 0.4);
+  color: var(--cream);
+  transition: background 0.12s, box-shadow 0.12s;
+}
+
+.tbtn.small {
+  --size: clamp(46px, 12vmin, 66px);
+}
+
+.tbtn .icon {
+  width: 52%;
+  height: 52%;
+  stroke-width: 2.4;
+}
+
+.tbtn:active,
+.tbtn.active {
+  background: #12505f;
+  border-color: var(--teal-light);
+  box-shadow: 0 0 16px rgba(127, 214, 230, 0.55);
+}
+
+/* Phones: no key hints, and the left panel keeps only the camera strip and the three tools. */
+body.touch .key,
+body.touch .start-keys,
+body.touch .menu-columns,
+body.touch #strip-boost,
+body.touch #strip-time {
+  display: none;
+}
+
+body.touch #left {
+  top: 14px;
+  bottom: auto;
+  transform-origin: 0 0;
+}
+
+body.touch #tools {
+  flex-wrap: wrap;
+  max-width: 260px;
+}
+
+body.touch #strip-camera {
+  min-width: 0;
+}
+
+.start-touch,
+.touch-help {
+  display: none;
+}
+
+body.touch .start-touch {
+  display: block;
+  margin: 0 0 14px;
+  font-size: clamp(13px, 2.2vh, 17px);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(241, 236, 224, 0.92);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
+}
+
+body.touch .touch-help {
+  display: block;
+  margin: 0 0 14px;
+  font-size: 15px;
+  line-height: 1.45;
+  color: rgba(241, 236, 224, 0.85);
+}
+
+body.touch .menu-foot {
+  display: none;
+}
+
+/* Small screens (a phone held sideways): shrink the HUD panels. */
+@media (max-height: 520px) {
+  body.touch {
+    --ui: 0.55;
+  }
+}

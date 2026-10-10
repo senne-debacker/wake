@@ -66,16 +66,40 @@ export function createCameraRig(camera, domElement, state) {
   }, { passive: true })
 
   // Drag with the mouse to look round the boat; double-click puts the camera back behind it.
-  let dragging = false
+  // One finger or the mouse looks round; two fingers pinch to zoom. The movement is worked out from
+  // the pointer positions (touch pointers report no `movementX`).
+  const pointers = new Map() // pointerId -> { x, y } of the pointers that went down on the canvas
+  let pinch = 0 // distance between two fingers last time
+  const fingerGap = () => {
+    const [a, b] = [...pointers.values()]
+    return Math.hypot(a.x - b.x, a.y - b.y)
+  }
   addEventListener('pointerdown', (event) => {
-    if (event.target !== domElement || event.button !== 0 || orbit || opening.phase !== 'done') return
-    dragging = true
+    if (event.target !== domElement || (event.pointerType === 'mouse' && event.button !== 0) || orbit || opening.phase !== 'done') return
+    pointers.set(event.pointerId, { x: event.clientX, y: event.clientY })
+    if (pointers.size === 2) pinch = fingerGap()
     domElement.setPointerCapture(event.pointerId)
   })
   addEventListener('pointermove', (event) => {
-    if (dragging) chase.look(-event.movementX * CAMERA.dragSpeed, event.movementY * CAMERA.dragSpeed)
+    const last = pointers.get(event.pointerId)
+    if (!last) return
+    const dx = event.clientX - last.x
+    const dy = event.clientY - last.y
+    last.x = event.clientX
+    last.y = event.clientY
+    if (pointers.size === 1) chase.look(-dx * CAMERA.dragSpeed, dy * CAMERA.dragSpeed)
+    else if (pointers.size === 2) {
+      const gap = fingerGap()
+      if (pinch > 0 && gap > 0) chase.zoomBy(pinch / gap) // fingers apart = closer
+      pinch = gap
+    }
   })
-  for (const type of ['pointerup', 'pointercancel']) addEventListener(type, () => (dragging = false))
+  for (const type of ['pointerup', 'pointercancel']) {
+    addEventListener(type, (event) => {
+      pointers.delete(event.pointerId)
+      if (pointers.size === 0) pinch = 0
+    })
+  }
   addEventListener('dblclick', (event) => {
     if (event.target === domElement) chase.resetLook()
   })
@@ -148,7 +172,7 @@ export function createCameraRig(camera, domElement, state) {
         followBoat()
         orbit.update()
         truePos.copy(camera.position)
-      } else chase.update(state, delta, dragging, driving)
+      } else chase.update(state, delta, pointers.size > 0, driving)
 
       if (glide.active) applyGlide(delta)
       glide.restore = glide.active && orbit !== null

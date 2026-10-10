@@ -165,6 +165,10 @@ Letter keys match the letter printed on the key, so the controls work on QWERTY 
 
 The interface follows Dredge's: a ring that turns with the time of day (the anchor marker is "now" and lights up when the anchor is down), the day and clock, a compass whose dial turns while the marker at the top is the bow, diamond buttons for the lamp, anchor and horn with their keys, a stat box with speed (in knots) and sea state, and strips for the camera, time, menu, sound and effects. Short messages ("Lamp on", "Anchor down", "Bump!") appear under the dial.
 
+### On a phone or tablet
+
+When the main pointer is a finger (or after the first touch), the page switches to **touch mode** ([src/touch.js](src/touch.js)): two pads appear, steer left / right at the bottom left, forward / reverse and a boost button at the bottom right, all held with the thumbs (several at once, so you can steer and sail together). The lamp, anchor, horn and camera buttons and the menu / mute buttons are the same clickable HUD buttons as on the desktop, just tapped. Drag on the sea to look round the boat, pinch to zoom. The keyboard hints are hidden and the pause screen explains the buttons instead. The pads are not shown on desktop; to try touch mode in a desktop browser add `?touch` to the address, and `?desktop` forces it off.
+
 ## Run it
 
 Needs a WebGPU browser (recent Chrome or Edge, Safari 26). It was developed and tested in Chrome; I have not been able to try Safari.

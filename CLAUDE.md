@@ -23,6 +23,7 @@ src/
   uniforms.js          shared uniform nodes (time, storm, colours). JS writes .value, TSL reads
   interaction.js       keyboard -> `input` {throttle, steer, anchored, planetView} + weather uniform
   hud.js               the in-game interface: day ring + anchor marker, pill, compass, diamond tools, stat box, strips, toasts
+  touch.js             touch mode switch (body.touch): on-screen pads on phones, hidden on desktop
   menu.js              start screen (#start: title, 5 keys, button) and pause screen (#menu: all controls, volumes)
   audio/               audio.js (Web Audio graph: engine/sea/wash/rain layers + one-shots), music.js (generative)
   camera/              chaseCamera.js (follows the sphere frame, ignores wave tilt), introCamera.js (title close-up + swing to the chase pose), cameraRig.js (title/pan -> chase <-> planet orbit)
@@ -276,6 +277,14 @@ User asked for: start/pause screen, better driving interface, heavier boat, horn
 - **Switched off** by the user (`DOLPHIN.enabled: false`, "they're ugly, we'll work further next time"): `createDolphins` returns an inert stub, nothing is loaded or added to the scene. Set it to true to bring them back; next time: a better model/shape
 
 
+### Step 25 — Mobile / touch version  *(done)*
+- [x] `src/touch.js` `setupTouchMode()`: a `touch` class on `<body>` when `(pointer: coarse)` matches, after the first `pointerType === 'touch'` event, or with `?touch` (`?desktop` forces it off). CSS (`body.touch`, end of `style.css`) shows `#touch`, hides key hints (`.key`, `.start-keys`, the pause screen's key columns, the Boost / Time strips), moves the left tools to the top-left and shrinks the HUD on short screens
+- [x] `#touch` in `index.html` (inside `#hud`, so it fades with it and is hidden on the title / pause): `.tbtn` round buttons with `data-key` / `data-hold` = exactly the elements `main.js` already wires to `interaction.press/release` (KeyA/KeyD steer, KeyW/KeyS throttle, ShiftLeft boost). `touch-action: none`, pointer capture, so several thumbs work at once. Lamp / anchor / horn / camera / menu / mute already were clickable HUD buttons
+- [x] Camera (`camera/cameraRig.js`): the drag-to-look code now works from pointer positions (touch pointers have no `movementX`); one pointer = look round, two = pinch zoom (`chase.zoomBy(oldGap / gap)`); the auto-return timer treats "any pointer down" as dragging
+- [x] Viewport meta: `maximum-scale=1, user-scalable=no, viewport-fit=cover`; pads respect the safe-area insets. The "getting dark" toast says "tap the lamp" in touch mode
+- Checked in headless Chrome with mobile emulation (844 x 390, touch emulation, real `Input.dispatchTouchEvent`): body gets `touch`; tap Set sail; holding forward + right with two fingers: speed 0.67, throttle 1, steer 1; plus the boost finger: 1.06 and `boost` true; all released: throttle 0, boost false; one-finger drag looks round; the menu button pauses; screenshots of title, HUD, pause. Desktop (`?desktop`): `#touch` has `display: none`, HUD unchanged
+- NOT checked: a real phone (Safari / Android Chrome: WebGPU support, performance, the notch), portrait orientation, the layout on tablets. The game is heavy (per-pixel wake, rain and fish loops): expect a low frame rate on weak GPUs; there is no quality setting yet
+
 ## Final requirements check (re-run before handing in)
 
 ```
@@ -294,6 +303,7 @@ npm run check                                                                   
 
 ## Progress log
 
+- 2026-10-10: Step 25: touch mode with on-screen pads (hidden on desktop).
 - 2026-10-09: Step 24: leaping dolphins (procedural fallback, GLB loader, shader bend instead of a rig). Real model not received yet.
 - 2026-10-09: Step 23: lightning and thunder in storms.
 - 2026-10-09: Step 22: drag to look round the boat in chase view, bloom always on (P removed), fish smaller.

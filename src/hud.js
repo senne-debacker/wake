@@ -97,7 +97,10 @@ export function createHud() {
         $('tool-anchor').classList.toggle('on', v)
       })
       change('lamp', s.lights, (v) => $('tool-lamp').classList.toggle('on', v))
-      change('boost', s.boost, (v) => $('strip-boost').classList.toggle('active', v))
+      change('boost', s.boost, (v) => {
+        $('strip-boost').classList.toggle('active', v)
+        $('touch-boost').classList.toggle('active', v)
+      })
       change('horn', s.horn, (v) => $('tool-horn').classList.toggle('on', v))
 
       change('speed', Math.round(s.speed * 5), (v) => ($('stat-speed').textContent = v)) // 1 unit/s reads as 5 knots

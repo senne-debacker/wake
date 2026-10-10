@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>Wake</title>
     <link rel="stylesheet" href="/src/style.css" />
     <meta name="description" content="A low-poly fishing boat on a tiny ocean planet: Three.js WebGPURenderer, TSL, and a ported Shadertoy simplex noise." />
@@ -22,6 +22,10 @@
       <symbol id="i-waves" viewBox="0 0 24 24"><path d="M2 9c2.5-2.5 4.5 2.5 7 0s4.5 2.5 7 0 4.5 2.5 6 0M2 15c2.5-2.5 4.5 2.5 7 0s4.5 2.5 7 0 4.5 2.5 6 0" /></symbol>
       <symbol id="i-menu" viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h14" /></symbol>
       <symbol id="i-speaker" viewBox="0 0 24 24"><path d="M4 9.5v5h4l5 4v-13l-5 4H4z" /><path d="M16.5 9a4 4 0 0 1 0 6M19 6.5a8 8 0 0 1 0 11" /></symbol>
+      <symbol id="i-left" viewBox="0 0 24 24"><path d="M14.5 5.5L8 12l6.5 6.5" /></symbol>
+      <symbol id="i-right" viewBox="0 0 24 24"><path d="M9.5 5.5L16 12l-6.5 6.5" /></symbol>
+      <symbol id="i-up" viewBox="0 0 24 24"><path d="M5.5 14.5L12 8l6.5 6.5" /></symbol>
+      <symbol id="i-down" viewBox="0 0 24 24"><path d="M5.5 9.5L12 16l6.5-6.5" /></symbol>
       <symbol id="i-muted" viewBox="0 0 24 24"><path d="M4 9.5v5h4l5 4v-13l-5 4H4z" /><path d="M16 9.5l5 5M21 9.5l-5 5" /></symbol>
     </svg>
 
@@ -70,6 +74,21 @@
         </div>
       </div>
 
+      <!-- Touch controls (only shown in touch mode, see touch.js): the same actions as the keys. -->
+      <div id="touch">
+        <div class="pad" id="pad-steer">
+          <div class="tbtn" data-key="KeyA" data-hold aria-label="Steer left"><svg class="icon"><use href="#i-left" /></svg></div>
+          <div class="tbtn" data-key="KeyD" data-hold aria-label="Steer right"><svg class="icon"><use href="#i-right" /></svg></div>
+        </div>
+        <div class="pad" id="pad-drive">
+          <div class="tbtn small" id="touch-boost" data-key="ShiftLeft" data-hold aria-label="Boost"><svg class="icon"><use href="#i-gauge" /></svg></div>
+          <div class="column">
+            <div class="tbtn" data-key="KeyW" data-hold aria-label="Forward"><svg class="icon"><use href="#i-up" /></svg></div>
+            <div class="tbtn" data-key="KeyS" data-hold aria-label="Reverse"><svg class="icon"><use href="#i-down" /></svg></div>
+          </div>
+        </div>
+      </div>
+
       <div id="right">
         <div class="strip right" id="strip-menu" data-key="Escape"><span class="key">Esc</span><svg class="icon"><use href="#i-menu" /></svg></div>
         <div class="strip right" id="strip-sound" data-key="KeyM"><span class="key">M</span><svg class="icon"><use id="sound-icon" href="#i-speaker" /></svg></div>
@@ -83,6 +102,7 @@
         <h1>Wake</h1>
       </header>
       <footer>
+        <p class="start-touch">Hold the arrows to steer and sail</p>
         <ul class="start-keys">
           <li><kbd>W</kbd><kbd>S</kbd><span>Throttle</span></li>
           <li><kbd>A</kbd><kbd>D</kbd><span>Steer</span></li>
@@ -102,6 +122,8 @@
           <h1>Wake</h1>
           <p class="menu-state">Paused</p>
         </header>
+
+        <p class="touch-help">Left thumb: steer. Right thumb: forward and back, and the gauge button for boost. Lamp, anchor and horn are the diamonds at the top left. Drag the sea to look round the boat, pinch to zoom, and the top-right buttons pause and mute.</p>
 
         <div class="menu-columns">
           <section>

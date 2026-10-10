@@ -14,6 +14,7 @@ import { createRain } from './scene/rain.js'
 import { createClock } from './world/clock.js'
 import { createAtmosphere } from './world/atmosphere.js'
 import { createWeather } from './world/weather.js'
+import { setupTouchMode, isTouch } from './touch.js'
 import { createDolphins } from './scene/dolphin.js'
 import { createLightning } from './world/lightning.js'
 import { createWake } from './world/wake.js'
@@ -40,6 +41,7 @@ async function main() {
     return
   }
 
+  setupTouchMode() // on-screen buttons on phones and tablets (see touch.js)
   const loader = createLoader()
   await loader.stage(0.08, 'Starting the engine')
 
@@ -244,7 +246,7 @@ async function main() {
 
       const dark = atmosphere.state.elevation < 0.02
       if (dark && !input.lights && !darkHinted) {
-        hud.toast('It is getting dark: press L for the lamp', 3.5)
+        hud.toast(isTouch() ? 'It is getting dark: tap the lamp' : 'It is getting dark: press L for the lamp', 3.5)
         darkHinted = true
       }
       if (!dark) darkHinted = false
