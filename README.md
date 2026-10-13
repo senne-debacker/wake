@@ -169,6 +169,10 @@ The interface follows Dredge's: a ring that turns with the time of day (the anch
 
 When the main pointer is a finger (or after the first touch), the page switches to **touch mode** ([src/touch.js](src/touch.js)): two pads appear, steer left / right at the bottom left, forward / reverse and a boost button at the bottom right, all held with the thumbs (several at once, so you can steer and sail together). The lamp, anchor, horn and camera buttons and the menu / mute buttons are the same clickable HUD buttons as on the desktop, just tapped. Drag on the sea to look round the boat, pinch to zoom. The keyboard hints are hidden and the pause screen explains the buttons instead. On phones the game also runs in a **low quality mode** (`src/quality.js`: pixel ratio 1 instead of up to 2, and no wave pattern in the wake), because it draws a lot per pixel; `?low` / `?high` force it either way. The pads are not shown on desktop; to try touch mode in a desktop browser add `?touch` to the address, and `?desktop` forces it off.
 
+## Your own boat
+
+The boat is built in code ([src/scene/boat.js](src/scene/boat.js)), but if there is a `public/models/boat.glb` it is used instead. [blender/wake-boat.glb](blender/wake-boat.glb) is the current boat exported with every part named, to open in Blender (File > Import > glTF 2.0) and tweak or replace. The rules for the model (axes, waterline, size, the names the game looks for to make the horn tremble and the windows glow) are in [public/models/README.txt](public/models/README.txt). The bow lamp's light stays in code (`BOAT_LIGHT.lampPosition`).
+
 ## Run it
 
 Needs a WebGPU browser (recent Chrome or Edge, Safari 26). It was developed and tested in Chrome; I have not been able to try Safari.

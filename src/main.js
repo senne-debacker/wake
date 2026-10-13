@@ -64,6 +64,7 @@ async function main() {
 
   const { sun, moon, fill } = createLighting()
   const boat = createBoat()
+  await boat.ready // your own boat model (public/models/boat.glb), if there is one, replaces the built-in boat
   const layout = createLayout() // where islands, rocks and buoys are (also used for collisions)
   const world = createWorld(layout)
   const sky = createSky()
@@ -157,7 +158,7 @@ async function main() {
   }
   setState('menu')
 
-  if (import.meta.env.DEV) window.__game = { boatState, boatPose, input: interaction.input, uniforms, lights: { sun, moon, fill }, clock, atmosphere, weather, lightning, dolphins, layout, world, scene, camera, audio, fish, getState: () => state } // for debugging in the console
+  if (import.meta.env.DEV) window.__game = { boatState, boatPose, input: interaction.input, uniforms, lights: { sun, moon, fill }, clock, atmosphere, weather, lightning, dolphins, boat, layout, world, scene, camera, audio, fish, getState: () => state } // for debugging in the console
 
   // `?fish` checks the fish simulation on the GPU (see src/debug/fishTest.js).
   if (new URLSearchParams(location.search).has('fish')) {

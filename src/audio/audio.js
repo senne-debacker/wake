@@ -23,7 +23,7 @@ const USE_GENERATED_MUSIC = false
 // The sea and hull-wash layers are switched off (the music already has water in it). The code is
 // kept: set to true to hear them again.
 const USE_WATER_SOUND = false
-const THUNDER_VOLUME = 0.35 // the looped recording at the height of a storm (1 = full scale), kept low on purpose
+const THUNDER_VOLUME = 0.8 // the looped recording at the height of a storm (1 = full scale), kept low on purpose
 const clamp = (x, min = 0, max = 1) => Math.min(max, Math.max(min, x))
 const smoothstep = (a, b, x) => {
   const t = clamp((x - a) / (b - a))

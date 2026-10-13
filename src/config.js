@@ -61,6 +61,8 @@ export const WATER = {
 export const BOAT = {
   length: 0.9,
   width: 0.38,
+  // Optional own model (public/models/boat.glb): see scene/boat.js loadBoatModel.
+  model: { file: 'models/boat.glb', fitLength: true, flat: true },
   // How far the whole model is lifted above the waterline. The hull's dark underwater part is
   // 0.12 deep, so at 0.05 a little of it shows above the water. Measured in a full storm over 4 minutes,
   // water washes over the hull's edge: 7% of the time at 0, 0.6% at 0.05 (up to 5 cm, brief spray),
@@ -166,7 +168,7 @@ export const BOAT_LIGHT = {
   angle: 0.5, // half-angle of the beam, radians
   penumbra: 0.6,
   decay: 2,
-  lampPosition: [0, 0.27, -0.33],
+  lampPosition: [0, 0.24, -0.4], // [x sideways, y up, z forward = more negative]
   // Where the beam points to. Tilted ~23 degrees down: the planet is small, so the
   // water curves away fast and a level beam would shoot off into space.
   aim: [0, -1.25, -3.9],

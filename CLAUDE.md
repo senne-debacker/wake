@@ -289,6 +289,12 @@ User asked for: start/pause screen, better driving interface, heavier boat, horn
 - [x] Landscape bug (user: "doesn't work in landscape", portrait fine): the menu / mute strips (`#right`, `top: 170px`) sat at the right edge at the height of the forward button, so on a short screen their ~28 px overlapped the button's edge and a thumb on the forward button paused the game. In touch mode `#right` is now at the top right (`body.touch #right`, safe-area aware). My earlier emulated landscape tests (844 x 390) worked because the overlap is only a few pixels there; found by looking at the 740 x 340 screenshot. Checked 844x390, 740x340, 568x320 and a portrait -> landscape rotation at run time (canvas resizes, pads work)
 - [x] Choppy on phones: `src/quality.js` `QUALITY` (low when touch, `?low` / `?high` override): renderer pixel ratio 1 (a 3x phone at the old cap of 2 drew 4x the layout pixels; now 1x) and `wakeWaves` off (the per-pixel wake wave sum; the foam wash and bow splash stay). Not measured on a phone (this machine's GPU is not representative); the other per-pixel costs (fish shadows loop over 120 fish, bloom, rain ripples) are unchanged. Next levers if still slow: fewer fish in the shader loop, no bloom, `PLANET.detail`, fewer rain streaks
 
+### Step 27 — Own boat model + a Blender file of the current boat  *(done)*
+- [x] `scene/boat.js`: everything visible (hull, fittings, lamp housing and glass) is now in a `look` group, with named meshes/materials (Hull_Bottom, Hull_Top, Deck, Cabin, Roof, Window, Horn, Bell, Mast, Flag, Crate, Post, Tyre, Bow_Lamp_Housing, Lamp). `loadBoatModel()` loads `public/models/boat.glb` if present (GLTFLoader), scales it to `BOAT.length` (`BOAT.model.fitLength`), sets flat shading (`BOAT.model.flat`), finds the horn (node name `Horn*`, child `Bell*`) and the glowing materials (`Window*`, `Lamp*`; emissive colour from the material, else a warm default) and swaps it in for `look`; `boat.ready` resolves then and `main.js` awaits it before building the rest, so there is no pop. The SpotLight and the light cone stay in code at `BOAT_LIGHT.lampPosition`; the physics hull is unchanged (0.9 x 0.38)
+- [x] `blender/wake-boat.glb` (58 KB): the built-in boat exported from the running page with `GLTFExporter` (`__game.boat` is exposed in dev). A `.blend` cannot be produced here (no Blender); glTF imports into Blender with shapes, names and colours
+- Checked: the exported file copied to `public/models/boat.glb` gives a boat that looks the same (round trip), all names found, the lamp and window glow work, no console errors; the test copy was removed. NOT checked: a model made in Blender (axis conventions are from knowledge of the Blender glTF exporter: Blender +Y -> glTF -Z), textures, a very different hull
+- Procedure used to export: dev server, headless Chrome, `import('/node_modules/three/examples/jsm/exporters/GLTFExporter.js')`, `parseAsync(look.clone(), { binary: true })`
+
 ## Final requirements check (re-run before handing in)
 
 ```
@@ -307,6 +313,7 @@ npm run check                                                                   
 
 ## Progress log
 
+- 2026-10-10: Step 27: own boat model support (public/models/boat.glb) + blender/wake-boat.glb export of the current boat.
 - 2026-10-10: Step 26: landscape fix (menu/mute strips moved), low quality mode on phones.
 - 2026-10-10: Step 25: touch mode with on-screen pads (hidden on desktop).
 - 2026-10-09: Step 24: leaping dolphins (procedural fallback, GLB loader, shader bend instead of a rig). Real model not received yet.
