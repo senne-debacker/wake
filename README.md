@@ -109,6 +109,17 @@ What changed to fit this project:
 
 `?fish` (e.g. `http://localhost:5173/?fish`) reads the fish back from the GPU and checks them for a minute: no bad numbers, still on the sphere, speeds within the original's limits, none inside land, and the schools holding together. Size, darkness and count are in `FISH` in [src/config.js](src/config.js).
 
+## Fishing
+
+Six patches of **bubbling water** are scattered over the sea (one close to where you start, a couple in the big empty ocean). Each is a faceted patch of foam painted into the water by the water shader ([src/tsl/spotFoam.js](src/tsl/spotFoam.js): a disc with rings lapping outwards, per triangle like the shore foam, so it also shows from planet view) with bubbles rising out of it. The bubbles are one instanced mesh whose positions are worked out entirely in the vertex shader from the instance index and the clock ([src/tsl/fishingBubbles.js](src/tsl/fishingBubbles.js)); JavaScript only writes six small records per frame. A message says when fish are biting; **drop the anchor within about 0.9 units of a patch** and the fishing minigame opens ([src/fishing/](src/fishing/)):
+
+- **Hold `Space`** (or the on-screen button, with a mouse or a finger) to reel in. **Progress** (green) rises slowly and **Tension** (red) rises fast, so you reel in bursts and let go between them. Tension at 100% snaps the line; progress at 100% lands the fish. Now and then the fish pulls (the little fish on the panel twitches first): let go. `Esc` lets the fish go.
+- A catch is one of **16 species** in four rarities (common 60%, uncommon 27%, rare 10%, legendary 3%), each with a weight range, a description and an inline SVG picture ([src/fishing/fishDatabase.js](src/fishing/fishDatabase.js)). The fish is rolled when the fight starts but hidden until you land it, and rarer fish pull harder.
+- The **logbook** (`B`, or the book button) shows every species as a silhouette until you have caught one, then its name, picture, how many you landed, your heaviest and what is known about it. It is saved in the browser.
+- A patch you have fished out is empty for 90 seconds of game time, and its bubbles die away. The world keeps running during the fight (the clock, the weather); only the controls are locked.
+
+The rules of the fight are plain functions with no DOM ([src/fishing/fishingMinigame.js](src/fishing/fishingMinigame.js)), checked in `tests/fishing.check.mjs` (`npm run check`), including that a player who reacts a third of a second late still wins every rarity in 11 to 21 seconds and one who never lets go always loses. All the numbers are in `FISHING` in [src/config.js](src/config.js).
+
 ## Raindrops on the water
 
 While it rains, drops land on the sea and spread out as rings of ripples. This is the **second Shadertoy shader** in the project, ported to TSL: https://www.shadertoy.com/view/ldjyWw (a fork of https://www.shadertoy.com/view/4ldSRj, see [Third-party code](#third-party-code)), in [src/tsl/raindrops.js](src/tsl/raindrops.js), with the GLSL kept as comments next to each statement.
@@ -149,8 +160,9 @@ The start screen shows only the five essentials; `Esc` pauses (so does switching
 | `W` / `S` (or arrows) | Throttle / reverse |
 | `A` / `D` | Steer to port / starboard (needs speed) |
 | Hold `Shift` | Boost: top speed 8 knots instead of 5 (forwards only) |
-| `Space` or `X` | Drop / raise the anchor (stops the boat) |
+| `Space` or `X` | Drop / raise the anchor (stops the boat). Over a patch of bubbling water it starts fishing; then hold `Space` to reel in |
 | `H` (hold) | Horn |
+| `B` | Fish logbook (also a button in the HUD) |
 | `L` | Bow lamp on / off (spotlight on the water, glowing windows, light cone) |
 | Hold `T` | Fast-forward the day/night cycle |
 | `C` | Switch between the chase camera and a free orbit around the planet |
@@ -163,7 +175,7 @@ The start screen shows only the five essentials; `Esc` pauses (so does switching
 
 Letter keys match the letter printed on the key, so the controls work on QWERTY and AZERTY keyboards alike (on AZERTY both the keys labelled WASD and the ones in the WASD position steer); Cmd/Ctrl/Alt shortcuts are ignored.
 
-The interface follows Dredge's: a ring that turns with the time of day (the anchor marker is "now" and lights up when the anchor is down), the day and clock, a compass whose dial turns while the marker at the top is the bow, diamond buttons for the lamp, anchor and horn with their keys, a stat box with speed (in knots) and sea state, and strips for the camera, time, menu, sound and effects. Short messages ("Lamp on", "Anchor down", "Bump!") appear under the dial.
+The interface follows Dredge's: a ring that turns with the time of day (the anchor marker is "now" and lights up when the anchor is down), the day and clock, a compass whose dial turns while the marker at the top is the bow, diamond buttons for the lamp, anchor, horn and fish logbook with their keys, a stat box with speed (in knots) and sea state, and strips for the camera, time, menu, sound and effects. Short messages ("Lamp on", "Anchor down", "Bump!") appear under the dial.
 
 ### On a phone or tablet
 
@@ -197,14 +209,15 @@ src/
   menu.js            start screen and pause screen
   audio/             synthesised sound effects, engine / water / rain layers, music
   camera/            title close-up and swing, chase camera, the camera rig
-  scene/             planet mesh, lighting, boat model, sky dome, clouds, rain, islands, lighthouse, buoys
+  scene/             planet mesh, lighting, boat model, sky dome, clouds, rain, islands, lighthouse, buoys, fishing spots
+  fishing/           fish database (16 species), the fishing minigame, the logbook
   world/             game clock, day/night atmosphere, weather, wake trail, world layout
-  tsl/               simplexNoise (the port), waves, waterMaterial, wake, shore, lightCone, skyMaterial, rainMaterial
+  tsl/               simplexNoise (the port), waves, waterMaterial, wake, shore, spotFoam, fishingBubbles, lightCone, skyMaterial, rainMaterial
   physics/           JavaScript copy of the noise and waves, boat motion, weight, island shapes, collisions
   noiseConstants.js  constants of the Shadertoy noise shared by TSL and JS
   post.js            bloom + vignette (RenderPipeline)
   debug/             GPU-vs-CPU parity test (?parity), fish check (?fish)
-tests/             physics checks (npm run check)
+tests/             physics and fishing checks (npm run check)
 ```
 
 ## Third-party code

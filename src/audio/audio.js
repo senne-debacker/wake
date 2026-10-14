@@ -433,6 +433,37 @@ export function createAudio() {
       tone({ duration: 0.16, frequency: 130, endFrequency: 60, volume: 0.45 * s })
     },
 
+    // The fish take the bait: a few bubbles popping upwards.
+    fishBite() {
+      if (!ctx) return
+      for (let i = 0; i < 4; i++) {
+        const when = i * 0.09 + Math.random() * 0.03
+        const pitch = 380 + Math.random() * 260
+        tone({ when, duration: 0.09, frequency: pitch, endFrequency: pitch * 2.2, volume: 0.16 })
+        noiseBurst({ when, duration: 0.05, frequency: 1800, Q: 2, volume: 0.05 })
+      }
+    },
+
+    // The line snaps: a sharp crack, a falling whine and a dull thud.
+    lineSnap() {
+      if (!ctx) return
+      noiseBurst({ duration: 0.07, type: 'highpass', frequency: 3200, Q: 0.7, volume: 0.3 })
+      tone({ duration: 0.25, type: 'triangle', frequency: 1500, endFrequency: 260, volume: 0.12 })
+      tone({ when: 0.03, duration: 0.18, frequency: 140, endFrequency: 55, volume: 0.3 })
+    },
+
+    // A fish is landed: a splash and a little run up the key of the music (D F A C D), one more note
+    // for every rarity, so a legendary catch sounds like one.
+    fishCaught(rarity = 'common') {
+      if (!ctx) return
+      const count = { common: 2, uncommon: 3, rare: 4, legendary: 5 }[rarity] ?? 2
+      noiseBurst({ duration: 0.5, type: 'lowpass', frequency: 1600, endFrequency: 300, Q: 0.7, volume: 0.16, attack: 0.03 })
+      ;[587, 698, 880, 1047, 1175].slice(0, count).forEach((frequency, i) => {
+        tone({ when: 0.12 + i * 0.11, duration: 0.6, type: 'triangle', frequency, volume: 0.13 })
+        tone({ when: 0.12 + i * 0.11, duration: 0.4, frequency: frequency * 2, volume: 0.03 })
+      })
+    },
+
     // Hitting a shore: a hull-shaking boom, a sharp crack of splintering timber and a creak, louder
     // for harder hits.
     bump(strength = 0.5) {
