@@ -55,11 +55,11 @@ export function createFishingBubbleMaterial(spotCount) {
   const radiusNow = r2.mul(0.6).add(0.6).mul(size).mul(pop).mul(fullness)
   material.positionNode = centre.add(positionLocal.mul(radiusNow))
 
-  // Unlit, pale blue-white, a little brighter on the upward faces so the facets read; it glows at
-  // night (the bloom only picks up what is brighter than 1).
+  // Unlit, pale blue-white, a little brighter on the upward faces so the facets read; it is dimmer at
+  // night: dimmer, and never above 1, so the bloom leaves it alone.
   const night = float(1).sub(smoothstep(float(-0.15), float(0.4), uniforms.sunElevation))
   const facet = normalLocal.y.mul(0.3).add(0.85)
-  material.colorNode = color(new Color(FISHING.spots.color)).mul(facet).mul(night.mul(0.7).add(1.05))
+  material.colorNode = color(new Color(FISHING.spots.color)).mul(facet).mul(float(1).sub(night.mul(0.45)))
   material.opacityNode = float(FISHING.spots.opacity)
 
   return { material, frame, visible }

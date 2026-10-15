@@ -95,10 +95,11 @@ const RESULT_LOCK = 0.6 // s after the result card appears before a key press ca
 //   onResult   ({ outcome, fish, weight, isNew, isRecord }) when the fight ends. outcome is
 //              'caught', 'snapped' or 'released' (the player gave up with Esc / "Let it go")
 //   onClose    () when the interface has gone away again (after the result card was dismissed)
+//   onFrame    ({ holding, tension, progress, pulling, warning }) every frame of the fight (for the sound)
 // Returns { open, abort, isOpen }. `open({ difficulty, fish })` starts a fight; with `fish` (rolled
 // beforehand, hidden from the player) the difficulty follows that fish's rarity and the same fish
 // is what you land. Without it, the fish is rolled at the moment of the catch.
-export function createFishingMinigame({ logbook = null, onResult, onClose, random = Math.random } = {}) {
+export function createFishingMinigame({ logbook = null, onResult, onClose, onFrame, random = Math.random } = {}) {
   const $ = (id) => document.getElementById(id)
   const root = $('fishing')
   const fightCard = $('fishing-fight')
@@ -156,6 +157,7 @@ export function createFishingMinigame({ logbook = null, onResult, onClose, rando
     last = now
     const outcome = stepFight(fight, keyHeld || pointerHeld, delta)
     render()
+    onFrame?.({ holding: keyHeld || pointerHeld, tension: fight.tension, progress: fight.progress, pulling: fight.pulling, warning: fight.warning })
     if (outcome === 'playing') frame = requestAnimationFrame(tick)
     else endFight(outcome)
   }

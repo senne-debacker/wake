@@ -112,10 +112,12 @@ async function main() {
   const logbook = createLogbook({ onClose: () => state === 'logbook' && setState('playing') })
   const fishing = createFishingMinigame({
     logbook,
+    onFrame: (fight) => audio.reel(fight),
     onResult: (result) => {
+      audio.reelStop()
       if (result.outcome === 'caught') {
         audio.fishCaught(result.fish.rarity)
-        if (fishingSpot) spots.deplete(fishingSpot) // the school scatters: the spot is empty for a while
+        if (fishingSpot) spots.deplete(fishingSpot) // the school scatters: the spot is empty until midnight
       } else if (result.outcome === 'snapped') {
         audio.lineSnap()
       }
@@ -225,6 +227,7 @@ async function main() {
   let previous = { lights: false, anchored: false, horn: false }
   let bumpCooldown = 0
   let darkHinted = false
+  let lastDay = clock.days // the spots refill when the day changes (midnight)
   let hintedSpot = null // the fishing spot the player was last told about
 
   renderer.setAnimationLoop((now) => {
@@ -274,7 +277,11 @@ async function main() {
     if (playing && buoyHit > 0) audio.buoyHit(buoyHit) // the boat sails through it and tips it over
     rain.update(boatState)
     wake.update(sim, boatState)
-    spots.update({ delta, sim, time: elapsed, storm: uniforms.storm.value, space: spaceAmount })
+    if (clock.days !== lastDay) {
+      lastDay = clock.days
+      spots.refill()
+    }
+    spots.update({ delta, time: elapsed, storm: uniforms.storm.value, space: spaceAmount })
 
     // Sounds and messages for things that just happened, and the continuous sounds.
     if (playing) {

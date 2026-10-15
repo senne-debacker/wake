@@ -7,7 +7,7 @@
 //                player can win at every difficulty and one that just holds cannot
 //   3. logbook   new species / personal best, saved and loaded, survives a broken or missing storage
 //   4. spots     where the fishing spots are (open water with room to anchor, deterministic, the rest of
-//                the world untouched) and how they behave (nearest, empty for a while after a catch)
+//                the world untouched) and how they behave (nearest, empty until midnight after a catch)
 
 import { Vector3 } from 'three/webgpu'
 import { FISHING, PLANET } from '../src/config.js'
@@ -307,17 +307,18 @@ const mulberry32 = (seed) => () => {
   check('spots: nearest finds a spot inside the trigger radius and nothing outside it', field.nearest(beside(first, cfg.triggerRadius * 0.9), cfg.triggerRadius)?.spot === first && field.nearest(beside(first, cfg.triggerRadius * 1.1), cfg.triggerRadius) === null)
   check('spots: the distance it reports is the distance over the sea', Math.abs(field.nearest(beside(first, 0.5), 1).distance - 0.5) < 1e-6)
   field.deplete(first)
-  check('spots: a spot that gave up a fish is skipped', field.nearest(first.dir, 5) === null || field.nearest(first.dir, 5).spot !== first)
-  field.update({ delta: 1 / 60, sim: 0, time: 0, storm: 0, space: 0 }) // paused: game time does not move
-  check('spots: the cooldown only runs in game time (not while paused)', first.empty === cfg.cooldown)
-  for (let t = 0; t < 8; t += 1 / 60) field.update({ delta: 1 / 60, sim: 0, time: t, storm: 0, space: 0 })
-  check('spots: the bubbles die away while it is empty (even while paused)', first.level < 0.05, `level ${first.level.toFixed(3)}`)
-  for (let t = 0; t < cfg.cooldown + 1; t += 1 / 60) field.update({ delta: 1 / 60, sim: 1 / 60, time: t, storm: 0, space: 0 })
-  check('spots: after the cooldown it can be fished again', first.empty === 0 && field.nearest(first.dir, 0.1)?.spot === first)
-  for (let t = 0; t < 8; t += 1 / 60) field.update({ delta: 1 / 60, sim: 1 / 60, time: t, storm: 0, space: 0 })
+  check('spots: a spot that gave up a fish is skipped', field.nearest(first.dir, 5)?.spot !== first)
+  for (let t = 0; t < 600; t += 1 / 60) field.update({ delta: 1 / 60, time: t, storm: 0, space: 0 }) // ten minutes of real time
+  check('spots: it stays empty (no timer): only refill() brings it back', first.empty === true && field.nearest(first.dir, 0.1) === null)
+  check('spots: the bubbles die away while it is empty', first.level < 0.05, `level ${first.level.toFixed(3)}`)
+  const other = field.spots[1]
+  check('spots: the other spots are untouched', other.empty === false && other.level > 0.95)
+  field.refill()
+  check('spots: refill() (at midnight) makes every spot fishable again', field.spots.every((s) => !s.empty) && field.nearest(first.dir, 0.1)?.spot === first)
+  for (let t = 0; t < 8; t += 1 / 60) field.update({ delta: 1 / 60, time: t, storm: 0, space: 0 })
   check('spots: ... and the bubbles come back', first.level > 0.95, `level ${first.level.toFixed(3)}`)
   const none = createFishingSpots([])
-  none.update({ delta: 1 / 60, sim: 1 / 60, time: 0, storm: 0, space: 0 })
+  none.update({ delta: 1 / 60, time: 0, storm: 0, space: 0 })
   check('spots: a world without spots does not crash', none.nearest(new Vector3(0, 1, 0), 10) === null)
 }
 

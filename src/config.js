@@ -475,21 +475,21 @@ export const FISHING = {
     clearance: 0.9, // from the edge of any island, rock or buoy (world units): room to anchor beside it
     gap: 1.8, // between two spots
     startClear: 0.9, // none closer than this to where the boat starts (except the near-start one)
-    triggerRadius: 0.9, // anchor within this distance (over the sea, world units) = the fish bite
+    triggerRadius: 0.45, // anchor within this distance (over the sea, world units) = the fish bite
     hintRadius: 2.2, // within this the game says that fish are biting
-    cooldown: 90, // seconds (game time) a spot stays empty after a fish was landed
+    // (a spot that gave up a fish stays empty until the clock passes midnight, see main.js)
     // The patch of foam the water shader paints at each spot (tsl/spotFoam.js): a disc with rings
     // lapping outwards. It is what you see from far away and from space.
-    patch: 0.6, // radius, world units
+    patch: 0.3, // radius, world units
     patchFoam: 0.7, // how white it is (1 = as foam on a crest)
     // The bubbles (tsl/fishingBubbles.js): all of them are drawn from one instanced mesh
     bubbles: 20, // per spot
-    radius: 0.45, // the patch of water they rise in
+    radius: 0.225, // the patch of water they rise in
     rise: 0.38, // how far above the water they get before they pop
-    size: 0.05, // a bubble's radius at its biggest
+    size: 0.038, // a bubble's radius at its biggest
     speed: 0.45, // rises per second (the cycle time of a bubble is about 1 / speed)
-    opacity: 0.75,
-    color: '#d8f4ff',
+    opacity: 0.45,
+    color: '#a9cfdc',
   },
 }
 
