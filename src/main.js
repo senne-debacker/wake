@@ -176,8 +176,7 @@ async function main() {
     if (state === 'playing') hud.toast(muted ? 'Sound off' : 'Sound on') // on the other screens the Sound button shows it
   }
   const interaction = setupInteraction({
-    onMenu: () => (state === 'playing' ? setState('paused') : state === 'paused' ? (menu.back() ? null : setState('playing')) : null), // on a page of the pause screen Esc goes back to the list
-    onMute: toggleSound,
+    onMenu: () => (state === 'playing' ? setState('paused') : state === 'paused' ? (menu.back() ? null : setState('playing')) : state === 'menu' ? menu.back() : null), // on a page of the pause screen Esc goes back to the list; the Settings page on the start screen closes
     onFullscreen: () => fullscreen.toggle(),
     onLogbook: () => {
       if (state !== 'playing') return
@@ -256,7 +255,7 @@ async function main() {
     cursor.setEnabled(next === 'playing')
     interaction.enabled = next === 'playing'
     hud.show(next === 'playing' || next === 'paused' || next === 'fishing' || next === 'logbook')
-    menu.showSound(next === 'menu') // (the pause screen has Sound and Full screen on its Settings page)
+    menu.showCorner(next === 'menu') // (the Settings button and the "Made by" tag)
     if (next === 'menu') {
       menu.closePause() // (coming home from the pause screen)
       menu.showStart()

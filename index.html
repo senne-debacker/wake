@@ -28,6 +28,7 @@
       <symbol id="i-down" viewBox="0 0 24 24"><path d="M5.5 9.5L12 16l6.5-6.5" /></symbol>
       <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5zM12 6.5v13" /></symbol>
       <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7M6 9.5V20h4.5v-5.5h3V20H18V9.5" /></symbol>
+      <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1" /><circle cx="15" cy="6" r="2" /><circle cx="9" cy="12" r="2" /><circle cx="17" cy="18" r="2" /></symbol>
       <symbol id="i-expand" viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" /></symbol>
       <symbol id="i-shrink" viewBox="0 0 24 24"><path d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5" /></symbol>
       <symbol id="i-muted" viewBox="0 0 24 24"><path d="M4 9.5v5h4l5 4v-13l-5 4H4z" /><path d="M16 9.5l5 5M21 9.5l-5 5" /></symbol>
@@ -130,23 +131,8 @@
         <h1>Wake</h1>
       </header>
       <footer>
-        <p class="start-touch" data-stick-hint>Drag the stick to steer and sail</p>
-        <div class="ctrl-mode" role="group" aria-label="Steering on a touch screen">
-          <span class="ctrl-label">Steering</span>
-          <button type="button" data-mode="stick" aria-pressed="true">Joystick</button>
-          <button type="button" data-mode="tilt" aria-pressed="false">Tilt</button>
-          <p class="ctrl-note" aria-live="polite"></p>
-        </div>
-
-        <ul class="start-keys">
-          <li><kbd>W</kbd><kbd>S</kbd><span>Throttle</span></li>
-          <li><kbd>A</kbd><kbd>D</kbd><span>Steer</span></li>
-          <li><kbd class="wide">Space</kbd><span>Anchor</span></li>
-          <li><kbd>H</kbd><span>Horn</span></li>
-          <li><kbd class="wide">Esc</kbd><span>All controls</span></li>
-        </ul>
         <button id="start-action" class="big-button" type="button">Set sail</button>
-        <p class="start-foot">Sound on, please</p>
+        <p class="start-foot">Recommended with sound</p>
       </footer>
     </div>
 
@@ -375,17 +361,10 @@
       </div>
     </div>
 
-    <!-- Sound switch, full screen switch and the "Made by" tag, shown on the start and pause screens (in the game the M and F strips on the right do the first two). -->
-    <button id="sound-button" type="button" aria-label="Sound on or off">
-      <svg class="icon"><use id="sound-button-icon" href="#i-speaker" /></svg>
-      <span id="sound-button-label">Sound on</span>
-      <span class="key">M</span>
-    </button>
-
-    <button id="fullscreen-button" type="button" aria-label="Full screen on or off">
-      <svg class="icon"><use data-fullscreen-icon href="#i-expand" /></svg>
-      <span data-fullscreen-label>Full screen</span>
-      <span class="key">F</span>
+    <!-- The Settings button and the "Made by" tag, shown on the start screen. -->
+    <button id="settings-button" type="button" aria-label="Settings">
+      <svg class="icon"><use href="#i-settings" /></svg>
+      <span>Settings</span>
     </button>
     <a id="credit" href="https://debacker-devine.be/" target="_blank" rel="noopener">Made by <b>Senne</b></a>
 

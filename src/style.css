@@ -614,25 +614,16 @@ body {
   }
 }
 
-/* A phone held upright: the Sound and Full screen buttons are two small icons side by side in the corner,
-   and the start screen's title and footer leave room for them and for the "Made by" tag. */
+/* A phone held upright: the Settings button is a small icon in the corner, and the start screen's title
+   and footer leave room for it and for the "Made by" tag. */
 @media (orientation: portrait) {
-  body.touch #sound-button,
-  body.touch #fullscreen-button {
+  body.touch #settings-button {
     top: max(8px, env(safe-area-inset-top));
+    right: max(8px, env(safe-area-inset-right));
     padding: 7px;
   }
 
-  body.touch #sound-button {
-    right: max(8px, env(safe-area-inset-right));
-  }
-
-  body.touch #fullscreen-button {
-    right: calc(max(8px, env(safe-area-inset-right)) + 46px);
-  }
-
-  body.touch #sound-button-label,
-  body.touch #fullscreen-button span {
+  body.touch #settings-button span {
     display: none;
   }
 
@@ -816,34 +807,6 @@ kbd.wide {
   margin-bottom: clamp(20px, 5vh, 54px);
 }
 
-.start-keys {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px 34px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.start-keys li {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: clamp(12px, 1.7vh, 16px);
-  letter-spacing: 0.22em;
-  color: rgba(241, 236, 224, 0.92);
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
-}
-
-.start-keys kbd {
-  background: rgba(5, 10, 15, 0.45);
-}
-
-.start-keys span {
-  margin-left: 8px;
-}
-
 .start-foot {
   margin: 14px 0 0;
   font-size: 12px;
@@ -852,9 +815,8 @@ kbd.wide {
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
 }
 
-/* Sound and full screen switches on the start and pause screens. */
-#sound-button,
-#fullscreen-button {
+/* The Settings button on the start screen (it opens the pause screen's Settings page). */
+#settings-button {
   position: fixed;
   top: 18px;
   right: 18px;
@@ -873,41 +835,33 @@ kbd.wide {
   transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
 
-#fullscreen-button {
-  top: 66px;
-}
-
-#sound-button .icon,
-#fullscreen-button .icon {
+#settings-button .icon {
   width: 22px;
   height: 22px;
 }
 
-body.show-sound #sound-button,
-body.show-sound #fullscreen-button {
+body.show-corner #settings-button {
   display: flex;
 }
 
-body.no-fullscreen #fullscreen-button,
-body.no-fullscreen #strip-fullscreen {
-  display: none; /* iPhones have no full screen for web pages */
-}
-
-#sound-button:hover,
-#sound-button:focus-visible,
-#fullscreen-button:hover,
-#fullscreen-button:focus-visible {
+#settings-button:hover,
+#settings-button:focus-visible {
   outline: none;
   background: var(--teal);
   border-color: var(--teal-light);
 }
 
-#sound-button.off {
-  color: var(--warn);
-  border-color: rgba(240, 179, 74, 0.6);
+body.no-fullscreen #strip-fullscreen {
+  display: none; /* iPhones have no full screen for web pages */
 }
 
-/* "Made by Senne": a link to the portfolio, bottom left on the start and pause screens. */
+/* While the Settings page is open over the start screen, the corner is empty. */
+body.show-corner.overlay #settings-button,
+body.show-corner.overlay #credit {
+  display: none;
+}
+
+/* "Made by Senne": a link to the portfolio, bottom left on the start screen. */
 #credit {
   position: fixed;
   left: 18px;
@@ -929,7 +883,7 @@ body.no-fullscreen #strip-fullscreen {
   transition: border-color 0.2s, color 0.2s;
 }
 
-body.show-sound #credit {
+body.show-corner #credit {
   display: block;
 }
 
@@ -1331,7 +1285,6 @@ body.touch {
 
 /* No key hints; the left panel keeps only the stat box (the buttons are on the right now). */
 body.touch .key,
-body.touch .start-keys,
 body.touch .keymap,
 body.touch #dock,
 body.touch #strip-time {
@@ -1411,19 +1364,6 @@ body.touch #right {
   right: env(safe-area-inset-right);
 }
 
-.start-touch {
-  display: none;
-}
-
-body.touch .start-touch {
-  display: block;
-  margin: 0 0 14px;
-  font-size: clamp(13px, 2.2vh, 17px);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(241, 236, 224, 0.92);
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
-}
 
 /* The pause screen on a phone: the on-screen controls drawn small, at a readable size (not scaled
    down with the window like the desktop card), scrolling if the screen is short. */
@@ -2556,20 +2496,13 @@ body.tilt-steer #stick .stick-knob {
     display: none;
   }
 
-  body.touch #sound-button {
+  body.touch #settings-button {
     top: 8px;
     right: max(8px, env(safe-area-inset-right));
     padding: 7px;
   }
 
-  body.touch #fullscreen-button {
-    top: 52px;
-    right: max(8px, env(safe-area-inset-right));
-    padding: 7px;
-  }
-
-  body.touch #sound-button-label,
-  body.touch #fullscreen-button span {
+  body.touch #settings-button span {
     display: none;
   }
 

@@ -25,7 +25,7 @@ src/
   hud.js               the in-game interface: day ring + anchor marker, pill, compass, diamond tools, stat box, strips, toasts
   touch.js             touch mode switch (body.touch): on-screen pads on phones, hidden on desktop
   tilt.js              tilt steering on phones (phone as a steering wheel), the Joystick / Tilt switch (.ctrl-mode)
-  menu.js              start screen (#start: title, 5 keys, button) and pause screen (#menu: a list with Controls / Settings / About pages)
+  menu.js              start screen (#start: title, button, Settings) and pause screen (#menu: a list with Controls / Settings / About pages)
   display.js           the visual settings (resolution, glow, interface size), remembered
   fullscreen.js        full screen on / off (F key, buttons on the start / pause screens and the HUD strip); `body.is-fullscreen`, hidden where unsupported (iPhone)
   audio/               audio.js (Web Audio graph: engine/sea/wash/rain layers + one-shots), music.js (generative)
@@ -392,6 +392,9 @@ User asked for: effects in planet view (rain, ripples, fog, fishing particles), 
 - [x] `src/tutorial.js`, `#tutorial` in `index.html`: seven steps (sail, steer, look, find the bubbles, anchor, reel, finish) as a card at the bottom centre (under the dial on a phone). Steps move on by themselves when the player does the thing (`done` + `hold`), "Next" moves on without, **Skip tutorial** ends it; jumps ahead when fishing starts or ends. Starts by itself the first time (`wake.tutorial` = done in localStorage, set on skip or finish), and again from the pause menu's **Tutorial** item (`menu.js` `onTutorial`). Hidden behind the pause screen and the logbook
 - On a phone the texts name the joystick / buttons / tilt; while a fish is on, the card goes to the bottom (upright) or waits (sideways: the fishing card fills the screen). The pause list has 7 items now: checked again on 16 screen sizes
 - Checked in headless Chrome: fresh player through all steps (W, A, Next, boat moved to a spot, Space, a fight to the end), skip, reload (does not start), redo from the menu, logbook hint and full text
+
+### Step 42 — Simpler start screen  *(done)*
+- [x] The start screen has no control hints any more (the key list, the touch hint and the Joystick / Tilt switch are gone: the tutorial and the pause menu's Controls page cover them; the steering switch now lives only on the Controls page). "Sound on, please" is "Recommended with sound". The Sound and Full screen buttons are replaced by one **Settings** button (`#settings-button`, an icon on phones) that opens the pause card's Settings page over the start screen (`menu.openSettings`, `fromStart`): Back or Esc closes it. `body.show-corner` shows the button and the "Made by" tag, `body.overlay` hides them while the page is open. Checked on 16 sizes
 
 ## Final requirements check (re-run before handing in)
 

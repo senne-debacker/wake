@@ -142,9 +142,6 @@ export function createHud() {
       change('muted', s.muted, (v) => {
         $('sound-icon').setAttribute('href', v ? '#i-muted' : '#i-speaker')
         $('strip-sound').classList.toggle('off', v)
-        $('sound-button-icon').setAttribute('href', v ? '#i-muted' : '#i-speaker') // the button on the start and pause screens
-        $('sound-button-label').textContent = v ? 'Sound off' : 'Sound on'
-        $('sound-button').classList.toggle('off', v)
       })
     },
   }

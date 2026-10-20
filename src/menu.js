@@ -1,13 +1,14 @@
 // Two overlays (markup in index.html, look in style.css):
-//   #start  the start screen: title, five key hints and the "Set sail" button. Everything else
-//           is the 3D scene behind it, a close-up of the boat
+//   #start  the start screen: title, the "Set sail" button and a Settings button (which opens the Settings
+//           page below, and goes back to the start screen). Everything else is the 3D scene behind it, a
+//           close-up of the boat
 //   #menu   the pause screen: a short list (Resume, Controls, Tutorial, Settings, Logbook, About, Home screen).
 //           Controls, Settings, About and the "go home?" question are pages inside the same card: one .menu-view is shown at a time,
 //           Esc or "Back" returns to the list
 // Enter presses whichever button is showing.
 const TITLES = { main: 'Paused', controls: 'Controls', settings: 'Settings', about: 'About', confirm: 'Go home?' }
 
-export function createMenu({ audio, display, onStart, onResume, onHome, onLogbook, onTutorial, onMute, onFullscreen }) {
+export function createMenu({ audio, display, onStart, onResume, onHome, onLogbook, onTutorial, onFullscreen }) {
   const $ = (id) => document.getElementById(id)
   const start = $('start')
   const startButton = $('start-action')
@@ -48,6 +49,7 @@ export function createMenu({ audio, display, onStart, onResume, onHome, onLogboo
 
   // The pages of the pause card.
   let view = 'main'
+  let fromStart = false // the Settings page was opened from the start screen: Back closes the card instead of going to the list
   function show(next) {
     view = next
     card.dataset.view = next
@@ -58,29 +60,45 @@ export function createMenu({ audio, display, onStart, onResume, onHome, onLogboo
     first?.focus({ preventScroll: true })
   }
   for (const button of pause.querySelectorAll('.menu-item[data-view]')) button.addEventListener('click', () => show(button.dataset.view))
-  for (const button of pause.querySelectorAll('[data-back]')) button.addEventListener('click', () => show('main'))
+  for (const button of pause.querySelectorAll('[data-back]')) button.addEventListener('click', () => back())
   $('menu-logbook').addEventListener('click', () => onLogbook())
   $('menu-tutorial').addEventListener('click', () => onTutorial())
   $('menu-home').addEventListener('click', () => show('confirm')) // asks first
   $('menu-home-confirm').addEventListener('click', () => onHome())
 
-  const soundButton = $('sound-button')
-  soundButton.addEventListener('click', () => {
-    onMute()
-    soundButton.blur() // otherwise Space or Enter would press it again
+  const settingsButton = $('settings-button')
+  settingsButton.addEventListener('click', () => {
+    settingsButton.blur() // otherwise Space or Enter would press it again
+    openSettings()
   })
-  const fullscreenButton = $('fullscreen-button')
-  fullscreenButton.addEventListener('click', () => {
-    onFullscreen()
-    fullscreenButton.blur()
-  })
+
+  function openSettings() {
+    fromStart = true
+    showSettings()
+    pause.classList.add('show')
+    document.body.classList.add('overlay')
+    show('settings')
+  }
+  // Esc or Back: up one level. Returns false when there is nowhere to go (the list of the pause screen).
+  function back() {
+    if (fromStart) {
+      fromStart = false
+      pause.classList.remove('show')
+      document.body.classList.remove('overlay')
+      startButton.focus({ preventScroll: true })
+      return true
+    }
+    if (view === 'main') return false
+    show('main')
+    return true
+  }
 
   startButton.addEventListener('click', () => onStart())
   resumeButton.addEventListener('click', () => onResume())
 
   addEventListener('keydown', (event) => {
     if (event.code !== 'Enter') return
-    if (start.classList.contains('show') && !start.classList.contains('leaving') && document.activeElement !== startButton) {
+    if (start.classList.contains('show') && !start.classList.contains('leaving') && !pause.classList.contains('show') && document.activeElement !== startButton) {
       event.preventDefault()
       onStart()
     } else if (view === 'main' && pause.classList.contains('show') && !pause.contains(document.activeElement)) {
@@ -90,9 +108,9 @@ export function createMenu({ audio, display, onStart, onResume, onHome, onLogboo
   })
 
   return {
-    // The Sound and Full screen buttons and the "Made by" tag are shown on the start and pause screens.
-    showSound(visible) {
-      document.body.classList.toggle('show-sound', visible)
+    // The Settings button and the "Made by" tag are shown on the start screen.
+    showCorner(visible) {
+      document.body.classList.toggle('show-corner', visible)
     },
     showStart() {
       start.classList.remove('leaving')
@@ -106,21 +124,20 @@ export function createMenu({ audio, display, onStart, onResume, onHome, onLogboo
       setTimeout(() => start.classList.remove('show', 'leaving'), 900)
     },
     openPause() {
+      fromStart = false
       showSettings()
       pause.classList.add('show')
       show('main')
     },
     closePause() {
+      fromStart = false
+      document.body.classList.remove('overlay')
       pause.classList.remove('show')
       document.activeElement?.blur?.()
     },
     // The mute state changed (the M key): show it on the Settings page.
     refresh: showSettings,
     // Esc on a page goes back to the list. Returns false when the list was already showing (Esc then resumes).
-    back() {
-      if (view === 'main') return false
-      show('main')
-      return true
-    },
+    back,
   }
 }

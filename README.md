@@ -159,7 +159,7 @@ The first time the game is played, a few pop-ups ([src/tutorial.js](src/tutorial
 
 ## Start screen
 
-The game opens on a close-up of the boat with the title above it, five key hints and a "Set sail" button. Behind the glass the world is already running (waves, clouds, the boat bobbing), but the clock, the weather and the boat stand still. Pressing the button starts the music and swings the camera round the port side from the front of the boat to behind it (about 3 seconds, eased, with the lens widening from 38 to 55 degrees), and the interface fades in as the camera arrives and the game begins. The camera poses are in `INTRO` in [src/config.js](src/config.js) and the swing is in [src/camera/introCamera.js](src/camera/introCamera.js).
+The game opens on a close-up of the boat with the title above it, a "Set sail" button ("Recommended with sound" under it) and a Settings button in the corner that opens the settings page. The controls are explained by the tutorial and on the pause menu's Controls page, not here. Behind the glass the world is already running (waves, clouds, the boat bobbing), but the clock, the weather and the boat stand still. Pressing the button starts the music and swings the camera round the port side from the front of the boat to behind it (about 3 seconds, eased, with the lens widening from 38 to 55 degrees), and the interface fades in as the camera arrives and the game begins. The camera poses are in `INTRO` in [src/config.js](src/config.js) and the swing is in [src/camera/introCamera.js](src/camera/introCamera.js).
 
 ## Controls
 
