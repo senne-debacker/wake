@@ -16,7 +16,8 @@ const RIGHT = ['KeyD', 'ArrowRight']
 //   boost     bool    Shift, true while held
 //   weather   'auto' | 'calm' | 'breezy' | 'storm'   keys 4 / 1 / 2 / 3 (developer mode only), read by world/weather.js
 // App-level keys call back into main.js: Escape -> handlers.onMenu(), M -> handlers.onMute(),
-// B -> handlers.onLogbook() (the fish logbook; only while sailing).
+// B -> handlers.onLogbook() (the fish logbook; only while sailing), F -> handlers.onFullscreen().
+// (Mute and full screen work on every screen.)
 // While `interaction.enabled` is false (start screen, pause) only Escape works and the input
 // settles to neutral.
 export function setupInteraction(handlers = {}) {
@@ -40,6 +41,7 @@ export function setupInteraction(handlers = {}) {
   function press(key, code = key) {
     if (key === 'Escape') return handlers.onMenu?.()
     if (key === 'KeyM') return handlers.onMute?.() // works on every screen, not only while sailing
+    if (key === 'KeyF') return handlers.onFullscreen?.()
     if (!interaction.enabled) return
     // Movement keys are tracked by both the label and the position, so on an AZERTY keyboard
     // both the keys labelled WASD and the ones in the WASD position (labelled ZQSD) steer.

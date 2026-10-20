@@ -284,17 +284,24 @@ export function createAudio() {
       return settings.muted
     },
 
-    // Must be called from a user gesture (the start button).
-    async start() {
+    // Builds the audio engine and starts the music. Can be called before any click: the browser then
+    // keeps the context suspended (its clock stands still, so the fade-in below has not started) until
+    // unlock() is called from a user gesture. Calling it again does nothing.
+    start() {
       if (ctx) return
       ctx = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: 'interactive' })
       buildGraph()
-      await ctx.resume()
-      bus.music.gain.setValueAtTime(0, ctx.currentTime) // the music fades in while the camera swings round
+      ctx.resume().catch(() => {}) // (allowed straight away if the visitor has clicked on the site before)
+      bus.music.gain.setValueAtTime(0, ctx.currentTime) // the music fades in once the sound is allowed
       bus.music.gain.linearRampToValueAtTime(settings.music * (paused ? 0.4 : 1), ctx.currentTime + 3.5)
       if (USE_GENERATED_MUSIC) music.start()
       loadThunder()
       music.loadCustomTrack(new URL('audio/music.mp3', document.baseURI)) // optional: your own track replaces the generated music
+    },
+
+    // Call from a click, key press or touch: browsers only let sound start after one of those.
+    unlock() {
+      if (ctx && ctx.state !== 'running') ctx.resume().catch(() => {})
     },
 
     // Continuous layers follow the game. Call every frame.

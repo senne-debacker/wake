@@ -4,7 +4,7 @@ import { isTouch } from './touch.js'
 
 // The in-game interface, modelled on Dredge's: a ring that turns with the time of day with the
 // anchor marker as "now", a pill with the day and the clock, a compass, diamond buttons for the
-// lamp / anchor / horn with their keys, a stat box (speed and sea state) and a few key strips.
+// anchor / boost / horn / lamp / camera at the bottom left, the logbook under the stat box (speed and sea state) at the top left, the compass at the top right and a few key strips under it.
 // The markup is in index.html, the look in style.css. Everything here only touches the DOM when a
 // value actually changes.
 
@@ -112,7 +112,7 @@ export function createHud() {
         $('t-lamp').classList.toggle('on', v)
       })
       change('boost', s.boost, (v) => {
-        $('strip-boost').classList.toggle('active', v)
+        $('tool-boost').classList.toggle('active', v)
         $('touch-boost').classList.toggle('active', v)
       })
       change('horn', s.horn, (v) => {
@@ -129,8 +129,8 @@ export function createHud() {
       })
 
       change('camera', s.camera, (v) => {
-        $('camera-label').textContent = v === 'chase' ? 'Chase' : 'Planet'
-        $('t-camera').classList.toggle('on', v !== 'chase')
+        $('tool-camera').classList.toggle('on', v !== 'chase')
+        $('strip-view').classList.toggle('active', v !== 'chase') // (the button in touch mode)
       })
       change('muted', s.muted, (v) => {
         $('sound-icon').setAttribute('href', v ? '#i-muted' : '#i-speaker')

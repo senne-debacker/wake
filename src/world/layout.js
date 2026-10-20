@@ -117,7 +117,7 @@ export function createLayout() {
       arc(dir, start.dir) > minStart &&
       islands.every((island) => arc(dir, island.dir) > footprint(island.radius) + cfg.clearance) &&
       rocks.every((rock) => arc(dir, rock.dir) > rock.radius + cfg.clearance) &&
-      buoys.every((buoy) => arc(dir, buoy.dir) > 0.6) &&
+      buoys.every((buoy) => arc(dir, buoy.dir) > cfg.buoyClearance) &&
       fishingSpots.every((spot) => arc(dir, spot.dir) > cfg.gap)
     const add = (dir) => fishingSpots.push({ dir, seed: spotRandom() * 100 })
 

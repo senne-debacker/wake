@@ -138,6 +138,15 @@ export function createCameraRig(camera, domElement, state) {
       return orbit ? 'planet' : 'chase'
     },
 
+    // Back to the close-up of the boat on the start screen (from the pause screen).
+    title() {
+      if (orbit) leaveOrbit()
+      glide.active = false
+      glide.restore = false
+      opening.phase = 'title'
+      opening.t = 0
+    },
+
     // Swing from the title view to the chase view over `seconds`, then call `onDone`.
     pan(seconds, onDone) {
       opening.phase = 'panning'

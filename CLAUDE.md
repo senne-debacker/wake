@@ -26,6 +26,7 @@ src/
   touch.js             touch mode switch (body.touch): on-screen pads on phones, hidden on desktop
   tilt.js              tilt steering on phones (phone as a steering wheel), the Joystick / Tilt switch (.ctrl-mode)
   menu.js              start screen (#start: title, 5 keys, button) and pause screen (#menu: all controls, volumes)
+  fullscreen.js        full screen on / off (F key, buttons on the start / pause screens and the HUD strip); `body.is-fullscreen`, hidden where unsupported (iPhone)
   audio/               audio.js (Web Audio graph: engine/sea/wash/rain layers + one-shots), music.js (generative)
   camera/              chaseCamera.js (follows the sphere frame, ignores wave tilt), introCamera.js (title close-up + swing to the chase pose), cameraRig.js (title/pan -> chase <-> planet orbit)
   scene/               plain Three.js objects: flag.js (flutter + turn of the boat's flag), planet.js, lighting.js, boat.js (procedural model), sky.js (dome), clouds.js, rain.js, world.js (assembles islands), terrain.js, props.js, lighthouse.js, buoys.js
@@ -354,6 +355,24 @@ User asked for: effects in planet view (rain, ripples, fog, fishing particles), 
 - [x] **Compass redrawn** (`#compass-dial` in `index.html`, `hud.js`): a card with tick marks every 15 degrees, a red N triangle and red N, E / S / W, a fixed boat arrow in the middle and a red-free cream bow marker on top. The card turns (`#compass-card`) and the four letters are counter-rotated each time so they always read upright (`COMPASS_LETTERS`). 66 px
 - [x] **Phone:** camera (eye) and logbook now sit at the top right under the menu button (`#top-tools`, moved out of `#actions`; hidden while fishing), and the mute strip is hidden in touch mode (`body.touch #strip-sound`; mute is on the start / pause screens). Lamp, horn, boost and anchor stay at the bottom right (`#actions` is narrower, 196 px). Checked on emulated portrait and landscape: eye toggles planet view, book opens the logbook, anchor lights the arrow, no console errors, desktop dial and compass look right
 - Note: if "music button gone" meant the horn button (a speaker icon) rather than the mute strip, the horn is still there: say so
+
+### Step 36 — Small fixes  *(done)*
+- [x] Music on the start screen: `audio.start()` now runs at load (idempotent, no longer waits for the click) and `audio.unlock()` resumes the context on the first pointerdown / keydown / touchend (browsers keep sound off until then; the context clock stands still while suspended, so the 3.5 s fade-in starts at the unlock)
+- [x] Pause screen: "Home screen" button (`#menu-home`, `onHome` in `menu.js`, `rig.title()` in `cameraRig.js`): back to the close-up of the boat and the start screen; the world stays as it was
+- [x] "Made by Senne" tag (`#credit`, links to https://debacker-devine.be/ in a new tab), bottom left on the start and pause screens
+- [x] A snapped line empties the spot until midnight, like a catch (`spots.deplete` in `main.js` `onResult`)
+- [x] After a catch or a snap the anchor comes up when the result card is dismissed (`onClose` in `main.js`), with the usual "Anchor up" sound and toast. Letting the fish go (Esc) leaves the anchor down
+- [x] Full screen: `fullscreen.js`, F key (`interaction.js` -> `onFullscreen`), a button under Sound on the start / pause screens and an F strip in the HUD
+- Checked in headless Chrome over the DevTools protocol: music context started before any click, Set sail -> Esc -> Home screen -> Set sail again, snapped line (spot empty, anchor up, back to playing), F key enters full screen, no console errors. NOT checked: a real phone, Safari
+
+### Step 37 — Desktop HUD layout  *(done)*
+- [x] Positions only (no style or icon changes), after a mock-up: stat box top left with the logbook diamond under it (the horn lives in the bottom row) (`#left` > `#stats` + `#side`), compass top right (`#compass`, now a child of `#hud` instead of `#dial`), the menu / sound / full screen strips under it, all the same width (`#right`), and anchor / boost / horn / lamp / camera as a row of diamonds bottom left (`#dock`). Boost and camera are diamonds now (`#tool-boost`, `#tool-camera`), no longer strips; the dev-only T strip sits under the logbook
+- Touch mode keeps its own layout: `#side` and `#dock` are hidden, `#compass` is put back beside the dial. Checked at 1470x835, 1920x1080 and 1100x700 (no overlaps) and at phone sizes
+- Fix: the spot near the start was 0.92 from a route buoy, so anchoring on it from the buoy's side tipped the buoy over (and played the buoy sound). Fishing spots now keep `FISHING.spots.buoyClearance` (1.3) from buoys (was a hard-coded 0.6) and the near-start spot moved to bearing 60, distance 0.35. The other five spots are exactly where they were
+
+### Step 38 — Phone HUD after a mock-up  *(done)*
+- [x] Top left: stat box (a column on a tall phone, sea state on top) with the logbook under it, centred on it upright and at its left end sideways. Top right: compass, and under it four black strips: menu, sound (back on phones), full screen and VIEW (`#strip-view`, the camera, the eye icon; teal while in planet view; phones only, the desktop has the eye diamond in `#dock`). Bottom right: a diagonal lattice of diamonds (`#actions`): boost big in the middle and in front of the others (`z-index`), lamp up-right, horn down-left, anchor down-right; only the diamonds take taps (`pointer-events`), the joystick stays bottom left. Replaces the Step 35 / Step 36 positions (`#top-tools`, `#t-camera`, `#t-book` are gone)
+- Checked at 844x390, 667x375, 932x430, 390x844 and 360x640: no overlaps; taps on lamp, anchor, VIEW and mute work. NOT checked on a real phone
 
 ## Final requirements check (re-run before handing in)
 

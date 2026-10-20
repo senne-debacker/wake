@@ -41,6 +41,7 @@ import { createLoader } from './loader.js'
 import { createAudio } from './audio/audio.js'
 import { createPostProcessing } from './post.js'
 import { setupInteraction } from './interaction.js'
+import { setupFullscreen } from './fullscreen.js'
 
 const FOG_ZOOM = 0.5 // how much the haze thins out when zooming out: 1 = in proportion to the distance (clear), 0 = not at all
 const CHASE_DISTANCE = Math.hypot(CAMERA.distance, CAMERA.height) // about how far the camera is from the boat at the normal zoom
@@ -117,21 +118,24 @@ async function main() {
   // fish can pull harder. The world keeps running during the fight (state 'fishing'); only the
   // controls are locked, and the anchor stays down afterwards.
   let fishingSpot = null // the spot being fished
+  let fightOutcome = null // how the last fight ended: 'caught', 'snapped' or 'released'
   const logbook = createLogbook({ onClose: () => state === 'logbook' && setState('playing') })
   const fishing = createFishingMinigame({
     logbook,
     onFrame: (fight) => audio.reel(fight),
     onResult: (result) => {
       audio.reelStop()
+      fightOutcome = result.outcome
       if (result.outcome === 'caught') {
         audio.fishCaught(result.fish.rarity)
-        if (fishingSpot) spots.deplete(fishingSpot) // the school scatters: the spot is empty until midnight
       } else if (result.outcome === 'snapped') {
         audio.lineSnap()
       }
+      if ((result.outcome === 'caught' || result.outcome === 'snapped') && fishingSpot) spots.deplete(fishingSpot) // caught: the school scatters. Snapped: the fish is spooked. Either way the spot is empty until midnight
     },
     onClose: () => {
       fishingSpot = null
+      if (fightOutcome === 'caught' || fightOutcome === 'snapped') interaction.input.anchored = false // the anchor comes up by itself: off you go
       if (state === 'fishing') setState('playing')
     },
   })
@@ -161,6 +165,7 @@ async function main() {
   const interaction = setupInteraction({
     onMenu: () => (state === 'playing' ? setState('paused') : state === 'paused' ? setState('playing') : null),
     onMute: toggleSound,
+    onFullscreen: () => fullscreen.toggle(),
     onLogbook: () => {
       if (state !== 'playing') return
       setState('logbook')
@@ -168,13 +173,26 @@ async function main() {
     },
     onBlur: () => state === 'playing' && setState('paused'),
   })
+  // The music plays on the start screen already. Browsers keep the sound off until the visitor has done
+  // something on the page, so it starts with the first click, key press or touch (at once, if the
+  // browser lets it).
+  audio.start()
+  for (const type of ['pointerdown', 'keydown', 'touchend']) addEventListener(type, () => audio.unlock(), { capture: true })
+  const fullscreen = setupFullscreen()
   const menu = createMenu({
     audio,
     onMute: toggleSound,
+    onFullscreen: () => fullscreen.toggle(),
+    onHome: () => {
+      if (state !== 'paused') return
+      interaction.input.planetView = false
+      rig.title() // the camera goes back to the close-up of the boat
+      setState('menu')
+    },
     onStart: () => {
       if (state !== 'menu') return
       tilt.begin() // (a tap: iOS asks for the motion sensor here)
-      audio.start() // browsers only allow sound after a click, so the audio engine is created here
+      audio.unlock()
       setState('starting')
       rig.pan(INTRO.panSeconds, () => setState('playing')) // swing round behind the boat, then sail
     },
@@ -209,7 +227,10 @@ async function main() {
     interaction.enabled = next === 'playing'
     hud.show(next === 'playing' || next === 'paused' || next === 'fishing' || next === 'logbook')
     menu.showSound(next === 'menu' || next === 'paused')
-    if (next === 'menu') menu.showStart()
+    if (next === 'menu') {
+      menu.closePause() // (coming home from the pause screen)
+      menu.showStart()
+    }
     if (next === 'starting') menu.hideStart()
     if (next === 'playing') menu.closePause()
     if (next === 'paused') menu.openPause()

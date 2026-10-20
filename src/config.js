@@ -494,8 +494,9 @@ export const FISHING = {
     seed: 20261014,
     count: 6, // in all
     oceanCount: 2, // this many of them in the big empty ocean (WORLD.ocean)
-    nearStart: { bearing: 38, distance: 0.3 }, // one close to the start, placed like a landmark (degrees from the heading, radians of arc)
+    nearStart: { bearing: 60, distance: 0.35 }, // one close to the start, placed like a landmark (degrees from the heading, radians of arc)
     clearance: 0.9, // from the edge of any island, rock or buoy (world units): room to anchor beside it
+    buoyClearance: 1.3, // from a buoy: the hull reaches 0.56 from its centre and you may anchor 0.45 from the spot, so any closer and you tip the buoy over (and hear it) while fishing
     gap: 1.8, // between two spots
     startClear: 0.9, // none closer than this to where the boat starts (except the near-start one)
     triggerRadius: 0.45, // anchor within this distance (over the sea, world units) = the fish bite; the "fish are biting" message shows within the same distance, so it only appears when Space works
