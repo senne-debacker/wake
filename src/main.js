@@ -17,6 +17,8 @@ import { createWeather } from './world/weather.js'
 import { createWind } from './world/wind.js'
 import { QUALITY } from './quality.js'
 import { setupTouchMode, setupStick, isTouch } from './touch.js'
+import { setupTilt } from './tilt.js'
+import { screenSteer } from './camera/screenSteer.js'
 import { createDolphins } from './scene/dolphin.js'
 import { createLightning } from './world/lightning.js'
 import { createWake } from './world/wake.js'
@@ -171,13 +173,19 @@ async function main() {
     onMute: toggleSound,
     onStart: () => {
       if (state !== 'menu') return
+      tilt.begin() // (a tap: iOS asks for the motion sensor here)
       audio.start() // browsers only allow sound after a click, so the audio engine is created here
       setState('starting')
       rig.pan(INTRO.panSeconds, () => setState('playing')) // swing round behind the boat, then sail
     },
-    onResume: () => setState('playing'),
+    onResume: () => {
+      tilt.begin()
+      setState('playing')
+    },
   })
   setupStick(interaction) // the touch joystick
+  interaction.screenRelative = (stick) => (rig.mode === 'planet' ? screenSteer(boatState, camera, stick, innerWidth / innerHeight) : null) // in planet view the stick points where the boat should go on the screen
+  const tilt = setupTilt(interaction, { notify: (text) => hud.toast(text, 3.5) }) // steering by tilting the phone, an alternative to the stick's left / right
   const dev = createDevMode({ interaction, clock, spots, logbook, startFishing, getState: () => state }) // ?dev + code: weather, time and fishing tools
   const cursor = createCursorHider()
   // The clickable HUD: every button triggers the same action as its key; buttons marked data-hold
@@ -195,6 +203,7 @@ async function main() {
     }
   }
   function setState(next) {
+    if (next === 'playing' && (state === 'starting' || state === 'paused')) tilt.calibrate() // the way the phone is held now is "straight ahead"
     state = next
     cursor.setEnabled(next === 'playing')
     interaction.enabled = next === 'playing'
@@ -249,6 +258,7 @@ async function main() {
     const sim = running ? delta : 0 // game time
 
     uniforms.time.value = elapsed // single clock shared with the water shader
+    tilt.update(delta)
     interaction.update(delta)
     weather.update(sim, input.weather) // storm / cover / rain levels; `storm` also drives the waves
 
