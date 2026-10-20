@@ -16,6 +16,7 @@ import { createAtmosphere } from './world/atmosphere.js'
 import { createWeather } from './world/weather.js'
 import { createWind } from './world/wind.js'
 import { createDisplay } from './display.js'
+import { createTutorial } from './tutorial.js'
 import { setupTouchMode, setupStick, isTouch } from './touch.js'
 import { setupTilt } from './tilt.js'
 import { screenSteer } from './camera/screenSteer.js'
@@ -154,7 +155,7 @@ async function main() {
     fishingSpot = spot
     audio.fishBite()
     setState('fishing')
-    fishing.open({ fish: rollFish() })
+    fishing.open({ fish: rollFish(Math.random, { hour: clock.timeOfDay * 24, ...weather.levels }) }) // some rare fish bite better in the right weather and hour (fishing/habitat.js)
   }
   atmosphere.update(clock.timeOfDay, boatState.dir, camera.position.length(), spaceAmount, weather.levels) // correct lighting from the first frame
 
@@ -192,6 +193,7 @@ async function main() {
   audio.start()
   for (const type of ['pointerdown', 'keydown', 'touchend']) addEventListener(type, () => audio.unlock(), { capture: true })
   const fullscreen = setupFullscreen()
+  const tutorial = createTutorial() // pop-ups that explain sailing and fishing, the first time and from the pause menu
   const menu = createMenu({
     audio,
     onMute: toggleSound,
@@ -202,6 +204,11 @@ async function main() {
       logbookReturn = 'paused' // closing the book brings the pause screen back
       setState('logbook')
       logbook.open()
+    },
+    onTutorial: () => {
+      if (state !== 'paused') return
+      setState('playing')
+      tutorial.start()
     },
     onHome: () => {
       if (state !== 'paused') return
@@ -214,7 +221,10 @@ async function main() {
       tilt.begin() // (a tap: iOS asks for the motion sensor here)
       audio.unlock()
       setState('starting')
-      rig.pan(INTRO.panSeconds, () => setState('playing')) // swing round behind the boat, then sail
+      rig.pan(INTRO.panSeconds, () => {
+        setState('playing') // swing round behind the boat, then sail
+        tutorial.maybeStart()
+      })
     },
     onResume: () => {
       tilt.begin()
@@ -342,6 +352,7 @@ async function main() {
       spots.refill()
     }
     dev.update()
+    tutorial.update(delta, { state, input, touch: isTouch(), tilt: interaction.tilt.active, nearSpot: spots.nearest(boatState.dir, FISHING.spots.triggerRadius) !== null })
     spots.update({ delta, time: elapsed, storm: uniforms.storm.value, space: spaceAmount })
 
     // Sounds and messages for things that just happened, and the continuous sounds.

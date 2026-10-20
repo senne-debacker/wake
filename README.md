@@ -147,6 +147,16 @@ The scene is rendered once into a texture, then a TSL node graph adds bloom (onl
 - The original Shadertoy URLs are credited at the top of this file (the simplex noise), in "Raindrops on the water" (the rain ripples) and in "Third-party code" (the fish schooling), and in the header of the shader files.
 - The shader responds to user input: the boat's wake is drawn into the water by the shader from where and how fast you sail, the foam patches over the fishing spots follow what you fish, and the weather (wave amplitude, foam, rain ripples) can be forced in the **developer mode** (`1` `2` `3` `4` and a panel), which is locked in the normal game; the weather otherwise cycles by itself.
 
+### Habitats: some fish bite better in the right weather
+
+Every rare and legendary species has a **habitat** ([src/fishing/habitat.js](src/fishing/habitat.js), the data in [src/fishing/fishDatabase.js](src/fishing/fishDatabase.js)): a weather (thunderstorm, rain, rough, calm or clear) and / or hours of the game clock. While both are right, the fish is `boost` times (twice) as likely to come up: the Wake-Eater in a thunderstorm between 02:00 and 04:00, the Old Moonfin on calm seas late at night, and so on. The chances are shared out again afterwards, so the others shrink a little to make room. The weather and the hour are read at the moment the anchor goes down on a spot.
+
+The logbook gives a vague hint under each unseen rare or legendary fish ("Prefers storm and darkness.") and, once you have caught one, the whole rule ("Twice as likely to bite during a thunderstorm, between 02:00 and 04:00."). Common and uncommon fish have none.
+
+## Tutorial
+
+The first time the game is played, a few pop-ups ([src/tutorial.js](src/tutorial.js)) explain how to sail (throttle, steering, looking round) and how to fish (find the bubbles, drop the anchor, reel in without snapping the line). Each one waits for you to do what it says, then moves on by itself; "Next" moves on without doing it and **Skip tutorial** ends it at any time. It is remembered (`wake.tutorial` in localStorage) and can be played again from the pause menu ("Tutorial"). On a phone the texts talk about the joystick, the buttons and tilting instead of the keys.
+
 ## Start screen
 
 The game opens on a close-up of the boat with the title above it, five key hints and a "Set sail" button. Behind the glass the world is already running (waves, clouds, the boat bobbing), but the clock, the weather and the boat stand still. Pressing the button starts the music and swings the camera round the port side from the front of the boat to behind it (about 3 seconds, eased, with the lens widening from 38 to 55 degrees), and the interface fades in as the camera arrives and the game begins. The camera poses are in `INTRO` in [src/config.js](src/config.js) and the swing is in [src/camera/introCamera.js](src/camera/introCamera.js).

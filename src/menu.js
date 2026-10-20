@@ -1,13 +1,13 @@
 // Two overlays (markup in index.html, look in style.css):
 //   #start  the start screen: title, five key hints and the "Set sail" button. Everything else
 //           is the 3D scene behind it, a close-up of the boat
-//   #menu   the pause screen: a short list (Resume, Controls, Settings, Logbook, About, Home screen).
+//   #menu   the pause screen: a short list (Resume, Controls, Tutorial, Settings, Logbook, About, Home screen).
 //           Controls, Settings, About and the "go home?" question are pages inside the same card: one .menu-view is shown at a time,
 //           Esc or "Back" returns to the list
 // Enter presses whichever button is showing.
 const TITLES = { main: 'Paused', controls: 'Controls', settings: 'Settings', about: 'About', confirm: 'Go home?' }
 
-export function createMenu({ audio, display, onStart, onResume, onHome, onLogbook, onMute, onFullscreen }) {
+export function createMenu({ audio, display, onStart, onResume, onHome, onLogbook, onTutorial, onMute, onFullscreen }) {
   const $ = (id) => document.getElementById(id)
   const start = $('start')
   const startButton = $('start-action')
@@ -60,6 +60,7 @@ export function createMenu({ audio, display, onStart, onResume, onHome, onLogboo
   for (const button of pause.querySelectorAll('.menu-item[data-view]')) button.addEventListener('click', () => show(button.dataset.view))
   for (const button of pause.querySelectorAll('[data-back]')) button.addEventListener('click', () => show('main'))
   $('menu-logbook').addEventListener('click', () => onLogbook())
+  $('menu-tutorial').addEventListener('click', () => onTutorial())
   $('menu-home').addEventListener('click', () => show('confirm')) // asks first
   $('menu-home-confirm').addEventListener('click', () => onHome())
 

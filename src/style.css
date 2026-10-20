@@ -658,6 +658,15 @@ body {
   body.touch #menu .menu-card h1 {
     font-size: 30px;
   }
+
+  body.touch #menu .menu-list {
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  body.touch #menu .menu-item {
+    padding: 11px 20px;
+  }
 }
 
 body.no-fullscreen .setting-fullscreen {
@@ -2056,6 +2065,28 @@ body.touch .text-button kbd {
   color: rgba(241, 236, 224, 0.9);
 }
 
+#detail-habitat {
+  margin: 12px 0 0;
+  padding: 8px 10px;
+  font-size: 13px;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: rgba(241, 236, 224, 0.9);
+  background: rgba(127, 214, 230, 0.08);
+  border-left: 3px solid var(--rarity);
+  text-align: left;
+}
+
+#detail-habitat b {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--rarity);
+}
+
 #logbook .big-button {
   margin-top: 12px;
   padding-block: 10px;
@@ -2567,4 +2598,162 @@ body.touch #strip-view {
 body.touch #right .strip {
   width: 56px;
   justify-content: center;
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Tutorial pop-ups (src/tutorial.js): one card at a time, bottom centre on a desktop and under the
+   dial on a phone. Only its two buttons take taps.
+   --------------------------------------------------------------------------------------------- */
+
+#tutorial {
+  position: fixed;
+  z-index: 9;
+  left: 50%;
+  bottom: 36px;
+  transform: translateX(-50%);
+  width: min(440px, calc(100vw - 32px));
+  box-sizing: border-box;
+  padding: 10px 16px 12px;
+  background: var(--panel);
+  border-left: 3px solid var(--teal-light);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  font-size: 15px;
+  line-height: 1.45;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  pointer-events: none;
+  user-select: none;
+  transition: border-color 0.2s;
+}
+
+#tutorial[hidden],
+#tutorial.away {
+  display: none;
+}
+
+#tutorial.ok {
+  border-left-color: var(--good);
+}
+
+.tut-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--teal-light);
+}
+
+#tutorial.ok .tut-count::after {
+  content: ' \2713';
+  color: var(--good);
+}
+
+.tut-skip,
+.tut-next {
+  pointer-events: auto;
+  font: 700 11px var(--font);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tut-skip {
+  margin-right: -6px;
+  padding: 8px 6px 8px 14px;
+  color: rgba(241, 236, 224, 0.6);
+  background: none;
+  border: 0;
+}
+
+.tut-skip:hover {
+  color: var(--cream);
+}
+
+#tut-text {
+  margin: 4px 0 10px;
+  color: var(--cream);
+}
+
+#tut-text b {
+  color: var(--teal-light);
+  font-weight: 700;
+}
+
+#tutorial kbd {
+  height: 22px;
+  min-width: 22px;
+  margin: 0 2px;
+  font-size: 12px;
+  border-width: 1.5px;
+  vertical-align: 1px;
+}
+
+.tut-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tut-dots i {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 7px;
+  background: rgba(241, 236, 224, 0.25);
+  transform: rotate(45deg);
+}
+
+.tut-dots i.on {
+  background: var(--teal-light);
+}
+
+.tut-next {
+  padding: 8px 16px;
+  color: var(--cream);
+  background: rgba(5, 10, 15, 0.35);
+  border: 1px solid var(--teal-light);
+  transition: background 0.2s;
+}
+
+.tut-next:hover {
+  background: var(--teal);
+}
+
+/* A phone: under the dial, between the stat box and the strips; the toasts move down out of its way. */
+body.touch #tutorial {
+  top: calc(104px * var(--ui));
+  bottom: auto;
+  width: clamp(210px, calc(100vw - 150px), 400px);
+  padding: 6px 12px 8px;
+  font-size: 13px;
+}
+
+body.touch.tutorial-open #toast {
+  top: 190px;
+}
+
+body.touch .tut-skip,
+body.touch .tut-next {
+  min-height: 36px;
+}
+
+body.touch #tutorial kbd {
+  display: none; /* (no keyboard keys are shown on a phone: the texts have their own wording) */
+}
+
+/* A fish is on: on a phone the fishing card fills the middle of the screen, so the tutorial card goes to
+   the bottom (upright) or waits until the fight is over (sideways: there is no room, and the fishing
+   card says the same in its own words). */
+body.touch.fishing-open #tutorial {
+  top: auto;
+  bottom: max(16px, env(safe-area-inset-bottom));
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  body.touch.fishing-open #tutorial {
+    display: none;
+  }
 }

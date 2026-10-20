@@ -1,4 +1,5 @@
 import { RARITIES, FISH_SPECIES, FISH_BY_ID, fishInRarity, formatWeight } from './fishDatabase.js'
+import { describeHabitat } from './habitat.js'
 
 // The fish logbook: which species you have caught, how many, and the heaviest of each. Saved in
 // localStorage, so it survives reloads. Two parts: createLogbookStore is the bookkeeping (no DOM,
@@ -70,7 +71,7 @@ export function createLogbook({ onClose, storage } = {}) {
   const root = $('logbook')
   const grid = $('logbook-grid')
   const closeButton = $('logbook-close')
-  const detail = { image: $('detail-image'), name: $('detail-name'), rarity: $('detail-rarity'), stats: $('detail-stats'), text: $('detail-text') }
+  const detail = { image: $('detail-image'), name: $('detail-name'), rarity: $('detail-rarity'), stats: $('detail-stats'), text: $('detail-text'), habitat: $('detail-habitat') }
   const tiles = new Map() // species id -> its button
   let selected = FISH_SPECIES[0].id
   let open = false
@@ -134,6 +135,9 @@ export function createLogbook({ onClose, storage } = {}) {
       ? `Caught ${entry.count} × · Best ${formatWeight(entry.best)} · Range ${formatWeight(fish.weight[0])} to ${formatWeight(fish.weight[1])}`
       : 'Not caught yet'
     detail.text.textContent = entry ? fish.description : 'Catch one to learn what it is.'
+    // Rare and legendary fish bite better in the right weather and hour: a hint at first, the whole rule once caught.
+    detail.habitat.hidden = !fish.habitat
+    if (fish.habitat) detail.habitat.querySelector('span').textContent = entry ? describeHabitat(fish.habitat) : fish.habitat.hint
   }
 
   grid.addEventListener('click', (event) => {

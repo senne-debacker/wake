@@ -12,8 +12,14 @@
 //                like the game's low-poly look, and use no id= / url(#) so the same picture can be on
 //                the page several times. No scripts or external references.
 //
+//   habitat      (rare and legendary only, optional) when the species is likelier to bite, see
+//                fishing/habitat.js: { weather, hours, boost, hint }. The logbook shows the vague `hint`
+//                until you have caught one, then the whole rule
+//
 // Note: config.js has a FISH too, the schools that swim under the water. This file is about the
 // ones you can catch.
+
+import { habitatActive } from './habitat.js'
 
 // Order = display order of the logbook. `rate` is the chance that a catch is of this rarity
 // (the four add up to 1); `difficulty` scales the fight (see fishing/fishingMinigame.js);
@@ -273,6 +279,7 @@ export const FISH_SPECIES = [
     id: 'bonewhistle',
     name: 'Bonewhistle',
     rarity: 'rare',
+    habitat: { weather: 'rough', boost: 2, hint: 'Prefers wind and rough water.' },
     weight: [4, 16],
     description: 'All ribs and no fish. The wind whistles through it, and it hums back a tune you almost know.',
     imgUrl: `<svg ${SVG}>
@@ -295,6 +302,7 @@ export const FISH_SPECIES = [
     id: 'brasscrown-sturgeon',
     name: 'Brasscrown Sturgeon',
     rarity: 'rare',
+    habitat: { weather: 'clear', hours: [10, 14], boost: 2, hint: 'Prefers clear skies and the middle of the day.' },
     weight: [20, 65],
     description: 'Armoured like a knight and crowned like a king. Nobody remembers which kingdom.',
     imgUrl: `<svg ${SVG}>
@@ -314,6 +322,7 @@ export const FISH_SPECIES = [
     id: 'argus-grouper',
     name: 'Argus Grouper',
     rarity: 'rare',
+    habitat: { weather: 'clear', hours: [22, 4], boost: 2, hint: 'Prefers clear skies and the small hours.' },
     weight: [8, 34],
     description: 'Seven eyes, and every one of them is looking at you. Not one of them blinks.',
     imgUrl: `<svg ${SVG}>
@@ -350,6 +359,7 @@ export const FISH_SPECIES = [
     id: 'old-moonfin',
     name: 'Old Moonfin',
     rarity: 'legendary',
+    habitat: { weather: 'calm', hours: [22, 2], boost: 2, hint: 'Prefers still water and the dead of night.' },
     weight: [90, 240],
     description: 'A drifting disc of silver that surfaces on still nights. Sailors take their hats off when it passes.',
     imgUrl: `<svg ${SVG}>
@@ -371,6 +381,7 @@ export const FISH_SPECIES = [
     id: 'wake-eater',
     name: 'The Wake-Eater',
     rarity: 'legendary',
+    habitat: { weather: 'thunderstorm', hours: [2, 4], boost: 2, hint: 'Prefers storm and darkness.' },
     weight: [150, 420],
     description: 'It follows boats and swallows their wakes. No one has ever seen it leave one.',
     imgUrl: `<svg ${SVG}>
@@ -413,10 +424,27 @@ export function rollRarity(random = Math.random) {
   return last // only reached through rounding
 }
 
-// A species at random: first the rarity by its drop rate, then any fish of that rarity.
-export function rollFish(random = Math.random) {
-  const pool = fishInRarity(rollRarity(random))
-  return pool[Math.min(pool.length - 1, Math.floor(random() * pool.length))]
+// The chance of each species, as weights: its rarity's drop rate shared out over the rarity, times its
+// habitat's boost while the weather and the hour suit it. They are not normalised: rollFish takes the sum.
+export function speciesWeights(conditions = null) {
+  return FISH_SPECIES.map((fish) => {
+    const base = RARITIES[fish.rarity].rate / fishInRarity(fish.rarity).length
+    return habitatActive(fish.habitat, conditions) ? base * fish.habitat.boost : base
+  })
+}
+
+// A species at random. Without `conditions` it is the rarity first (by its drop rate), then any fish
+// of that rarity, all equally likely. `conditions` ({ hour, storm, cover, rain }) lets a rare or
+// legendary fish whose habitat is right come up `boost` times as often (a little less in the end,
+// because the chances are shared out again: the odds of the others shrink to make room).
+export function rollFish(random = Math.random, conditions = null) {
+  const weights = speciesWeights(conditions)
+  let roll = random() * weights.reduce((sum, w) => sum + w, 0)
+  for (let i = 0; i < weights.length; i++) {
+    roll -= weights[i]
+    if (roll < 0) return FISH_SPECIES[i]
+  }
+  return FISH_SPECIES[FISH_SPECIES.length - 1] // only reached through rounding
 }
 
 // The weight of one catch in kg, always inside the species' range. Squared-ish towards the light

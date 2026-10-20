@@ -162,6 +162,7 @@
           <nav class="menu-list" aria-label="Pause menu">
             <button id="menu-action" class="big-button" type="button">Resume</button>
             <button class="menu-item" type="button" data-view="controls">Controls</button>
+            <button class="menu-item" type="button" id="menu-tutorial">Tutorial</button>
             <button class="menu-item" type="button" data-view="settings">Settings</button>
             <button class="menu-item" type="button" id="menu-logbook">Logbook</button>
             <button class="menu-item" type="button" data-view="about">About</button>
@@ -287,6 +288,19 @@
       </div>
     </div>
 
+    <!-- Tutorial pop-ups (src/tutorial.js): a card that explains one thing at a time while you play. -->
+    <aside id="tutorial" role="status" aria-live="polite" hidden>
+      <div class="tut-head">
+        <span class="tut-count" id="tut-count">1 / 7</span>
+        <button class="tut-skip" id="tut-skip" type="button" tabindex="-1">Skip tutorial</button>
+      </div>
+      <p id="tut-text"></p>
+      <div class="tut-foot">
+        <span class="tut-dots" id="tut-dots" aria-hidden="true"></span>
+        <button class="tut-next" id="tut-next" type="button" tabindex="-1">Next</button>
+      </div>
+    </aside>
+
     <!-- Fishing minigame (src/fishing/fishingMinigame.js): a panel at the bottom while the fish fights,
          a card in the middle with the result afterwards. -->
     <div id="fishing" aria-live="polite">
@@ -353,6 +367,7 @@
             <p id="detail-rarity" class="rarity-chip"></p>
             <p id="detail-stats"></p>
             <p id="detail-text"></p>
+            <p id="detail-habitat" hidden><b>Habitat</b><span></span></p>
           </aside>
         </div>
         <button id="logbook-close" class="big-button" type="button">Close</button>

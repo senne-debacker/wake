@@ -383,6 +383,16 @@ User asked for: effects in planet view (rain, ripples, fog, fishing particles), 
 - [x] Fits every screen (checked with a script over CDP: 16 sizes from 320x568 and 568x320 up to 2560x1080, every page, the start screen as well): nothing sticks out of the card, nothing scrolls, nothing is covered. The Sound / Full screen buttons and the "Made by" tag are only on the start screen now (the pause screen's Settings page has Sound on / off and Full screen; M and F still work); a phone held upright gets them as two small icons side by side. Settings go in two columns on a phone held sideways (max-height 440), narrower labels and buttons below 400 and 340 px wide, and the start title is limited by the screen's width as well as its height
 - Checked in headless Chrome at 1470x835, 390x844 and 844x390: every page, Esc back / resume, settings change and stored, logbook round trip, Home screen. In a short landscape phone the list is two columns and the title is hidden on the pages. NOT checked on a real phone
 
+### Step 40 — Habitats for rare and legendary fish  *(done)*
+- [x] `src/fishing/habitat.js` (weather kinds, hours that may wrap midnight, `habitatActive`, `describeHabitat`) and a `habitat: { weather, hours, boost, hint }` on the five rare / legendary species in `fishDatabase.js`: Bonewhistle (rough weather), Brasscrown Sturgeon (clear, 10-14), Argus Grouper (clear, 22-04), Old Moonfin (calm, 22-02), The Wake-Eater (thunderstorm, 02-04), all boost 2. A thunderstorm is the same test as lightning (`LIGHTNING.minRain` / `minStorm`)
+- [x] `rollFish(random, conditions)` now draws from `speciesWeights(conditions)` (rate / species in the rarity, times the boost while the habitat is right) instead of rarity first: with no conditions it is the same odds as before. `main.js` `startFishing` passes `{ hour, ...weather.levels }`. Measured: the Wake-Eater is 1.95 times as likely in a thunderstorm at 03:00 (the odds are shared out again, so not quite 2)
+- [x] Logbook (`#detail-habitat`): a vague `hint` while a species is unseen, the full text from `describeHabitat` once caught; hidden for common and uncommon. 7 new checks in `tests/fishing.check.mjs`
+
+### Step 41 — Tutorial  *(done)*
+- [x] `src/tutorial.js`, `#tutorial` in `index.html`: seven steps (sail, steer, look, find the bubbles, anchor, reel, finish) as a card at the bottom centre (under the dial on a phone). Steps move on by themselves when the player does the thing (`done` + `hold`), "Next" moves on without, **Skip tutorial** ends it; jumps ahead when fishing starts or ends. Starts by itself the first time (`wake.tutorial` = done in localStorage, set on skip or finish), and again from the pause menu's **Tutorial** item (`menu.js` `onTutorial`). Hidden behind the pause screen and the logbook
+- On a phone the texts name the joystick / buttons / tilt; while a fish is on, the card goes to the bottom (upright) or waits (sideways: the fishing card fills the screen). The pause list has 7 items now: checked again on 16 screen sizes
+- Checked in headless Chrome: fresh player through all steps (W, A, Next, boat moved to a spot, Space, a fight to the end), skip, reload (does not start), redo from the menu, logbook hint and full text
+
 ## Final requirements check (re-run before handing in)
 
 ```

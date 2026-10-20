@@ -14,10 +14,11 @@ import { FISHING, PLANET } from '../src/config.js'
 import { createLayout } from '../src/world/layout.js'
 import { createFishingSpots } from '../src/scene/fishingSpots.js'
 import {
-  FISH_SPECIES, FISH_BY_ID, RARITIES, fishInRarity, rollRarity, rollFish, rollWeight, formatWeight,
+  FISH_SPECIES, FISH_BY_ID, RARITIES, fishInRarity, rollRarity, rollFish, rollWeight, formatWeight, speciesWeights,
 } from '../src/fishing/fishDatabase.js'
 import { createFight, stepFight } from '../src/fishing/fishingMinigame.js'
 import { createLogbookStore } from '../src/fishing/logbook.js'
+import { habitatActive, describeHabitat, inHours, WEATHER_KINDS } from '../src/fishing/habitat.js'
 
 let failures = 0
 const check = (name, ok, detail = '') => {
@@ -87,6 +88,35 @@ const mulberry32 = (seed) => () => {
   }
   const [lo, hi] = heavy.weight
   check('rolling: weights stay in the species range, lighter ones are more common', outside === 0 && sum / 20000 < (lo + hi) / 2, `mean ${(sum / 20000).toFixed(0)} kg of ${lo}-${hi}`)
+
+  // Habitats: only rare and legendary fish have one, the rule is checked against the weather and the hour,
+  // and a fish whose habitat is right comes up about `boost` times as often.
+  const withHabitat = FISH_SPECIES.filter((f) => f.habitat)
+  check('habitat: only rare and legendary species have one, each with a hint and a boost above 1', withHabitat.length > 0 && withHabitat.every((f) => (f.rarity === 'rare' || f.rarity === 'legendary') && f.habitat.hint && f.habitat.boost > 1 && (f.habitat.weather || f.habitat.hours) && (!f.habitat.weather || f.habitat.weather in WEATHER_KINDS)))
+  check('habitat: the wake-eater wants a thunderstorm between 02:00 and 04:00', (() => {
+    const h = FISH_BY_ID.get('wake-eater').habitat
+    const storm = { storm: 1, cover: 1, rain: 1 }
+    return habitatActive(h, { ...storm, hour: 3 }) && !habitatActive(h, { ...storm, hour: 4 }) && !habitatActive(h, { ...storm, hour: 1.9 }) && !habitatActive(h, { storm: 1, cover: 1, rain: 0, hour: 3 }) && !habitatActive(h, { storm: 0, cover: 0.1, rain: 0, hour: 3 }) && !habitatActive(h, null)
+  })())
+  check('habitat: hours wrap past midnight', inHours(23, [22, 2]) && inHours(1.5, [22, 2]) && !inHours(2, [22, 2]) && !inHours(12, [22, 2]) && inHours(12, [10, 14]) && !inHours(14, [10, 14]))
+  check('habitat: the text spells the rule out', describeHabitat(FISH_BY_ID.get('wake-eater').habitat) === 'Twice as likely to bite during a thunderstorm, between 02:00 and 04:00.' && describeHabitat(FISH_BY_ID.get('bonewhistle').habitat) === 'Twice as likely to bite in rough weather.', describeHabitat(FISH_BY_ID.get('old-moonfin').habitat))
+  check('habitat: weights add up to 1 without conditions and every boost shows when its habitat is right', (() => {
+    const sum = (w) => w.reduce((a, b) => a + b, 0)
+    if (Math.abs(sum(speciesWeights()) - 1) > 1e-9) return false
+    const storm = speciesWeights({ hour: 3, storm: 1, cover: 1, rain: 1 })
+    const i = FISH_SPECIES.findIndex((f) => f.id === 'wake-eater')
+    return Math.abs(storm[i] / speciesWeights()[i] - 2) < 1e-9
+  })())
+  const rollShare = (id, conditions) => {
+    const r = mulberry32(11)
+    let n = 0
+    for (let i = 0; i < 400000; i++) if (rollFish(r, conditions).id === id) n++
+    return n / 400000
+  }
+  const night = { hour: 3, storm: 1, cover: 1, rain: 1 }
+  const ratio = rollShare('wake-eater', night) / rollShare('wake-eater', { hour: 12, storm: 0, cover: 0.1, rain: 0 })
+  check('habitat: the wake-eater is about twice as likely in a thunderstorm at 03:00', ratio > 1.85 && ratio < 2.1, `${ratio.toFixed(2)} times`)
+  check('habitat: a boost in the wrong hour or weather changes nothing', Math.abs(rollShare('wake-eater', { hour: 3, storm: 0, cover: 0.1, rain: 0 }) - rollShare('wake-eater', null)) < 0.002)
   check('weight text: grams below a kilo, kilos above', formatWeight(0.25) === '250 g' && formatWeight(0.05) === '50 g' && formatWeight(2.44) === '2.4 kg' && formatWeight(0.9996) === '1.0 kg' && formatWeight(143.26) === '143.3 kg')
 }
 
