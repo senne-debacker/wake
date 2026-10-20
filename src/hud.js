@@ -66,9 +66,10 @@ export function createHud() {
   // Scale the interface with the window.
   // On a phone the HUD is sized from both sides of the screen (it is narrow upright, short sideways),
   // and the menus are not scaled at all: they are laid out for the screen and scroll (style.css).
+  let sizeFactor = 1 // the Interface size setting (display.js)
   const rescale = () => {
     const root = document.documentElement.style
-    const ui = isTouch() ? Math.min(1, Math.max(0.6, Math.min(innerHeight / 640, innerWidth / 520))) : Math.min(1.4, Math.max(0.7, innerHeight / 900))
+    const ui = (isTouch() ? Math.min(1, Math.max(0.6, Math.min(innerHeight / 640, innerWidth / 520))) : Math.min(1.4, Math.max(0.7, innerHeight / 900))) * sizeFactor
     root.setProperty('--ui', ui.toFixed(3))
     root.setProperty('--menu-scale', isTouch() ? '1' : Math.min(1.15, Math.max(0.55, Math.min(innerHeight / 780, innerWidth / 820))).toFixed(3))
   }
@@ -82,6 +83,12 @@ export function createHud() {
   return {
     show(visible) {
       root.classList.toggle('off', !visible) // fades in and out
+    },
+
+    // 'small' | 'normal' | 'large'
+    setSize(name) {
+      sizeFactor = { small: 0.85, normal: 1, large: 1.2 }[name] ?? 1
+      rescale()
     },
 
     // A short message under the dial.

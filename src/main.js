@@ -15,7 +15,7 @@ import { createClock } from './world/clock.js'
 import { createAtmosphere } from './world/atmosphere.js'
 import { createWeather } from './world/weather.js'
 import { createWind } from './world/wind.js'
-import { QUALITY } from './quality.js'
+import { createDisplay } from './display.js'
 import { setupTouchMode, setupStick, isTouch } from './touch.js'
 import { setupTilt } from './tilt.js'
 import { screenSteer } from './camera/screenSteer.js'
@@ -55,12 +55,20 @@ async function main() {
   }
 
   setupTouchMode() // on-screen buttons on phones and tablets (see touch.js)
+  // The visual settings (pause screen > Settings): resolution, glow and interface size, remembered between visits.
+  const display = createDisplay((key, value) => {
+    if (key === 'resolution') {
+      renderer.setPixelRatio(display.pixelRatio())
+      renderer.setSize(innerWidth, innerHeight)
+    } else if (key === 'glow') post.setGlow(value === 'on')
+    else if (key === 'hud') hud.setSize(value)
+  })
   const loader = createLoader()
   await loader.stage(0.08, 'Starting the engine')
 
   // --- Renderer ---------------------------------------------------------------
   const renderer = new WebGPURenderer({ antialias: true })
-  renderer.setPixelRatio(QUALITY.pixelRatio)
+  renderer.setPixelRatio(display.pixelRatio())
   renderer.setSize(innerWidth, innerHeight)
   renderer.toneMapping = ACESFilmicToneMapping
   document.querySelector('#app').appendChild(renderer.domElement)
@@ -110,6 +118,8 @@ async function main() {
   const post = createPostProcessing(renderer, scene, camera)
   const rig = createCameraRig(camera, renderer.domElement, boatState)
   const hud = createHud()
+  hud.setSize(display.get('hud'))
+  post.setGlow(display.get('glow') === 'on')
   const audio = createAudio()
   const dolphins = createDolphins({ scene, layout, audio })
 
@@ -119,7 +129,8 @@ async function main() {
   // controls are locked, and the anchor stays down afterwards.
   let fishingSpot = null // the spot being fished
   let fightOutcome = null // how the last fight ended: 'caught', 'snapped' or 'released'
-  const logbook = createLogbook({ onClose: () => state === 'logbook' && setState('playing') })
+  let logbookReturn = 'playing' // where the logbook goes back to: the game, or the pause screen it was opened from
+  const logbook = createLogbook({ onClose: () => state === 'logbook' && setState(logbookReturn) })
   const fishing = createFishingMinigame({
     logbook,
     onFrame: (fight) => audio.reel(fight),
@@ -160,14 +171,16 @@ async function main() {
   let state = 'menu'
   function toggleSound() {
     const muted = audio.toggleMuted()
+    menu.refresh()
     if (state === 'playing') hud.toast(muted ? 'Sound off' : 'Sound on') // on the other screens the Sound button shows it
   }
   const interaction = setupInteraction({
-    onMenu: () => (state === 'playing' ? setState('paused') : state === 'paused' ? setState('playing') : null),
+    onMenu: () => (state === 'playing' ? setState('paused') : state === 'paused' ? (menu.back() ? null : setState('playing')) : null), // on a page of the pause screen Esc goes back to the list
     onMute: toggleSound,
     onFullscreen: () => fullscreen.toggle(),
     onLogbook: () => {
       if (state !== 'playing') return
+      logbookReturn = 'playing'
       setState('logbook')
       logbook.open()
     },
@@ -182,7 +195,14 @@ async function main() {
   const menu = createMenu({
     audio,
     onMute: toggleSound,
+    display,
     onFullscreen: () => fullscreen.toggle(),
+    onLogbook: () => {
+      if (state !== 'paused') return
+      logbookReturn = 'paused' // closing the book brings the pause screen back
+      setState('logbook')
+      logbook.open()
+    },
     onHome: () => {
       if (state !== 'paused') return
       interaction.input.planetView = false
@@ -226,13 +246,13 @@ async function main() {
     cursor.setEnabled(next === 'playing')
     interaction.enabled = next === 'playing'
     hud.show(next === 'playing' || next === 'paused' || next === 'fishing' || next === 'logbook')
-    menu.showSound(next === 'menu' || next === 'paused')
+    menu.showSound(next === 'menu') // (the pause screen has Sound and Full screen on its Settings page)
     if (next === 'menu') {
       menu.closePause() // (coming home from the pause screen)
       menu.showStart()
     }
     if (next === 'starting') menu.hideStart()
-    if (next === 'playing') menu.closePause()
+    if (next === 'playing' || next === 'logbook') menu.closePause()
     if (next === 'paused') menu.openPause()
     audio.setPaused(next === 'paused' || next === 'logbook')
   }

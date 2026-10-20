@@ -430,6 +430,279 @@ body {
   color: var(--warn);
 }
 
+/* The pause screen's pages: a narrow card for the list, Settings and About, a wide one for the controls. */
+#menu .menu-card {
+  width: min(440px, 92vw);
+}
+
+#menu .menu-card[data-view='controls'] {
+  width: min(780px, 92vw);
+}
+
+.menu-view[hidden] {
+  display: none;
+}
+
+.menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.menu-list .big-button {
+  margin: 0;
+  padding: 14px 20px;
+}
+
+.menu-item {
+  padding: 13px 20px;
+  font: 700 16px var(--font);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: rgba(5, 10, 15, 0.35);
+  border: 1px solid rgba(241, 236, 224, 0.28);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.menu-item:hover,
+.menu-item:focus-visible {
+  outline: none;
+  background: rgba(42, 127, 149, 0.35);
+  border-color: var(--teal-light);
+}
+
+.menu-view .text-button {
+  margin-top: 20px;
+}
+
+/* Settings: a label on the left, the control on the right. */
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 11px 0;
+  border-top: 1px solid rgba(127, 214, 230, 0.16);
+  font-size: 14px;
+  letter-spacing: 0.25em;
+}
+
+#view-settings {
+  margin-top: 18px;
+}
+
+#view-settings .setting-row:first-child {
+  border-top: 0;
+}
+
+.setting-row > span,
+.setting-row > label {
+  flex-shrink: 0;
+}
+
+.setting-row input[type='range'] {
+  flex: 1 1 80px;
+  min-width: 0;
+  max-width: 170px;
+  accent-color: var(--teal-light);
+}
+
+.seg {
+  display: flex;
+  min-width: 0;
+}
+
+/* A narrow phone: smaller labels and buttons so that every row fits the card. */
+@media (max-width: 400px) {
+  .setting-row {
+    font-size: 12px;
+    letter-spacing: 0.15em;
+  }
+
+  #menu .seg button,
+  #menu .seg-button {
+    padding: 0 9px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+}
+
+/* The narrowest phones (320 px wide). */
+@media (max-width: 340px) {
+  .setting-row {
+    gap: 10px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+
+  #menu .seg button,
+  #menu .seg-button {
+    padding: 0 6px;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+}
+
+.seg button,
+.seg-button {
+  min-height: 36px;
+  padding: 0 14px;
+  font: 700 12px var(--font);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(241, 236, 224, 0.85);
+  background: rgba(5, 7, 10, 0.62);
+  border: 2px solid rgba(241, 236, 224, 0.4);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.seg button + button {
+  margin-left: -2px;
+}
+
+.seg button[aria-pressed='true'] {
+  color: #04070a;
+  background: var(--teal-light);
+  border-color: var(--teal-light);
+}
+
+.seg button:hover:not([aria-pressed='true']),
+.seg-button:hover,
+.seg button:focus-visible,
+.seg-button:focus-visible {
+  outline: none;
+  border-color: var(--teal-light);
+}
+
+/* A short screen (a phone held sideways): the settings go in two columns. */
+@media (orientation: landscape) and (max-height: 440px) {
+  body.touch #menu .menu-card[data-view='settings'] {
+    width: min(720px, calc(100vw - 24px));
+  }
+
+  body.touch #view-settings:not([hidden]) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 24px;
+    margin-top: 6px;
+  }
+
+  body.touch #menu #view-settings .setting-row {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+  }
+
+  body.touch #menu #view-settings .seg button,
+  body.touch #menu #view-settings .seg-button {
+    padding: 0 7px;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+  }
+
+  body.touch #view-settings .setting-row:nth-child(2) {
+    border-top: 0;
+  }
+
+  body.touch #view-settings .text-button {
+    grid-column: 1 / -1;
+    margin-top: 6px;
+  }
+}
+
+/* A phone held upright: the Sound and Full screen buttons are two small icons side by side in the corner,
+   and the start screen's title and footer leave room for them and for the "Made by" tag. */
+@media (orientation: portrait) {
+  body.touch #sound-button,
+  body.touch #fullscreen-button {
+    top: max(8px, env(safe-area-inset-top));
+    padding: 7px;
+  }
+
+  body.touch #sound-button {
+    right: max(8px, env(safe-area-inset-right));
+  }
+
+  body.touch #fullscreen-button {
+    right: calc(max(8px, env(safe-area-inset-right)) + 46px);
+  }
+
+  body.touch #sound-button-label,
+  body.touch #fullscreen-button span {
+    display: none;
+  }
+
+  body.touch #start header {
+    margin-top: 58px;
+  }
+
+  body.touch #start footer {
+    margin-bottom: 44px;
+  }
+}
+
+/* A short phone held upright: the settings page is tighter. */
+@media (orientation: portrait) and (max-height: 640px) {
+  body.touch #menu .setting-note {
+    display: none;
+  }
+
+  body.touch #menu .setting-row {
+    padding: 7px 0;
+  }
+
+  body.touch #menu .menu-card h1 {
+    font-size: 30px;
+  }
+}
+
+body.no-fullscreen .setting-fullscreen {
+  display: none; /* iPhones have no full screen for web pages */
+}
+
+.setting-note {
+  margin: 4px 0 0;
+  padding-top: 11px;
+  border-top: 1px solid rgba(127, 214, 230, 0.16);
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: 0.1em;
+  text-transform: none;
+  color: rgba(241, 236, 224, 0.6);
+}
+
+/* About. */
+.about {
+  margin-top: 18px;
+  font-size: 15px;
+  line-height: 1.55;
+  letter-spacing: 0.08em;
+  text-transform: none;
+  text-align: center;
+  color: rgba(241, 236, 224, 0.85);
+}
+
+.about p {
+  margin: 0 0 12px;
+}
+
+.about a {
+  color: var(--teal-light);
+}
+
+.about + .menu-list {
+  margin-top: 22px;
+}
+
+.about-small {
+  font-size: 12px;
+  color: rgba(241, 236, 224, 0.6);
+}
+
 kbd {
   display: inline-grid;
   place-items: center;
@@ -447,28 +720,6 @@ kbd {
 
 kbd.wide {
   padding: 0 11px;
-}
-
-.menu-audio {
-  display: flex;
-  justify-content: center;
-  gap: 38px;
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(127, 214, 230, 0.2);
-  font-size: 15px;
-  letter-spacing: 0.25em;
-}
-
-.menu-audio label {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.menu-audio input {
-  width: 150px;
-  accent-color: var(--teal-light);
 }
 
 /* The big outlined button on both screens. */
@@ -546,7 +797,7 @@ kbd.wide {
   margin: 0.12em 0 0;
   font-family: Georgia, 'Times New Roman', serif;
   font-weight: 400;
-  font-size: clamp(44px, 11vh, 112px);
+  font-size: clamp(44px, min(11vh, 17vw), 112px); /* (the width limit keeps WAKE on a narrow phone) */
   letter-spacing: 0.3em;
   padding-left: 0.3em; /* balances the trailing letter-spacing so the title looks centred */
   text-shadow: 0 3px 24px rgba(0, 0, 0, 0.55), 0 0 40px rgba(127, 214, 230, 0.2);
@@ -1228,8 +1479,8 @@ body.touch .touchmap {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 11px;
-  letter-spacing: 0.1em;
+  font-size: 10px;
+  letter-spacing: 0.04em;
 }
 
 .mini-tool .diamond {
@@ -1248,16 +1499,6 @@ body.touch .touchmap {
 .tm-note {
   grid-column: 1 / -1;
   text-align: center;
-}
-
-body.touch .menu-audio {
-  flex-wrap: wrap;
-  gap: 12px 24px;
-  margin-top: 14px;
-}
-
-body.touch .menu-audio input {
-  width: 110px;
 }
 
 body.touch .big-button {
@@ -2168,34 +2409,9 @@ body.tilt-steer #stick .stick-knob {
   margin: calc(var(--stick-size) * -0.15) 0 0 calc(var(--stick-size) * -0.15);
 }
 
-/* The pause screen on a phone held sideways: the screen is short, so the card is two columns (the
-   controls on the left, the settings and Resume on the right) and nothing needs scrolling. The
-   Sound button shrinks to its icon so it does not sit on the card. */
+/* The pause screen on a phone held sideways: the screen is short, so everything is compact and the
+   list is two columns. The Sound and Full screen buttons shrink to their icons so they do not sit on the card. */
 @media (orientation: landscape) and (max-height: 520px) {
-  body.touch #menu {
-    align-items: center;
-    overflow: hidden;
-    padding: 0;
-  }
-
-  body.touch #menu .menu-card {
-    display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-    grid-template-areas:
-      'head ctrl'
-      'touch audio'
-      'touch action';
-    gap: 8px 22px;
-    align-items: center;
-    width: min(760px, calc(100vw - 112px));
-    margin: 0;
-    padding: 12px 18px;
-  }
-
-  body.touch #menu .menu-card header {
-    grid-area: head;
-  }
-
   body.touch #menu .menu-card h1 {
     margin: 0;
     font-size: clamp(26px, 9vh, 36px);
@@ -2207,10 +2423,51 @@ body.tilt-steer #stick .stick-knob {
     letter-spacing: 0.4em;
   }
 
+  body.touch #menu .menu-card:not([data-view='main']) h1 {
+    display: none; /* the page's name is enough: there is no room for the title as well */
+  }
+
+  body.touch #menu .menu-card:not([data-view='main']) {
+    padding-top: 12px;
+  }
+
+  body.touch #menu .menu-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  body.touch #menu .menu-list .big-button {
+    grid-column: 1 / -1;
+    padding: 9px 28px;
+    font-size: 17px;
+  }
+
+  body.touch #menu .menu-item {
+    padding: 9px 10px;
+    font-size: 13px;
+  }
+
+  body.touch #menu .setting-row {
+    padding: 5px 0;
+    font-size: 12px;
+  }
+
+  body.touch #menu .seg button,
+  body.touch #menu .seg-button {
+    min-height: 32px;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+
+  body.touch #menu .setting-note {
+    display: none;
+  }
+
   body.touch #menu .touchmap {
-    grid-area: touch;
     gap: 6px 14px;
-    margin: 0;
+    margin: 8px 0 0;
   }
 
   body.touch #menu .stick-base.mini {
@@ -2245,8 +2502,7 @@ body.tilt-steer #stick .stick-knob {
   }
 
   body.touch #menu .ctrl-mode {
-    grid-area: ctrl;
-    margin: 0;
+    margin: 8px 0 0;
     padding: 0;
     border-top: 0;
     gap: 6px 8px;
@@ -2267,32 +2523,6 @@ body.tilt-steer #stick .stick-knob {
 
   .ctrl-note:empty {
     display: none;
-  }
-
-  body.touch #menu .menu-audio {
-    grid-area: audio;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 6px;
-    margin: 0;
-    padding: 0;
-    border-top: 0;
-    font-size: 12px;
-  }
-
-  body.touch #menu .menu-audio label {
-    justify-content: space-between;
-  }
-
-  body.touch #menu .menu-audio input {
-    width: min(150px, 42%);
-  }
-
-  body.touch #menu .big-button {
-    grid-area: action;
-    margin: 0;
-    padding: 9px 28px;
-    font-size: 17px;
   }
 
   body.touch #sound-button {

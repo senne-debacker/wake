@@ -19,8 +19,18 @@ export function createPostProcessing(renderer, scene, camera) {
   const corner = smoothstep(float(POST.vignetteStart), float(POST.vignetteEnd), screenUV.sub(0.5).length())
   const vignette = float(1).sub(corner.mul(POST.vignetteStrength))
 
-  const lit = color.add(glow)
-  pipeline.outputNode = vec4(lit.rgb.mul(vignette), lit.a)
+  const output = (withGlow) => {
+    const lit = withGlow ? color.add(glow) : color
+    return vec4(lit.rgb.mul(vignette), lit.a)
+  }
+  pipeline.outputNode = output(true)
 
-  return { render: () => pipeline.render() }
+  return {
+    render: () => pipeline.render(),
+    // The Glow setting: the bloom can be left out.
+    setGlow(on) {
+      pipeline.outputNode = output(on)
+      pipeline.needsUpdate = true
+    },
+  }
 }

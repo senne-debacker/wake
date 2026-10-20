@@ -25,7 +25,8 @@ src/
   hud.js               the in-game interface: day ring + anchor marker, pill, compass, diamond tools, stat box, strips, toasts
   touch.js             touch mode switch (body.touch): on-screen pads on phones, hidden on desktop
   tilt.js              tilt steering on phones (phone as a steering wheel), the Joystick / Tilt switch (.ctrl-mode)
-  menu.js              start screen (#start: title, 5 keys, button) and pause screen (#menu: all controls, volumes)
+  menu.js              start screen (#start: title, 5 keys, button) and pause screen (#menu: a list with Controls / Settings / About pages)
+  display.js           the visual settings (resolution, glow, interface size), remembered
   fullscreen.js        full screen on / off (F key, buttons on the start / pause screens and the HUD strip); `body.is-fullscreen`, hidden where unsupported (iPhone)
   audio/               audio.js (Web Audio graph: engine/sea/wash/rain layers + one-shots), music.js (generative)
   camera/              chaseCamera.js (follows the sphere frame, ignores wave tilt), introCamera.js (title close-up + swing to the chase pose), cameraRig.js (title/pan -> chase <-> planet orbit)
@@ -373,6 +374,14 @@ User asked for: effects in planet view (rain, ripples, fog, fishing particles), 
 ### Step 38 — Phone HUD after a mock-up  *(done)*
 - [x] Top left: stat box (a column on a tall phone, sea state on top) with the logbook under it, centred on it upright and at its left end sideways. Top right: compass, and under it four black strips: menu, sound (back on phones), full screen and VIEW (`#strip-view`, the camera, the eye icon; teal while in planet view; phones only, the desktop has the eye diamond in `#dock`). Bottom right: a diagonal lattice of diamonds (`#actions`): boost big in the middle and in front of the others (`z-index`), lamp up-right, horn down-left, anchor down-right; only the diamonds take taps (`pointer-events`), the joystick stays bottom left. Replaces the Step 35 / Step 36 positions (`#top-tools`, `#t-camera`, `#t-book` are gone)
 - Checked at 844x390, 667x375, 932x430, 390x844 and 360x640: no overlaps; taps on lamp, anchor, VIEW and mute work. NOT checked on a real phone
+
+### Step 39 — Pause menu with pages  *(done)*
+- [x] The pause screen is a short list: Resume, Controls, Settings, Logbook, About, Home screen (`#menu`, `menu.js`). Controls (the keyboard or the touch legend, plus the Joystick / Tilt switch), Settings and About are pages in the same card (`.menu-view`, one shown at a time, `data-view` on the card). Esc or "Back" goes back to the list; Esc on the list resumes (`menu.back()` in `main.js` `onMenu`)
+- [x] Settings: music and effects volume, **Resolution** (low / medium / high = pixel ratio 1 / up to 1.5 / up to 2, applied at once), **Glow** (the bloom on / off, `post.setGlow`), **Interface** size (small / normal / large = 0.85 / 1 / 1.2 times the HUD scale, `hud.setSize`), Full screen. The visual ones live in `src/display.js` (`wake.display` in localStorage; a phone starts on low resolution). The wake wave pattern stays tied to `QUALITY` (shader built once), so it is not a setting
+- [x] Logbook from the pause screen (`logbookReturn` in `main.js`): closing the book brings the pause screen back; with the B key it still returns to the game. About: a few lines, the "Made by" link and the Shadertoy credit (the README has the rest)
+- [x] "Home screen" asks first (`#view-confirm`: Stay, which has the focus, or Go home; Esc = stay)
+- [x] Fits every screen (checked with a script over CDP: 16 sizes from 320x568 and 568x320 up to 2560x1080, every page, the start screen as well): nothing sticks out of the card, nothing scrolls, nothing is covered. The Sound / Full screen buttons and the "Made by" tag are only on the start screen now (the pause screen's Settings page has Sound on / off and Full screen; M and F still work); a phone held upright gets them as two small icons side by side. Settings go in two columns on a phone held sideways (max-height 440), narrower labels and buttons below 400 and 340 px wide, and the start title is limited by the screen's width as well as its height
+- Checked in headless Chrome at 1470x835, 390x844 and 844x390: every page, Esc back / resume, settings change and stored, logbook round trip, Home screen. In a short landscape phone the list is two columns and the title is hidden on the pages. NOT checked on a real phone
 
 ## Final requirements check (re-run before handing in)
 

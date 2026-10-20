@@ -150,81 +150,140 @@
       </footer>
     </div>
 
-    <!-- Pause screen: the controls drawn as a keyboard (or, on a phone, as the on-screen controls), and the volumes. -->
+    <!-- Pause screen: a short list. Controls, Settings and About open in the same card (menu.js shows one .menu-view at a time). -->
     <div id="menu">
-      <div class="menu-card">
+      <div class="menu-card" data-view="main">
         <header>
           <h1>Wake</h1>
-          <p class="menu-state">Paused</p>
+          <p class="menu-state" id="menu-state">Paused</p>
         </header>
 
-        <div class="keymap" aria-label="Keyboard controls">
-          <div class="km-cluster km-wasd">
-            <div class="cap k-up"><b>W</b><i>Forward</i></div>
-            <div class="cap"><b>A</b><i>Port</i></div>
-            <div class="cap"><b>S</b><i>Back</i></div>
-            <div class="cap"><b>D</b><i>Starboard</i></div>
+        <div class="menu-view" id="view-main">
+          <nav class="menu-list" aria-label="Pause menu">
+            <button id="menu-action" class="big-button" type="button">Resume</button>
+            <button class="menu-item" type="button" data-view="controls">Controls</button>
+            <button class="menu-item" type="button" data-view="settings">Settings</button>
+            <button class="menu-item" type="button" id="menu-logbook">Logbook</button>
+            <button class="menu-item" type="button" data-view="about">About</button>
+            <button class="menu-item" type="button" id="menu-home">Home screen</button>
+          </nav>
+        </div>
+
+        <div class="menu-view" id="view-confirm" data-title="Go home?" hidden>
+          <div class="about">
+            <p>Go back to the home screen?</p>
+            <p class="about-small">Your logbook is kept. The game carries on from here when you set sail again.</p>
           </div>
-          <span class="km-or">or</span>
-          <div class="km-cluster km-arrows">
-            <div class="cap k-up"><b>&uarr;</b></div>
-            <div class="cap"><b>&larr;</b></div>
-            <div class="cap"><b>&darr;</b></div>
-            <div class="cap"><b>&rarr;</b></div>
-          </div>
-          <div class="km-mouse">
-            <svg viewBox="0 0 40 60" aria-hidden="true"><rect x="4" y="3" width="32" height="54" rx="16" fill="none" stroke="#e9e4d6" stroke-width="2.4" /><path d="M20 3v22M4 25h32" fill="none" stroke="#e9e4d6" stroke-width="2" /><rect x="17" y="9" width="6" height="11" rx="3" fill="#7fd6e6" /></svg>
-            <p><b>Drag</b> look<br /><b>Wheel</b> zoom</p>
-          </div>
-          <div class="cap wide k-shift"><b>Shift</b><i>Boost</i></div>
-          <div class="cap k-space"><b>Space</b><i>Drop / raise the anchor &middot; reel in at the bubbles</i></div>
-          <div class="km-tools">
-            <div class="cap"><b>L</b><i>Lamp</i></div>
-            <div class="cap"><b>H</b><i>Horn (hold)</i></div>
-            <div class="cap"><b>B</b><i>Logbook</i></div>
-            <div class="cap"><b>C</b><i>Camera</i></div>
-            <div class="cap"><b>M</b><i>Mute</i></div>
-            <div class="cap"><b>F</b><i>Full screen</i></div>
-            <div class="cap"><b>Esc</b><i>Pause</i></div>
+          <div class="menu-list">
+            <button class="big-button" type="button" data-back>Stay</button>
+            <button class="menu-item" type="button" id="menu-home-confirm">Go home</button>
           </div>
         </div>
 
-        <div class="touchmap" aria-label="Touch controls">
-          <div class="tm-stick">
-            <div class="stick-base mini">
-              <svg class="icon s-up"><use href="#i-up" /></svg>
-              <svg class="icon s-down"><use href="#i-down" /></svg>
-              <svg class="icon s-left"><use href="#i-left" /></svg>
-              <svg class="icon s-right"><use href="#i-right" /></svg>
-              <i class="stick-knob"></i>
+        <div class="menu-view" id="view-controls" data-title="Controls" hidden>
+          <div class="keymap" aria-label="Keyboard controls">
+            <div class="km-cluster km-wasd">
+              <div class="cap k-up"><b>W</b><i>Forward</i></div>
+              <div class="cap"><b>A</b><i>Port</i></div>
+              <div class="cap"><b>S</b><i>Back</i></div>
+              <div class="cap"><b>D</b><i>Starboard</i></div>
             </div>
-            <p data-stick-hint>Drag the stick to steer and sail</p>
+            <span class="km-or">or</span>
+            <div class="km-cluster km-arrows">
+              <div class="cap k-up"><b>&uarr;</b></div>
+              <div class="cap"><b>&larr;</b></div>
+              <div class="cap"><b>&darr;</b></div>
+              <div class="cap"><b>&rarr;</b></div>
+            </div>
+            <div class="km-mouse">
+              <svg viewBox="0 0 40 60" aria-hidden="true"><rect x="4" y="3" width="32" height="54" rx="16" fill="none" stroke="#e9e4d6" stroke-width="2.4" /><path d="M20 3v22M4 25h32" fill="none" stroke="#e9e4d6" stroke-width="2" /><rect x="17" y="9" width="6" height="11" rx="3" fill="#7fd6e6" /></svg>
+              <p><b>Drag</b> look<br /><b>Wheel</b> zoom</p>
+            </div>
+            <div class="cap wide k-shift"><b>Shift</b><i>Boost</i></div>
+            <div class="cap k-space"><b>Space</b><i>Drop / raise the anchor &middot; reel in at the bubbles</i></div>
+            <div class="km-tools">
+              <div class="cap"><b>L</b><i>Lamp</i></div>
+              <div class="cap"><b>H</b><i>Horn (hold)</i></div>
+              <div class="cap"><b>B</b><i>Logbook</i></div>
+              <div class="cap"><b>C</b><i>Camera</i></div>
+              <div class="cap"><b>M</b><i>Mute</i></div>
+              <div class="cap"><b>F</b><i>Full screen</i></div>
+              <div class="cap"><b>Esc</b><i>Pause</i></div>
+            </div>
           </div>
-          <div class="tm-buttons">
-            <div class="mini-tool"><div class="diamond"><svg class="icon"><use href="#i-eye" /></svg></div><span>Camera</span></div>
-            <div class="mini-tool"><div class="diamond"><svg class="icon"><use href="#i-bulb" /></svg></div><span>Lamp</span></div>
-            <div class="mini-tool"><div class="diamond"><svg class="icon"><use href="#i-horn" /></svg></div><span>Horn</span></div>
-            <div class="mini-tool"><div class="diamond"><svg class="icon"><use href="#i-book" /></svg></div><span>Logbook</span></div>
-            <div class="mini-tool"><div class="diamond"><svg class="icon"><use href="#i-gauge" /></svg></div><span>Boost</span></div>
-            <div class="mini-tool"><div class="diamond"><svg class="icon"><use href="#i-anchor" /></svg></div><span>Anchor</span></div>
+          <div class="touchmap" aria-label="Touch controls">
+            <div class="tm-stick">
+              <div class="stick-base mini">
+                <svg class="icon s-up"><use href="#i-up" /></svg>
+                <svg class="icon s-down"><use href="#i-down" /></svg>
+                <svg class="icon s-left"><use href="#i-left" /></svg>
+                <svg class="icon s-right"><use href="#i-right" /></svg>
+                <i class="stick-knob"></i>
+              </div>
+              <p data-stick-hint>Drag the stick to steer and sail</p>
+            </div>
+            <div class="tm-buttons">
+              <div class="mini-tool"><div class="diamond"><svg class="icon"><use href="#i-eye" /></svg></div><span>View</span></div>
+              <div class="mini-tool"><div class="diamond"><svg class="icon"><use href="#i-bulb" /></svg></div><span>Lamp</span></div>
+              <div class="mini-tool"><div class="diamond"><svg class="icon"><use href="#i-horn" /></svg></div><span>Horn</span></div>
+              <div class="mini-tool"><div class="diamond"><svg class="icon"><use href="#i-book" /></svg></div><span>Logbook</span></div>
+              <div class="mini-tool"><div class="diamond"><svg class="icon"><use href="#i-gauge" /></svg></div><span>Boost</span></div>
+              <div class="mini-tool"><div class="diamond"><svg class="icon"><use href="#i-anchor" /></svg></div><span>Anchor</span></div>
+            </div>
+            <p class="tm-note">Anchor over bubbling water to fish. Drag the sea to look round, pinch to zoom. Top right: menu, sound, full screen and view. Top left: the logbook.</p>
           </div>
-          <p class="tm-note">Anchor over bubbling water to fish. Drag the sea to look round, pinch to zoom. The top-right buttons pause and mute.</p>
+          <div class="ctrl-mode" role="group" aria-label="Steering on a touch screen">
+            <span class="ctrl-label">Steering</span>
+            <button type="button" data-mode="stick" aria-pressed="true">Joystick</button>
+            <button type="button" data-mode="tilt" aria-pressed="false">Tilt</button>
+            <p class="ctrl-note" aria-live="polite"></p>
+          </div>
+          <button class="text-button" type="button" data-back><kbd>Esc</kbd><span>Back</span></button>
         </div>
 
-        <div class="ctrl-mode" role="group" aria-label="Steering on a touch screen">
-          <span class="ctrl-label">Steering</span>
-          <button type="button" data-mode="stick" aria-pressed="true">Joystick</button>
-          <button type="button" data-mode="tilt" aria-pressed="false">Tilt</button>
-          <p class="ctrl-note" aria-live="polite"></p>
+        <div class="menu-view" id="view-settings" data-title="Settings" hidden>
+          <div class="setting-row">
+            <span id="label-sound">Sound</span>
+            <div class="seg" role="group" aria-labelledby="label-sound" data-setting="sound">
+              <button type="button" data-value="on">On</button><button type="button" data-value="off">Off</button>
+            </div>
+          </div>
+          <div class="setting-row"><label for="volume-music">Music</label><input id="volume-music" type="range" min="0" max="1" step="0.05" /></div>
+          <div class="setting-row"><label for="volume-sfx">Effects</label><input id="volume-sfx" type="range" min="0" max="1" step="0.05" /></div>
+          <div class="setting-row">
+            <span id="label-resolution">Resolution</span>
+            <div class="seg" role="group" aria-labelledby="label-resolution" data-setting="resolution">
+              <button type="button" data-value="low">Low</button><button type="button" data-value="medium">Medium</button><button type="button" data-value="high">High</button>
+            </div>
+          </div>
+          <div class="setting-row">
+            <span id="label-glow">Glow</span>
+            <div class="seg" role="group" aria-labelledby="label-glow" data-setting="glow">
+              <button type="button" data-value="on">On</button><button type="button" data-value="off">Off</button>
+            </div>
+          </div>
+          <div class="setting-row">
+            <span id="label-hud">Interface</span>
+            <div class="seg" role="group" aria-labelledby="label-hud" data-setting="hud">
+              <button type="button" data-value="small">Small</button><button type="button" data-value="normal">Normal</button><button type="button" data-value="large">Large</button>
+            </div>
+          </div>
+          <div class="setting-row setting-fullscreen">
+            <span>Full screen</span>
+            <button class="seg-button" type="button" id="setting-fullscreen"><span data-fullscreen-label>Full screen</span></button>
+          </div>
+          <p class="setting-note">Resolution is how sharp the picture is: lower it if the game stutters. A phone starts on Low.</p>
+          <button class="text-button" type="button" data-back><kbd>Esc</kbd><span>Back</span></button>
         </div>
 
-        <div class="menu-audio">
-          <label>Music <input id="volume-music" type="range" min="0" max="1" step="0.05" /></label>
-          <label>Effects <input id="volume-sfx" type="range" min="0" max="1" step="0.05" /></label>
+        <div class="menu-view" id="view-about" data-title="About" hidden>
+          <div class="about">
+            <p>A small boat on a small planet: a low-poly water world to sail round and fish on, drawn in the browser with three.js (WebGPU and TSL shaders).</p>
+            <p>Made by <a href="https://debacker-devine.be/" target="_blank" rel="noopener">Senne De Backer</a>.</p>
+            <p class="about-small">The sea is a port of the Shadertoy &ldquo;3d simplex noise&rdquo; by Nikita Miropolskiy (MIT), and the rain ripples and the wake come from other Shadertoy shaders. Every credit is in the README.</p>
+          </div>
+          <button class="text-button" type="button" data-back><kbd>Esc</kbd><span>Back</span></button>
         </div>
-
-        <button id="menu-action" class="big-button" type="button">Resume</button>
-        <button id="menu-home" class="text-button" type="button"><svg class="icon"><use href="#i-home" /></svg><span>Home screen</span></button>
       </div>
     </div>
 

@@ -89,7 +89,7 @@ All sound is generated in the browser with the Web Audio API, so there are no so
 - **Continuous layers follow the game, every frame.** Engine: silent at a standstill, fading in as you pick up speed, with rising pitch, chug rate and brightness. The hull-wash and sea layers are switched off (`USE_WATER_SOUND` in `audio.js`, the code is kept; the music already has water in it). Rain: follows the rain level. In planet view they are muffled, and when paused they are silent. Changes glide (`setTargetAtTime`), so there are no clicks.
 - **One-shots** for the lamp switch, the anchor (chain rattle and a splash, or a creak when it comes up), hitting a shore (thump and a groan, louder for harder hits) and the horn (two low sawtooth notes a fifth apart, with vibrato and reverb, sounding as long as you hold `H`).
 - **Music** is a slow generative piece (four chords in D minor, soft plucks from the pentatonic scale). To use your own track instead, put it at `public/audio/music.mp3` and it replaces the generated music automatically.
-- Volumes for music and effects are on the pause screen and are remembered; `M` mutes. In the dev build, `__game.audio.levels()` shows the level of every layer, which is how the mix was checked without listening.
+- Volumes for music and effects are on the pause screen's Settings page and are remembered; `M` mutes. In the dev build, `__game.audio.levels()` shows the level of every layer, which is how the mix was checked without listening.
 
 ## The bow lamp on a curved world
 
