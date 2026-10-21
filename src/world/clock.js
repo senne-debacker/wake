@@ -8,11 +8,12 @@ export function createClock() {
   const clock = {
     timeOfDay: DAY.start,
     days: 0, // completed days since the start
+    speed: 1, // dev panel: multiplier on the pace of the day
     paused: false, // handy for debugging: `__game.clock.paused = true`
 
     update(delta, fastForward) {
       if (clock.paused) return
-      const next = clock.timeOfDay + (delta / DAY.length) * (fastForward ? DAY.fastForward : 1)
+      const next = clock.timeOfDay + (delta / DAY.length) * clock.speed * (fastForward ? DAY.fastForward : 1)
       clock.days += Math.floor(next)
       clock.timeOfDay = next % 1
     },

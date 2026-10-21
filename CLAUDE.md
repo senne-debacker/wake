@@ -396,6 +396,10 @@ User asked for: effects in planet view (rain, ripples, fog, fishing particles), 
 ### Step 42 — Simpler start screen  *(done)*
 - [x] The start screen has no control hints any more (the key list, the touch hint and the Joystick / Tilt switch are gone: the tutorial and the pause menu's Controls page cover them; the steering switch now lives only on the Controls page). "Sound on, please" is "Recommended with sound". The Sound and Full screen buttons are replaced by one **Settings** button (`#settings-button`, an icon on phones) that opens the pause card's Settings page over the start screen (`menu.openSettings`, `fromStart`): Back or Esc closes it. `body.show-corner` shows the button and the "Made by" tag, `body.overlay` hides them while the page is open. Checked on 16 sizes
 
+### Step 43 — A bigger developer panel  *(done)*
+- [x] Developer mode (`?dev` + code) has more tools, all in `devMode.js` and the `#dev` panel: **Weather** (calm / breezy / storm / auto, plus Waves, Clouds and Rain sliders that take over as the `custom` choice in `world/weather.js`, "change at once", a Wind slider with "wind follows the weather", a Fog multiplier, "Lightning now"), **Time** (Dawn / Noon / Dusk / Night buttons, a Speed multiplier for the day, freeze), **Boat** (top speed, boat size, buoy size, ghost mode that sails through islands, stop, teleport to the start / a fishing spot / the ocean), **Fishing** (pick the species for "Start a fight", refill spots, fill / clear the logbook) and **View** (frame rate read-out, hide the interface). "Lock developer mode" puts everything back. Nothing changes in the normal game
+- Checked in headless Chrome: every control used once (hour, the three weather sliders, instant, lightning, speed, sizes, fog, wind, teleports, ghost, fps, a Wake-Eater fight, hide interface, lock), no console errors
+
 ## Final requirements check (re-run before handing in)
 
 ```

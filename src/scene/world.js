@@ -121,6 +121,7 @@ export function createWorld(layout) {
   return {
     group,
     lighthouse,
+    setBuoyScale: buoys.setScale, // dev panel
     // `darkness` 0..1: lamps on the lighthouse and buoys switch on with it.
     // Returns how hard the boat hit a buoy this frame (0 = none).
     update(elapsed, storm, darkness, boat, delta) {

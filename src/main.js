@@ -151,11 +151,11 @@ async function main() {
       if (state === 'fishing') setState('playing')
     },
   })
-  function startFishing(spot) {
+  function startFishing(spot, fish = null) {
     fishingSpot = spot
     audio.fishBite()
     setState('fishing')
-    fishing.open({ fish: rollFish(Math.random, { hour: clock.timeOfDay * 24, ...weather.levels }) }) // some rare fish bite better in the right weather and hour (fishing/habitat.js)
+    fishing.open({ fish: fish ?? rollFish(Math.random, { hour: clock.timeOfDay * 24, ...weather.levels }) }) // some rare fish bite better in the right weather and hour (fishing/habitat.js)
   }
   atmosphere.update(clock.timeOfDay, boatState.dir, camera.position.length(), spaceAmount, weather.levels) // correct lighting from the first frame
 
@@ -233,7 +233,16 @@ async function main() {
   setupStick(interaction) // the touch joystick
   interaction.screenRelative = (stick) => (rig.mode === 'planet' ? screenSteer(boatState, camera, stick, innerWidth / innerHeight) : null) // in planet view the stick points where the boat should go on the screen
   const tilt = setupTilt(interaction, { notify: (text) => hud.toast(text, 3.5) }) // steering by tilting the phone, an alternative to the stick's left / right
-  const dev = createDevMode({ interaction, clock, spots, logbook, startFishing, getState: () => state }) // ?dev + code: weather, time and fishing tools
+  // Developer mode: moves the boat somewhere else (the wake and the camera start afresh there).
+  function teleport(dir) {
+    boatState.dir.copy(dir).normalize()
+    boatState.heading.addScaledVector(boatState.dir, -boatState.heading.dot(boatState.dir)).normalize()
+    boatState.vel.set(0, 0, 0)
+    boatState.yawRate = 0
+    for (const point of uniforms.wakeTrail.array) point.w = 0
+    rig.snap()
+  }
+  const dev = createDevMode({ interaction, clock, atmosphere, boat, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState: () => state }) // ?dev + code: weather, time, boat and fishing tools
   const cursor = createCursorHider()
   // The clickable HUD: every button triggers the same action as its key; buttons marked data-hold
   // (horn, hold-for-time) act while the mouse button is down.
@@ -314,7 +323,7 @@ async function main() {
 
     if (running) {
       stepBoat(boatState, input, sim, elapsed) // engine, keel, helm, anchor
-      const impact = resolveCollisions(boatState, layout.colliders, sim) // islands and rocks
+      const impact = dev.ghost ? 0 : resolveCollisions(boatState, layout.colliders, sim) // islands and rocks (dev: ghost mode sails through them)
       bumpCooldown = Math.max(0, bumpCooldown - sim)
       if (impact > 0.12 && bumpCooldown === 0) {
         audio.bump(impact)

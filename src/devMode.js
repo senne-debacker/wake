@@ -1,4 +1,5 @@
 import { FISH_SPECIES } from './fishing/fishDatabase.js'
+import { BOAT } from './config.js'
 
 // Developer mode. The normal game has no way to force the weather or to run the clock: those keys
 // (1 2 3 4, T) and everything else in here are locked. Open the page with `?dev`, type the code on the
@@ -11,7 +12,7 @@ import { FISH_SPECIES } from './fishing/fishDatabase.js'
 const CODE = '1815'
 const STORAGE_KEY = 'wake.dev'
 
-export function createDevMode({ interaction, clock, spots, logbook, startFishing, getState }) {
+export function createDevMode({ interaction, clock, atmosphere, boat, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState }) {
   const $ = (id) => document.getElementById(id)
   const gate = $('dev-gate')
   const panel = $('dev')
@@ -96,22 +97,110 @@ export function createDevMode({ interaction, clock, spots, logbook, startFishing
   gate.querySelector('[data-action="cancel"]').addEventListener('click', closeGate)
 
   // ---- the panel ------------------------------------------------------------------------------------
+  // A slider with a read-out. `read()` is what the slider shows while nobody is dragging it.
+  const sliders = []
+  function slider(id, { format, onInput, read }) {
+    const input = $(id)
+    const out = input.parentElement.querySelector('output')
+    const show = () => (out.textContent = format(Number(input.value)))
+    input.addEventListener('input', () => {
+      show()
+      onInput(Number(input.value))
+    })
+    sliders.push({
+      input,
+      sync() {
+        if (read && document.activeElement !== input) input.value = read()
+        show()
+      },
+    })
+  }
+  const percent = (v) => `${Math.round(v * 100)}%`
+  const times = (v) => `x${v.toFixed(2)}`
+
+  // Weather: the presets, and three sliders that take over ('custom') as soon as one is moved.
   const weatherButtons = [...panel.querySelectorAll('[data-weather]')]
   for (const button of weatherButtons) button.addEventListener('click', () => (interaction.input.weather = button.dataset.weather))
-  const slider = $('dev-time')
+  for (const key of ['storm', 'cover', 'rain']) {
+    slider(`dev-w-${key}`, {
+      format: percent,
+      read: () => weather.levels[key],
+      onInput(value) {
+        if (interaction.input.weather !== 'custom') Object.assign(weather.custom, weather.levels)
+        weather.custom[key] = value
+        interaction.input.weather = 'custom'
+      },
+    })
+  }
+  const instant = $('dev-w-instant')
+  instant.addEventListener('change', () => (weather.instant = instant.checked))
+  const windAuto = $('dev-wind-auto')
+  windAuto.addEventListener('change', () => {
+    if (windAuto.checked) wind.manual = null
+    else wind.manual = wind.strength
+  })
+  slider('dev-wind', {
+    format: percent,
+    read: () => wind.strength,
+    onInput(value) {
+      wind.manual = value
+      windAuto.checked = false
+    },
+  })
+  slider('dev-fog', { format: times, onInput: (value) => (atmosphere.fogMultiplier = value) })
+  $('dev-strike').addEventListener('click', () => lightning.strike())
+
+  // Time
+  const timeSlider = $('dev-time')
   const freeze = $('dev-freeze')
-  slider.addEventListener('input', () => (clock.timeOfDay = Number(slider.value) / 24))
+  timeSlider.addEventListener('input', () => (clock.timeOfDay = Number(timeSlider.value) / 24))
+  for (const button of panel.querySelectorAll('[data-hour]')) button.addEventListener('click', () => (clock.timeOfDay = Number(button.dataset.hour) / 24))
   freeze.addEventListener('change', () => (clock.paused = freeze.checked))
+  slider('dev-clock-speed', { format: times, onInput: (value) => (clock.speed = value) })
+
+  // Boat. The top speeds are scaled in place (the wake and the sounds read them too, so they follow).
+  const stock = { maxSpeed: BOAT.maxSpeed, boostSpeed: BOAT.boostSpeed, maxReverseSpeed: BOAT.maxReverseSpeed }
+  const setTopSpeed = (factor) => {
+    for (const key in stock) BOAT[key] = stock[key] * factor
+  }
+  slider('dev-speed', { format: times, onInput: setTopSpeed })
+  slider('dev-boat-size', { format: times, onInput: (value) => boat.setScale(value) })
+  slider('dev-buoy-size', { format: times, onInput: (value) => world.setBuoyScale(value) })
+  const ghostBox = $('dev-ghost')
+  ghostBox.addEventListener('change', () => (api.ghost = ghostBox.checked))
+  $('dev-stop').addEventListener('click', () => {
+    boatState.vel.set(0, 0, 0)
+    boatState.yawRate = 0
+  })
+  $('dev-home').addEventListener('click', () => teleport(layout.start.dir))
+  $('dev-ocean').addEventListener('click', () => teleport(layout.ocean.dir))
+  let spotIndex = 0
+  $('dev-next-spot').addEventListener('click', () => {
+    const list = spots.spots
+    teleport(list[spotIndex++ % list.length].dir)
+  })
+
+  // Fishing
+  const species = $('dev-species')
+  for (const fish of FISH_SPECIES) species.append(new Option(`${fish.name} (${fish.rarity})`, fish.id))
   $('dev-refill').addEventListener('click', () => spots.refill())
   $('dev-fight').addEventListener('click', () => {
-    const spot = spots.spots.find((s) => !s.empty) ?? spots.spots[0]
+    const spot = spots.nearest(boatState.dir, Infinity)?.spot ?? spots.spots.find((s) => !s.empty) ?? spots.spots[0]
     if (spot && getState() === 'playing') {
       panel.classList.remove('show')
-      startFishing(spot)
+      startFishing(spot, FISH_SPECIES.find((fish) => fish.id === species.value) ?? null)
     }
   })
   $('dev-fill').addEventListener('click', () => FISH_SPECIES.forEach((fish) => logbook.record({ id: fish.id, weight: (fish.weight[0] + fish.weight[1]) / 2 })))
   $('dev-clear').addEventListener('click', () => logbook.reset())
+
+  // View
+  const fpsBox = $('dev-fps')
+  const fpsRead = $('dev-fps-read')
+  const hideHud = $('dev-hidehud')
+  fpsBox.addEventListener('change', () => (fpsRead.hidden = !fpsBox.checked))
+  hideHud.addEventListener('change', () => document.body.classList.toggle('dev-nohud', hideHud.checked))
+
   $('dev-lock').addEventListener('click', () => {
     try {
       sessionStorage.removeItem(STORAGE_KEY)
@@ -120,8 +209,20 @@ export function createDevMode({ interaction, clock, spots, logbook, startFishing
     }
     unlocked = false
     clock.paused = false
+    clock.speed = 1
     interaction.input.weather = 'auto'
-    freeze.checked = false
+    weather.instant = false
+    wind.manual = null
+    atmosphere.fogMultiplier = 1
+    setTopSpeed(1)
+    boat.setScale(1)
+    world.setBuoyScale(1)
+    api.ghost = false
+    for (const box of [freeze, instant, ghostBox, fpsBox, hideHud]) box.checked = false
+    windAuto.checked = true
+    fpsRead.hidden = true
+    document.body.classList.remove('dev-nohud')
+    for (const id of ['dev-speed', 'dev-clock-speed', 'dev-fog', 'dev-boat-size', 'dev-buoy-size']) $(id).value = 1
     apply()
   })
   tab.addEventListener('click', () => panel.classList.toggle('show'))
@@ -134,7 +235,10 @@ export function createDevMode({ interaction, clock, spots, logbook, startFishing
   let shownWeather = null
   let shownClock = null
 
-  return {
+  let fpsSmooth = 16.7
+  let fpsLast = performance.now()
+  const api = {
+    ghost: false, // sail through islands and rocks (read by main.js)
     get unlocked() {
       return unlocked
     },
@@ -149,19 +253,28 @@ export function createDevMode({ interaction, clock, spots, logbook, startFishing
     },
     // Every frame: keeps the panel in step with what the keys and the clock do.
     update() {
-      if (!unlocked || !panel.classList.contains('show')) return
-      const weather = interaction.input.weather
-      if (weather !== shownWeather) {
-        shownWeather = weather
-        for (const button of weatherButtons) button.classList.toggle('on', button.dataset.weather === weather)
+      if (!unlocked) return
+      if (!fpsRead.hidden) {
+        const now = performance.now()
+        fpsSmooth += (now - fpsLast - fpsSmooth) * 0.05
+        fpsLast = now
+        fpsRead.textContent = `${Math.round(1000 / fpsSmooth)} fps`
+      }
+      if (!panel.classList.contains('show')) return
+      const weatherChoice = interaction.input.weather
+      if (weatherChoice !== shownWeather) {
+        shownWeather = weatherChoice
+        for (const button of weatherButtons) button.classList.toggle('on', button.dataset.weather === weatherChoice)
       }
       const hours = Math.round(clock.timeOfDay * 24 * 4) / 4
-      if (hours !== shownClock && document.activeElement !== slider) {
+      if (hours !== shownClock && document.activeElement !== timeSlider) {
         shownClock = hours
-        slider.value = hours
+        timeSlider.value = hours
       }
       $('dev-clock').textContent = clock.format()
       freeze.checked = clock.paused
+      for (const item of sliders) item.sync()
     },
   }
+  return api
 }

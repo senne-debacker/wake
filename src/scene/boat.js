@@ -182,6 +182,11 @@ export function createBoat() {
     },
     model,
     ready,
+    // Dev panel: draws the boat bigger or smaller (the hull used for collisions stays as it is).
+    setScale(factor) {
+      model.scale.setScalar(factor)
+      model.position.y = BOAT.rideHeight * factor // the waterline stays at the same place on the hull
+    },
     // `wind`: { angle, strength } of the wind relative to the bow (see scene/flag.js)
     update(delta, lightsOn, hornOn = false, time = 0, wind = { angle: Math.PI, strength: 0.3 }) {
       parts.flag?.update(delta, wind.angle, wind.strength)

@@ -101,6 +101,7 @@ export function createAtmosphere({ scene, sun, moon, fill }) {
 
   return {
     state,
+    fogMultiplier: 1, // dev panel: scales the haze (0 = clear air)
 
     // `localUp`: unit vector at the boat. `cameraHeight`: distance of the camera
     // from the planet centre. `spaceAmount`: 0 in the chase camera, 1 in planet
@@ -171,7 +172,7 @@ export function createAtmosphere({ scene, sun, moon, fill }) {
       fill.intensity = state.hemiIntensity + (0.4 - state.hemiIntensity) * spaceAmount
 
       scene.fog.color.copy(state.horizon) // far water fades into the horizon colour
-      scene.fog.density = DAY.fogDensity * (1 + 1.2 * cover) * (1 - spaceAmount) * fogScale
+      scene.fog.density = DAY.fogDensity * (1 + 1.2 * cover) * (1 - spaceAmount) * fogScale * this.fogMultiplier
 
       uniforms.sunDir.value.copy(sunDir)
       uniforms.localUp.value.copy(localUp)

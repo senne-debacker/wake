@@ -393,22 +393,52 @@
         <div class="dev-row">
           <button type="button" data-weather="calm">Calm</button><button type="button" data-weather="breezy">Breezy</button><button type="button" data-weather="storm">Storm</button><button type="button" data-weather="auto">Auto</button>
         </div>
+        <label class="dev-slider"><span>Waves</span><input id="dev-w-storm" type="range" min="0" max="1" step="0.01" /><output></output></label>
+        <label class="dev-slider"><span>Clouds</span><input id="dev-w-cover" type="range" min="0" max="1" step="0.01" /><output></output></label>
+        <label class="dev-slider"><span>Rain</span><input id="dev-w-rain" type="range" min="0" max="1" step="0.01" /><output></output></label>
+        <label class="dev-check"><input id="dev-w-instant" type="checkbox" /> Change at once (no fade)</label>
+        <label class="dev-slider"><span>Wind</span><input id="dev-wind" type="range" min="0" max="1" step="0.01" /><output></output></label>
+        <label class="dev-check"><input id="dev-wind-auto" type="checkbox" checked /> Wind follows the weather</label>
+        <label class="dev-slider"><span>Fog</span><input id="dev-fog" type="range" min="0" max="4" step="0.05" value="1" /><output></output></label>
+        <div class="dev-row"><button type="button" id="dev-strike">Lightning now</button></div>
       </section>
       <section>
         <h3>Time <small id="dev-clock">--:--</small></h3>
         <input id="dev-time" type="range" min="0" max="24" step="0.25" value="18" />
+        <div class="dev-row dev-quad">
+          <button type="button" data-hour="5">Dawn</button><button type="button" data-hour="12">Noon</button><button type="button" data-hour="18.5">Dusk</button><button type="button" data-hour="0">Night</button>
+        </div>
+        <label class="dev-slider"><span>Speed</span><input id="dev-clock-speed" type="range" min="0" max="3" step="0.05" value="1" /><output></output></label>
         <label class="dev-check"><input id="dev-freeze" type="checkbox" /> Freeze the clock</label>
         <small>Hold T to fast-forward</small>
       </section>
       <section>
+        <h3>Boat</h3>
+        <label class="dev-slider"><span>Top speed</span><input id="dev-speed" type="range" min="0.25" max="4" step="0.05" value="1" /><output></output></label>
+        <label class="dev-slider"><span>Boat size</span><input id="dev-boat-size" type="range" min="0.25" max="4" step="0.05" value="1" /><output></output></label>
+        <label class="dev-slider"><span>Buoy size</span><input id="dev-buoy-size" type="range" min="0.25" max="4" step="0.05" value="1" /><output></output></label>
+        <label class="dev-check"><input id="dev-ghost" type="checkbox" /> Ghost: sail through islands</label>
+        <div class="dev-row">
+          <button type="button" id="dev-stop">Stop the boat</button><button type="button" id="dev-home">To the start</button>
+          <button type="button" id="dev-next-spot">To a fishing spot</button><button type="button" id="dev-ocean">To the ocean</button>
+        </div>
+      </section>
+      <section>
         <h3>Fishing</h3>
+        <select id="dev-species"><option value="">Random fish</option></select>
         <div class="dev-row">
           <button type="button" id="dev-fight">Start a fight</button><button type="button" id="dev-refill">Refill spots</button>
           <button type="button" id="dev-fill">Fill logbook</button><button type="button" id="dev-clear">Clear logbook</button>
         </div>
       </section>
+      <section>
+        <h3>View</h3>
+        <label class="dev-check"><input id="dev-fps" type="checkbox" /> Show frame rate</label>
+        <label class="dev-check"><input id="dev-hidehud" type="checkbox" /> Hide the interface</label>
+      </section>
       <section><button type="button" id="dev-lock" class="dev-lock">Lock developer mode</button></section>
     </aside>
+    <div id="dev-fps-read" hidden>-- fps</div>
 
     <div id="loading">
       <h1>Wake</h1>

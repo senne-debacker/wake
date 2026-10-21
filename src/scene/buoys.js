@@ -65,6 +65,10 @@ export function createBuoys(buoyList) {
       }
       return hardest
     },
+    // Dev panel: draws every buoy bigger or smaller (the part that the boat tips over stays the same).
+    setScale(factor) {
+      for (const buoy of buoys) buoy.root.scale.setScalar(factor)
+    },
     // For the tests.
     buoys,
   }

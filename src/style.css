@@ -2183,7 +2183,7 @@ body.dev #dev-tab {
   top: 0;
   bottom: 0;
   z-index: 18;
-  width: min(280px, 86vw);
+  width: min(310px, 90vw);
   box-sizing: border-box;
   padding: 14px 16px;
   overflow-y: auto;
@@ -2272,6 +2272,67 @@ body.dev #dev-tab {
   width: 100%;
   color: var(--warn);
   border-color: rgba(240, 179, 74, 0.5);
+}
+
+.dev-quad {
+  grid-template-columns: repeat(4, 1fr);
+  margin: 8px 0;
+}
+
+.dev-slider {
+  display: grid;
+  grid-template-columns: 74px 1fr 44px;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0 2px;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: rgba(241, 236, 224, 0.85);
+}
+
+.dev-slider output {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--teal-light);
+}
+
+#dev select {
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 8px 6px;
+  font: 700 12px var(--font);
+  letter-spacing: 0.08em;
+  color: var(--cream);
+  background: rgba(5, 10, 15, 0.7);
+  border: 1px solid rgba(127, 214, 230, 0.45);
+}
+
+.dev-row + .dev-slider,
+.dev-row + .dev-check {
+  margin-top: 10px;
+}
+
+#dev-fps-read {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  z-index: 40;
+  padding: 3px 8px;
+  font: 700 12px var(--font);
+  letter-spacing: 0.1em;
+  color: var(--teal-light);
+  background: rgba(5, 10, 15, 0.75);
+  pointer-events: none;
+}
+
+#dev-fps-read[hidden] {
+  display: none;
+}
+
+/* "Hide the interface" (developer panel): clean screenshots. */
+body.dev-nohud #hud,
+body.dev-nohud #dev-tab {
+  visibility: hidden;
 }
 
 /* The weather and time controls belong to developer mode only. */

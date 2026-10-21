@@ -17,6 +17,8 @@ export function createWeather() {
 
   return {
     levels,
+    custom: { storm: 0, cover: 0, rain: 0 }, // dev panel: the targets for the choice 'custom'
+    instant: false, // dev panel: levels jump to the target instead of easing
     get label() {
       return label
     },
@@ -31,12 +33,15 @@ export function createWeather() {
         }
         target = WEATHER.cycle[index]
         label = target.name
+      } else if (choice === 'custom') {
+        target = this.custom
+        label = 'custom (manual)'
       } else {
         target = WEATHER.presets[choice]
         label = `${choice} (manual)`
       }
 
-      const k = 1 - Math.exp(-WEATHER.easeRate * delta)
+      const k = this.instant ? 1 : 1 - Math.exp(-WEATHER.easeRate * delta)
       for (const key of KEYS) levels[key] += (target[key] - levels[key]) * k
 
       uniforms.storm.value = levels.storm

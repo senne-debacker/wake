@@ -138,6 +138,11 @@ export function createCameraRig(camera, domElement, state) {
       return orbit ? 'planet' : 'chase'
     },
 
+    // The boat was moved somewhere else (dev teleport): put the camera right behind it again.
+    snap() {
+      if (!orbit) chase.snap(state) // (the planet view carries the camera along with the boat by itself)
+    },
+
     // Back to the close-up of the boat on the start screen (from the pause screen).
     title() {
       if (orbit) leaveOrbit()
