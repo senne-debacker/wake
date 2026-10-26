@@ -1,7 +1,9 @@
-wake-boat.glb is the game's current boat, exported from the running game (every part is a named
-object: Hull_Bottom, Hull_Top, Deck, Cabin, Roof, Window, Horn, Bell, Mast, Flag, Crate, Post,
-Tyre, Bow_Lamp_Housing, Lamp).
+Blender files for Wake. Everything here is glTF Binary (.glb): in Blender use File > Import > glTF 2.0.
+(glTF is Y up; Blender's importer turns that into Z up by itself, so nothing needs rotating.)
 
-In Blender: File > Import > glTF 2.0 (.glb). (A .blend file cannot be made without Blender; glTF
-carries the shapes, names and colours.) Edit it or model a new boat, then export it as
-public/models/boat.glb: see public/models/README.txt for the rules.
+wake-boat.glb    the game's current boat, every part named. See BOATS.md for how to export a new boat.
+wake-world.glb   the world as the game builds it: the sea, 7 islands, 74 trees, 9 rocks, 6 buoys, the
+                 lighthouse, the start position and the 6 fishing spots. See WORLDS.md.
+
+Re-make wake-world.glb from the game's own generator at any time (after changing the layout in
+src/config.js, say):   npm run export:world
