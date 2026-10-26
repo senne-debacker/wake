@@ -1,0 +1,6 @@
+id:           sloop
+name:         Classic Sloop
+description:  A white wooden sailboat with brass portholes and a red-striped mainsail.
+speed:        medium
+handling:     medium
+anything special: tallest boat (mast 1.08 above the waterline) with a deep keel (0.25 below); a red pennant flies at the masthead

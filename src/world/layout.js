@@ -139,8 +139,8 @@ export function createLayout() {
   // rocks are plain circles.
   for (const island of islands) island.shape = createIslandShape(island)
   const colliders = [
-    ...islands.map((island) => ({ kind: 'island', dir: island.dir, shape: island.shape, reach: island.shape.maxShoreline + BOAT.shoreMargin })),
-    ...rocks.map((rock) => ({ kind: 'circle', dir: rock.dir, radius: rock.radius + BOAT.shoreMargin, reach: rock.radius + BOAT.shoreMargin })),
+    ...islands.map((island) => ({ kind: 'island', dir: island.dir, shape: island.shape, reach: island.shape.maxShoreline + BOAT.shoreMargin * 2 })),
+    ...rocks.map((rock) => ({ kind: 'circle', dir: rock.dir, radius: rock.radius + BOAT.shoreMargin, reach: rock.radius + BOAT.shoreMargin * 2 })),
   ]
   const bodies = [
     ...islands.map((island) => ({ dir: island.dir, radius: island.radius })),

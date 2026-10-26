@@ -161,17 +161,35 @@ export function createBoat() {
 
   // What update() animates. For the built-in boat: the horn, the horn bell and the glowing
   // materials. For a loaded model the same roles are found by name (see loadBoatModel).
-  const parts = { flag: setupFlag(look), horn: hornGroup, bell, glow: [{ material: lampGlass, strength: 0.4 }, { material: windows, strength: 0.45 }] }
+  let parts = { flag: setupFlag(look), horn: hornGroup, bell, glow: [{ material: lampGlass, strength: 0.4 }, { material: windows, strength: 0.45 }] }
+
+  // Every boat that has been shown, by id: the object in the scene, what update() animates, where its
+  // bow lamp is and (for the extra boats) how big its hull is. The first is the game's own boat.
+  const lampHome = [...L.lampPosition]
+  const variants = new Map([['fishing-boat', { object: look, parts, lamp: lampHome, hull: null }]])
+  let current = variants.get('fishing-boat')
+
+  // The lamp's light and its beam sit at the boat's lamp position (the Bow_Lamp empty of a model).
+  function placeLamp([x, y, z]) {
+    spot.position.set(x, y, z - 0.05)
+    cone.mesh.position.copy(spot.position)
+    cone.mesh.quaternion.setFromUnitVectors(new Vector3(0, -1, 0), spot.target.position.clone().sub(spot.position).normalize())
+  }
+  function show(variant) {
+    model.remove(current.object)
+    model.add(variant.object)
+    current = variant
+    parts = variant.parts
+    placeLamp(variant.lamp)
+  }
+  const variantOf = (loaded) => ({ object: loaded.root, parts: { flag: loaded.flag, horn: loaded.horn, bell: loaded.bell, glow: loaded.glow }, lamp: loaded.lamp ?? lampHome, hull: loaded.hull })
 
   // Resolves when the model file (if there is one) has replaced the built-in boat.
-  const ready = loadBoatModel().then((loaded) => {
+  const ready = loadBoatModel(BOAT.model.file, BOAT.model.fitLength).then((loaded) => {
     if (!loaded) return false
-    model.remove(look)
-    model.add(loaded.root)
-    parts.flag = loaded.flag
-    parts.horn = loaded.horn
-    parts.bell = loaded.bell
-    parts.glow = loaded.glow
+    const variant = { ...variantOf(loaded), hull: null } // (the game's own boat keeps the hull numbers of config.js)
+    variants.set('fishing-boat', variant)
+    show(variant)
     return true
   })
 
@@ -182,6 +200,19 @@ export function createBoat() {
     },
     model,
     ready,
+    // Shows another boat (an entry of boats.js), loading its model the first time. Resolves with
+    // { hull } (null for the game's own boat), or null when the model could not be loaded.
+    async setBoat(entry) {
+      let variant = variants.get(entry.id)
+      if (!variant) {
+        const loaded = await loadBoatModel(entry.file, entry.fitLength ?? false)
+        if (!loaded) return null
+        variant = variantOf(loaded)
+        variants.set(entry.id, variant)
+      }
+      show(variant)
+      return { hull: variant.hull }
+    },
     // Dev panel: draws the boat bigger or smaller (the hull used for collisions stays as it is).
     setScale(factor) {
       model.scale.setScalar(factor)
@@ -203,9 +234,12 @@ export function createBoat() {
 
 // ---- your own model ---------------------------------------------------------------------------
 
-// Loads public/models/boat.glb if there is one (see public/models/README.txt for how to make it in
-// Blender). The model is used as it is, except that it is scaled to the hull length `BOAT.length`
-// (so the physics, the collisions and the camera keep fitting) when BOAT.model.fitLength is on.
+// Loads a boat model: public/models/boat.glb for the game's own boat (see public/models/README.txt for how
+// to make it in Blender) or a file of public/models/boats/ (see blender/BOATS.md). The model is used as it
+// is, except that it is scaled to the hull length `BOAT.length` (so the physics, the collisions and the
+// camera keep fitting) when `fitLength` is on (the game's own boat); the other boats keep their size and
+// the hull is measured from them.
+//   an empty named "Bow_Lamp"                 where the bow lamp's light and its beam start
 // Roles are found by name:
 //   a node whose name starts with "Horn"      trembles while the horn sounds (its child named
 //                                             "Bell..." grows and shrinks)
@@ -213,21 +247,28 @@ export function createBoat() {
 //   materials named "Window..." and "Lamp..."  glow when the lamp is on (their emissive colour is
 //                                             used; without one the base colour / a warm white is)
 // Returns null when there is no file.
-async function loadBoatModel() {
+async function loadBoatModel(file, fitLength) {
   let gltf
   try {
-    gltf = await new GLTFLoader().loadAsync(new URL(BOAT.model.file, document.baseURI).href)
+    gltf = await new GLTFLoader().loadAsync(new URL(file, document.baseURI).href)
   } catch {
     return null // no model file: keep the built-in boat
   }
   const root = gltf.scene
   root.name = 'boat-model'
 
-  if (BOAT.model.fitLength) {
+  if (fitLength) {
     const box = new Box3().setFromObject(root)
     const length = box.max.z - box.min.z
     if (length > 0) root.scale.multiplyScalar(BOAT.length / length)
   }
+
+  // The hull (the node named "Hull", else the whole model) and the lamp, in the model's own space.
+  root.updateMatrixWorld(true)
+  const hullBox = new Box3().setFromObject(root.getObjectByName('Hull') ?? root)
+  const hull = { length: hullBox.max.z - hullBox.min.z, width: hullBox.max.x - hullBox.min.x }
+  const lampNode = root.getObjectByName('Bow_Lamp')
+  const lamp = lampNode ? lampNode.getWorldPosition(new Vector3()).toArray() : null
 
   let horn = null
   let bell = null
@@ -250,5 +291,5 @@ async function loadBoatModel() {
       glow.push({ material, strength: kind.startsWith('lamp') ? 0.4 : 0.45 })
     }
   })
-  return { root, horn, bell, glow, flag: setupFlag(root) }
+  return { root, horn, bell, glow, flag: setupFlag(root), hull, lamp }
 }

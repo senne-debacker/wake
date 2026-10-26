@@ -1,0 +1,6 @@
+id:           yacht
+name:         Gilded Yacht
+description:  A navy and gold motor yacht with two decks, a hot tub and chrome railings.
+speed:        medium
+handling:     heavy
+anything special: the most expensive boat; its window bands and portholes glow warm when the lamp is on, and a gold flag flies at the stern

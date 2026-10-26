@@ -13,9 +13,8 @@ const push = new Vector3()
 const axis = new Vector3()
 const rotation = new Quaternion()
 
-// Hull half-sizes, used to find which part of the hull touches the shore.
-const HALF_LENGTH = 0.45
-const HALF_BEAM = 0.19
+// Hull half-sizes (they follow the boat: BOAT.length and BOAT.width), used to find which part of the hull
+// touches the shore.
 
 // Keeps the boat out of islands and rocks and reacts like a boat hitting a shore.
 //
@@ -83,6 +82,8 @@ export function resolveCollisions(state, colliders, delta) {
       port.crossVectors(dir, forward)
       const df = -normal.dot(forward)
       const dp = -normal.dot(port)
+      const HALF_LENGTH = BOAT.length / 2
+      const HALF_BEAM = BOAT.width / 2
       const norm = Math.hypot(HALF_LENGTH * df, HALF_BEAM * dp) || 1
       lever.copy(forward).multiplyScalar((HALF_LENGTH * HALF_LENGTH * df) / norm)
         .addScaledVector(port, (HALF_BEAM * HALF_BEAM * dp) / norm)

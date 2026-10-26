@@ -4,12 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "predev": "node scripts/buildBoats.mjs",
     "dev": "vite",
+    "prebuild": "node scripts/buildBoats.mjs",
     "build": "vite build",
     "preview": "vite preview",
     "check": "node tests/physics.check.mjs && node tests/fishing.check.mjs && node tests/tilt.check.mjs && node tests/screenSteer.check.mjs",
     "phone": "node scripts/phone.mjs",
-    "export:world": "node scripts/exportWorld.mjs"
+    "export:world": "node scripts/exportWorld.mjs",
+    "boats": "node scripts/buildBoats.mjs"
   },
   "devDependencies": {
     "vite": "^8.3.0"

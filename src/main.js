@@ -16,6 +16,7 @@ import { createAtmosphere } from './world/atmosphere.js'
 import { createWeather } from './world/weather.js'
 import { createWind } from './world/wind.js'
 import { createDisplay } from './display.js'
+import { loadBoats } from './boats.js'
 import { createTutorial } from './tutorial.js'
 import { setupTouchMode, setupStick, isTouch } from './touch.js'
 import { setupTilt } from './tilt.js'
@@ -242,7 +243,8 @@ async function main() {
     for (const point of uniforms.wakeTrail.array) point.w = 0
     rig.snap()
   }
-  const dev = createDevMode({ interaction, clock, atmosphere, boat, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState: () => state }) // ?dev + code: weather, time, boat and fishing tools
+  const boats = await loadBoats() // the game's own boat and the ones of public/models/boats (dev panel: Boat)
+  const dev = createDevMode({ interaction, clock, atmosphere, boat, boats, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState: () => state }) // ?dev + code: weather, time, boat and fishing tools
   const cursor = createCursorHider()
   // The clickable HUD: every button triggers the same action as its key; buttons marked data-hold
   // (horn, hold-for-time) act while the mouse button is down.

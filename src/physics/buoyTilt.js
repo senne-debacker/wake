@@ -1,5 +1,5 @@
 import { Vector3 } from 'three/webgpu'
-import { PLANET } from '../config.js'
+import { PLANET, BOAT as HULL } from '../config.js'
 
 const R = PLANET.radius
 
@@ -17,9 +17,7 @@ export const BUOY = {
   maxTilt: 1.45, // radians (83 degrees): it never goes fully under
 }
 
-// Hull half sizes, as in physics/collision.js.
-const HALF_LENGTH = 0.45
-const HALF_BEAM = 0.19
+// Hull half sizes: they follow the boat (BOAT.length and BOAT.width), as in physics/collision.js.
 
 export function createBuoyTilt() {
   // lean: a tangent vector at the buoy, pointing the way it leans; its length is the angle (radians)
@@ -44,7 +42,7 @@ export function hullTouchesBuoy(buoyDir, boat) {
   right.crossVectors(forward, dir)
   const f = offset.dot(forward) * R
   const s = offset.dot(right) * R
-  const [a, b] = [HALF_LENGTH + BUOY.radius, HALF_BEAM + BUOY.radius]
+  const [a, b] = [HULL.length / 2 + BUOY.radius, HULL.width / 2 + BUOY.radius]
   if ((f / a) ** 2 + (s / b) ** 2 >= 1) return null
 
   direction.copy(offset).addScaledVector(buoyDir, -offset.dot(buoyDir)).normalize() // away from the boat's centre

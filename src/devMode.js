@@ -1,5 +1,5 @@
 import { FISH_SPECIES } from './fishing/fishDatabase.js'
-import { BOAT } from './config.js'
+import { applyBoatStats } from './boats.js'
 
 // Developer mode. The normal game has no way to force the weather or to run the clock: those keys
 // (1 2 3 4, T) and everything else in here are locked. Open the page with `?dev`, type the code on the
@@ -12,7 +12,7 @@ import { BOAT } from './config.js'
 const CODE = '1815'
 const STORAGE_KEY = 'wake.dev'
 
-export function createDevMode({ interaction, clock, atmosphere, boat, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState }) {
+export function createDevMode({ interaction, clock, atmosphere, boat, boats, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState }) {
   const $ = (id) => document.getElementById(id)
   const gate = $('dev-gate')
   const panel = $('dev')
@@ -158,12 +158,41 @@ export function createDevMode({ interaction, clock, atmosphere, boat, world, wea
   freeze.addEventListener('change', () => (clock.paused = freeze.checked))
   slider('dev-clock-speed', { format: times, onInput: (value) => (clock.speed = value) })
 
-  // Boat. The top speeds are scaled in place (the wake and the sounds read them too, so they follow).
-  const stock = { maxSpeed: BOAT.maxSpeed, boostSpeed: BOAT.boostSpeed, maxReverseSpeed: BOAT.maxReverseSpeed }
-  const setTopSpeed = (factor) => {
-    for (const key in stock) BOAT[key] = stock[key] * factor
+  // Boat. Which boat (boats.js) it is: its model, hull and handling. The top-speed slider is a factor on top
+  // of that boat's own speed (BOAT is changed in place, so the wake and the sounds follow).
+  const boatSelect = $('dev-boat')
+  const boatInfo = $('dev-boat-info')
+  for (const entry of boats) boatSelect.append(new Option(entry.name, entry.id))
+  let currentBoat = { entry: boats[0], hull: null }
+  let speedFactor = 1
+  const BOAT_KEY = 'wake.dev.boat'
+  async function selectBoat(id) {
+    const entry = boats.find((candidate) => candidate.id === id) ?? boats[0]
+    const result = await boat.setBoat(entry)
+    if (!result) {
+      boatInfo.textContent = `Could not load ${entry.name}`
+      boatSelect.value = currentBoat.entry.id
+      return
+    }
+    currentBoat = { entry, hull: result.hull }
+    boatSelect.value = entry.id
+    applyBoatStats(entry, result.hull, speedFactor)
+    const size = result.hull ? `${result.hull.length.toFixed(2)} x ${result.hull.width.toFixed(2)}` : 'standard hull'
+    boatInfo.textContent = `${entry.speed}, ${entry.handling}, ${size}. ${entry.description}${entry.special ? ` (${entry.special})` : ''}`
+    try {
+      sessionStorage.setItem(BOAT_KEY, entry.id)
+    } catch {
+      // not remembered
+    }
   }
-  slider('dev-speed', { format: times, onInput: setTopSpeed })
+  boatSelect.addEventListener('change', () => selectBoat(boatSelect.value))
+  slider('dev-speed', {
+    format: times,
+    onInput(factor) {
+      speedFactor = factor
+      applyBoatStats(currentBoat.entry, currentBoat.hull, speedFactor)
+    },
+  })
   slider('dev-boat-size', { format: times, onInput: (value) => boat.setScale(value) })
   slider('dev-buoy-size', { format: times, onInput: (value) => world.setBuoyScale(value) })
   const ghostBox = $('dev-ghost')
@@ -214,12 +243,13 @@ export function createDevMode({ interaction, clock, atmosphere, boat, world, wea
     weather.instant = false
     wind.manual = null
     atmosphere.fogMultiplier = 1
-    setTopSpeed(1)
     boat.setScale(1)
     world.setBuoyScale(1)
     api.ghost = false
     for (const box of [freeze, instant, ghostBox, fpsBox, hideHud]) box.checked = false
     windAuto.checked = true
+    speedFactor = 1
+    selectBoat(boats[0].id) // back to the game's own boat
     fpsRead.hidden = true
     document.body.classList.remove('dev-nohud')
     for (const id of ['dev-speed', 'dev-clock-speed', 'dev-fog', 'dev-boat-size', 'dev-buoy-size']) $(id).value = 1
@@ -232,6 +262,14 @@ export function createDevMode({ interaction, clock, atmosphere, boat, world, wea
   })
 
   apply()
+  if (unlocked) {
+    try {
+      const saved = sessionStorage.getItem(BOAT_KEY) // the boat of this tab's last visit
+      if (saved && saved !== boats[0].id) selectBoat(saved)
+    } catch {
+      // nothing remembered
+    }
+  }
   let shownWeather = null
   let shownClock = null
 
