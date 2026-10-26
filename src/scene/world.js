@@ -5,6 +5,7 @@ import { createTerrain } from './terrain.js'
 import { createPineGeometry, createAutumnTreeGeometry, createRockGeometry } from './props.js'
 import { createLighthouse } from './lighthouse.js'
 import { createBuoys } from './buoys.js'
+import { createHarbour } from './harbour.js'
 
 const R = PLANET.radius
 const UP = new Vector3(0, 1, 0)
@@ -118,15 +119,19 @@ export function createWorld(layout) {
 
   const buoys = createBuoys(layout.buoys)
   group.add(buoys.group)
+  const harbour = createHarbour(layout.harbour.dir, layout.harbour.heading)
+  group.add(harbour.root)
 
   return {
     group,
     lighthouse,
+    harbour,
     setBuoyScale: buoys.setScale, // dev panel
-    // `darkness` 0..1: lamps on the lighthouse and buoys switch on with it.
+    // `darkness` 0..1: lamps on the lighthouse, the buoys and the harbour switch on with it.
     // Returns how hard the boat hit a buoy this frame (0 = none).
     update(elapsed, storm, darkness, boat, delta) {
       lighthouse?.update(elapsed, darkness)
+      harbour.update(elapsed, storm, darkness)
       return buoys.update(elapsed, storm, darkness, boat, delta)
     },
   }
@@ -159,13 +164,17 @@ function createImportedWorld(layout) {
 
   const buoys = createBuoys(layout.buoys)
   group.add(buoys.group)
+  const harbour = createHarbour(layout.harbour.dir, layout.harbour.heading)
+  group.add(harbour.root)
 
   return {
     group,
     lighthouse,
+    harbour,
     setBuoyScale: buoys.setScale, // dev panel
     update(elapsed, storm, darkness, boat, delta) {
       lighthouse?.update(elapsed, darkness)
+      harbour.update(elapsed, storm, darkness)
       return buoys.update(elapsed, storm, darkness, boat, delta)
     },
   }

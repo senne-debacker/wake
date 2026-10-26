@@ -4,6 +4,7 @@
     "name": "Frostmere",
     "description": "A cold northern sea of snow-capped islands, a blue glacier and drifting icebergs.",
     "special": "9 islands with new ground types: \"snow\" (white plateaus, snow-laden pines), \"ice\" (blue ice domes, no trees: Island_glacier, Island_floe) and \"rock\" (snowy rock, the lighthouse on Island_beacon). 23 rocks: Rock_001-009 are snowy rocks on the islands, Rock_010-015 snowy sea rocks, and Rock_016-023 are icebergs (material \"Ice\": white with blue sides, 0.35-0.6 across, sunk 0.08). They are all in the Rocks group so they collide like rocks. 81 snowy pines (Pine_001...), no autumn trees. Start, buoy route and ocean side are like the wake world: same start position and heading, 3 route buoys towards the lighthouse (now 20 degrees to port), the open ocean behind the start (radius 4.4). Suggested mood if the game ever reads one: colder sea colour (the Water material is a darker blue-green), snow instead of rain, a pale low sun.",
-    "file": "models/worlds/snow.glb"
+    "file": "models/worlds/snow.glb",
+    "price": 600
   }
 ]

@@ -21,7 +21,7 @@ const arc = (a, b) => Math.acos(Math.min(1, Math.max(-1, a.dot(b)))) * R // dist
 
 // A point `distance` radians from the start in direction `bearing` degrees
 // (0 = initial heading, +90 = starboard).
-function fromStart(start, bearingDeg, distance) {
+export function fromStart(start, bearingDeg, distance) {
   const up = start.dir
   const forward = start.heading.clone().addScaledVector(up, -start.heading.dot(up)).normalize()
   const right = new Vector3().crossVectors(forward, up)
@@ -134,6 +134,9 @@ export function createLayout() {
     }
   }
 
+  // The harbour dock, near the start on the port side.
+  const harbour = { dir: fromStart(start, WORLD.harbour.bearing, WORLD.harbour.distance), heading: new Vector3(1, 0, 0) }
+
   // What the boat cannot sail through, and what the water draws shore foam around.
   // Islands get their exact coastline (a table of shoreline distances per bearing);
   // rocks are plain circles.
@@ -141,11 +144,12 @@ export function createLayout() {
   const colliders = [
     ...islands.map((island) => ({ kind: 'island', dir: island.dir, shape: island.shape, reach: island.shape.maxShoreline + BOAT.shoreMargin * 2 })),
     ...rocks.map((rock) => ({ kind: 'circle', dir: rock.dir, radius: rock.radius + BOAT.shoreMargin, reach: rock.radius + BOAT.shoreMargin * 2 })),
+    { kind: 'circle', dir: harbour.dir, radius: WORLD.harbour.radius + BOAT.shoreMargin, reach: WORLD.harbour.radius + BOAT.shoreMargin * 2 }, // the dock
   ]
   const bodies = [
     ...islands.map((island) => ({ dir: island.dir, radius: island.radius })),
     ...rocks.map((rock) => ({ dir: rock.dir, radius: rock.radius })),
   ]
 
-  return { start, islands, rocks, buoys, colliders, bodies, ocean, fishingSpots }
+  return { start, islands, rocks, buoys, colliders, bodies, ocean, fishingSpots, harbour }
 }

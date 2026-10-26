@@ -31,6 +31,8 @@ export const DEFAULT_BOAT = {
   speed: 'medium',
   handling: 'medium',
   special: '',
+  price: 0, // (it is the player's from the start)
+  hold: 25, // kg of fish it carries
   file: BOAT.model.file, // (if it is not there, the boat that is built in code is used)
   fitLength: BOAT.model.fitLength, // the other boats keep the size they were modelled in
 }

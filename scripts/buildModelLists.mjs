@@ -4,6 +4,9 @@
 // A model is a pair of files: <id>.glb and <id>.txt. Runs before `npm run dev` and `npm run build`
 // (and by hand: npm run models).
 //
+// Cards may also give the economy numbers (src/economy.js): a boat's `price` (coins) and `hold` (kg of fish it
+// carries), a world's `price` (the chart) and `requires` (the id of a boat you must own).
+//
 // A card is "key: value" lines; a value may go on indented lines below its key (the "anything special" of
 // a world often does).
 import { readdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs'
@@ -52,5 +55,6 @@ function build(kind, extra) {
 }
 
 const pick = (value, allowed, fallback) => (allowed.includes(String(value).toLowerCase()) ? String(value).toLowerCase() : fallback)
-build('boats', (card) => ({ speed: pick(card.speed, SPEED, 'medium'), handling: pick(card.handling, HANDLING, 'medium') }))
-build('worlds', () => ({}))
+const number = (value) => (Number.isFinite(Number(value)) && String(value).trim() !== '' ? Number(value) : undefined) // (left out when the card has none: the game's defaults apply)
+build('boats', (card) => ({ speed: pick(card.speed, SPEED, 'medium'), handling: pick(card.handling, HANDLING, 'medium'), price: number(card.price), hold: number(card.hold) }))
+build('worlds', (card) => ({ price: number(card.price), requires: card.requires || undefined }))

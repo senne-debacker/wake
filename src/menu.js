@@ -8,7 +8,7 @@
 // Enter presses whichever button is showing.
 const TITLES = { main: 'Paused', controls: 'Controls', settings: 'Settings', about: 'About', confirm: 'Go home?' }
 
-export function createMenu({ audio, display, onStart, onResume, onHome, onLogbook, onTutorial, onFullscreen }) {
+export function createMenu({ audio, display, purse, onStart, onResume, onHome, onLogbook, onTutorial, onFullscreen }) {
   const $ = (id) => document.getElementById(id)
   const start = $('start')
   const startButton = $('start-action')
@@ -54,7 +54,7 @@ export function createMenu({ audio, display, onStart, onResume, onHome, onLogboo
     view = next
     card.dataset.view = next
     for (const element of pause.querySelectorAll('.menu-view')) element.hidden = element.id !== `view-${next}`
-    $('menu-state').textContent = TITLES[next]
+    $('menu-state').textContent = next === 'main' && purse ? `${TITLES[next]}  ·  ${purse()}` : TITLES[next]
     pause.scrollTop = 0
     const first = pause.querySelector(`#view-${next} ${next === 'main' ? '#menu-action' : '[data-back]'}`)
     first?.focus({ preventScroll: true })

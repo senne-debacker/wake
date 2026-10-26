@@ -333,8 +333,32 @@
           <p id="result-text" class="result-text"></p>
           <p class="result-badges"><span id="result-new" hidden>New species</span><span id="result-record" hidden>Personal best</span></p>
         </div>
+        <p id="result-value" class="result-value"></p>
         <p class="result-snap">It got away. Let go before the line gets too tight.</p>
         <button id="fishing-continue" class="big-button" type="button">Continue</button>
+      </div>
+    </div>
+
+    <!-- Harbour (src/harbourScreen.js): sell the catch, buy boats and charts to other worlds. Opens when the anchor goes down at the dock. -->
+    <div id="harbour">
+      <div class="menu-card harbour-card">
+        <header>
+          <h1>Harbour</h1>
+          <p class="menu-state" id="harbour-purse"></p>
+        </header>
+        <div class="harbour-tabs" role="tablist" aria-label="Harbour">
+          <button type="button" role="tab" data-tab="sell" aria-selected="true">Sell</button>
+          <button type="button" role="tab" data-tab="boats" aria-selected="false">Boats</button>
+          <button type="button" role="tab" data-tab="charts" aria-selected="false">Charts</button>
+        </div>
+        <div class="harbour-body">
+          <section id="harbour-sell" data-panel="sell"></section>
+          <section id="harbour-boats" data-panel="boats" hidden></section>
+          <section id="harbour-charts" data-panel="charts" hidden></section>
+        </div>
+        <p id="harbour-note" class="harbour-note" aria-live="polite"></p>
+        <button id="harbour-close" class="big-button" type="button">Set off again</button>
+        <p class="menu-foot">Esc closes the harbour</p>
       </div>
     </div>
 
@@ -392,6 +416,13 @@
         <h3>World</h3>
         <select id="dev-world" aria-label="World"></select>
         <p id="dev-world-info" class="dev-note"></p>
+      </section>
+      <section>
+        <h3>Economy</h3>
+        <div class="dev-row">
+          <button type="button" id="dev-coins">+1000 coins</button><button type="button" id="dev-reset-save">Reset the save</button>
+        </div>
+        <p id="dev-economy-info" class="dev-note"></p>
       </section>
       <section>
         <h3>Weather <small>keys 1 2 3 4</small></h3>

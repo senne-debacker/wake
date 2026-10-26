@@ -3,4 +3,6 @@ name:         Patched Dinghy
 description:  A leaky rowing boat with a rusty outboard: cheap, small and nobody's pride.
 speed:        slow
 handling:     nimble
+price:        150
+hold:         10
 anything special: the cheapest boat; open hull with no cabin, so no windows glow at night (only the bow lantern)

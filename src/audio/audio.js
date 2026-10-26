@@ -519,6 +519,18 @@ export function createAudio() {
       }
     },
 
+    // Selling at the harbour: a few bright coins landing on a counter.
+    coins(count = 3) {
+      if (!ctx) return
+      for (let i = 0; i < Math.min(6, count + 1); i++) {
+        const when = i * 0.07 + Math.random() * 0.02
+        const pitch = 1400 + Math.random() * 500
+        tone({ when, duration: 0.18, type: 'triangle', frequency: pitch, endFrequency: pitch * 1.04, volume: 0.16 })
+        tone({ when, duration: 0.1, frequency: pitch * 2.7, volume: 0.05 })
+        noiseBurst({ when, duration: 0.03, type: 'highpass', frequency: 4000, Q: 0.7, volume: 0.07 })
+      }
+    },
+
     // Hitting a shore: a hull-shaking boom, a sharp crack of splintering timber and a creak, louder
     // for harder hits.
     bump(strength = 0.5) {

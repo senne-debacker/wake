@@ -3,4 +3,6 @@ name:         Red Runabout
 description:  A low deep-V speedboat with twin outboards and a racing stripe.
 speed:        fast
 handling:     nimble
+price:        1500
+hold:         15
 anything special: the fastest boat; low and open, so it has no flag and no windows that glow (the nav light is the lamp)

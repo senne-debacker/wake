@@ -1,6 +1,7 @@
 id:           snow
 name:         Frostmere
 description:  A cold northern sea of snow-capped islands, a blue glacier and drifting icebergs.
+price:        600
 anything special:
   - 9 islands with new ground types: "snow" (white plateaus, snow-laden pines), "ice" (blue ice
     domes, no trees: Island_glacier, Island_floe) and "rock" (snowy rock, the lighthouse on

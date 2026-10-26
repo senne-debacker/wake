@@ -13,7 +13,7 @@ import { chooseWorld } from './worlds.js'
 const CODE = '1815'
 const STORAGE_KEY = 'wake.dev'
 
-export function createDevMode({ interaction, clock, atmosphere, boat, boats, worlds, activeWorld, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState }) {
+export function createDevMode({ interaction, clock, atmosphere, boat, boats, economy, worlds, activeWorld, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState }) {
   const $ = (id) => document.getElementById(id)
   const gate = $('dev-gate')
   const panel = $('dev')
@@ -119,6 +119,17 @@ export function createDevMode({ interaction, clock, atmosphere, boat, boats, wor
   const percent = (v) => `${Math.round(v * 100)}%`
   const times = (v) => `x${v.toFixed(2)}`
 
+  // Economy: money for trying out the harbour.
+  const economyInfo = $('dev-economy-info')
+  const showEconomy = () => (economyInfo.textContent = `${economy.coins} coins, hold ${economy.holdWeight.toFixed(1)} / ${economy.capacity} kg, ${economy.hold.length} fish`)
+  $('dev-coins').addEventListener('click', () => economy.addCoins(1000))
+  $('dev-reset-save').addEventListener('click', () => {
+    economy.reset()
+    location.reload()
+  })
+  economy.onChange(showEconomy)
+  showEconomy()
+
   // World (worlds.js): the game's own or one made in Blender. The whole world is built at start-up, so a change reloads the page.
   const worldSelect = $('dev-world')
   for (const entry of worlds) worldSelect.append(new Option(entry.name, entry.id))
@@ -174,6 +185,14 @@ export function createDevMode({ interaction, clock, atmosphere, boat, boats, wor
   let currentBoat = { entry: boats[0], hull: null }
   let speedFactor = 1
   const BOAT_KEY = 'wake.dev.boat'
+  // The boat in the scene is `entry` (the harbour changed it, or the picker): its hull and handling, and the panel.
+  function setCurrentBoat(entry, hull) {
+    currentBoat = { entry, hull }
+    boatSelect.value = entry.id
+    applyBoatStats(entry, hull, speedFactor)
+    const size = hull ? `${hull.length.toFixed(2)} x ${hull.width.toFixed(2)}` : 'standard hull'
+    boatInfo.textContent = `${entry.speed}, ${entry.handling}, ${size}. ${entry.description}${entry.special ? ` (${entry.special})` : ''}`
+  }
   async function selectBoat(id) {
     const entry = boats.find((candidate) => candidate.id === id) ?? boats[0]
     const result = await boat.setBoat(entry)
@@ -182,11 +201,7 @@ export function createDevMode({ interaction, clock, atmosphere, boat, boats, wor
       boatSelect.value = currentBoat.entry.id
       return
     }
-    currentBoat = { entry, hull: result.hull }
-    boatSelect.value = entry.id
-    applyBoatStats(entry, result.hull, speedFactor)
-    const size = result.hull ? `${result.hull.length.toFixed(2)} x ${result.hull.width.toFixed(2)}` : 'standard hull'
-    boatInfo.textContent = `${entry.speed}, ${entry.handling}, ${size}. ${entry.description}${entry.special ? ` (${entry.special})` : ''}`
+    setCurrentBoat(entry, result.hull)
     try {
       sessionStorage.setItem(BOAT_KEY, entry.id)
     } catch {
@@ -286,6 +301,7 @@ export function createDevMode({ interaction, clock, atmosphere, boat, boats, wor
   let fpsLast = performance.now()
   const api = {
     ghost: false, // sail through islands and rocks (read by main.js)
+    setCurrentBoat,
     get unlocked() {
       return unlocked
     },

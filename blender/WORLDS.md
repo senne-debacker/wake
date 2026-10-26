@@ -39,7 +39,8 @@ sphere: keep the `Water` sphere as it is and change what stands on it.
 
 Export it as glTF Binary the same way as the boats (+Y Up, Apply Modifiers) and save it as
 `public/models/worlds/<id>.glb`, with a card `<id>.txt` next to it (`id`, `name`, `description`, and an
-`anything special:` that may go on indented lines below). Restart the dev server and pick it in the developer
+`anything special:` that may go on indented lines below). Optional numbers: `price:` (what the chart of this world
+costs in the harbour; default 500) and `requires:` (the id of a boat the player must own first, e.g. `sloop`). Restart the dev server and pick it in the developer
 panel under **World**: the page reloads into that world (the choice is kept for the tab; "Lock developer
 mode" goes back to the original).
 
@@ -50,7 +51,9 @@ What the game takes from the file (src/world/importWorld.js):
   size is the mesh's biggest extent).
 - `Lighthouse`, `Buoys`: only the positions: the lighthouse (with its sweeping light) and the floating buoys are
   the game's own.
-- `Markers`: `Start` (the bow points along its -Z, +Y in Blender), up to **6** `FishingSpot_n`, `Open_Ocean`.
+- `Markers`: `Start` (the bow points along its -Z, +Y in Blender), up to **6** `FishingSpot_n`, `Open_Ocean`, and
+  optionally `Harbour`: where the dock goes (the shop where fish are sold). Without it the game puts the dock
+  near the start on clear water (away from land, buoys and fishing spots).
 - The `Water` sphere in the file is ignored: the game draws its own sea (the same sphere, radius 5).
 - The shore foam goes round at most **32** bodies: every island, then the biggest rocks.
 - Not read yet: a mood for the world (sea colour, snow instead of rain, the sun). The card can describe it.

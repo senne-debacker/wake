@@ -33,6 +33,11 @@ const arc = (a, b) => Math.acos(Math.min(1, Math.max(-1, a.dot(b)))) * R
 {
   const generated = createLayout()
   const read = await load('blender/wake-world.glb')
+  // The generated world's harbour: clear of islands, rocks, buoys and fishing spots, close to the start.
+  {
+    const dockClear = Math.min(...generated.colliders.slice(0, -1).map((c) => arc(generated.harbour.dir, c.dir) - (c.kind === 'island' ? c.shape.maxShoreline : c.radius)))
+    check('wake world: the harbour dock is on clear water near the start', dockClear > 0.5 && arc(generated.harbour.dir, generated.start.dir) < 2 && generated.buoys.every((b) => arc(b.dir, generated.harbour.dir) > 0.6) && generated.fishingSpots.every((s) => arc(s.dir, generated.harbour.dir) > 0.9), `${dockClear.toFixed(2)} from land, ${arc(generated.harbour.dir, generated.start.dir).toFixed(2)} from the start`)
+  }
   check('wake world: same number of islands, buoys and fishing spots', read.islands.length === generated.islands.length && read.buoys.length === generated.buoys.length && read.fishingSpots.length === generated.fishingSpots.length, `${read.islands.length} / ${read.buoys.length} / ${read.fishingSpots.length}`)
   check('wake world: the start is where it was, with the same heading', arc(read.start.dir, generated.start.dir) < 0.01 && read.start.heading.dot(generated.start.heading.clone().addScaledVector(generated.start.dir, -generated.start.heading.dot(generated.start.dir)).normalize()) > 0.99)
   check('wake world: the open ocean is where it was', arc(read.ocean.dir, generated.ocean.dir) < 0.01 && Math.abs(read.ocean.radius - generated.ocean.radius) < 0.01)
@@ -57,7 +62,7 @@ const arc = (a, b) => Math.acos(Math.min(1, Math.max(-1, a.dot(b)))) * R
   check('wake world: every island matches a generated island', matched === read.islands.length, `${matched} of ${read.islands.length}`)
     check('wake world: the measured coastlines lie on the generated ones', worst < 0.25, `worst difference ${worst.toFixed(2)} units`)
   check('wake world: rocks and the shore bodies', read.rocks.length === generated.rocks.length && read.bodies.length <= WORLD.maxBodies, `${read.rocks.length} rocks, ${read.bodies.length} bodies`)
-  check('wake world: colliders are islands then rocks, each with a reach that covers the biggest hull', read.colliders.length === read.islands.length + read.rocks.length && read.colliders.every((c) => c.reach > 0 && (c.kind === 'circle' || c.shape.maxShoreline + BOAT.shoreMargin <= c.reach)))
+  check('wake world: colliders are islands, rocks and the dock, each with a reach that covers the biggest hull', read.colliders.length === read.islands.length + read.rocks.length + 1 && read.colliders.every((c) => c.reach > 0 && (c.kind === 'circle' || c.shape.maxShoreline + BOAT.shoreMargin <= c.reach)))
 }
 
 // ---- the new worlds in public/models/worlds ------------------------------------------------------------------
@@ -78,6 +83,17 @@ for (const file of readdirSync('public/models/worlds').filter((f) => f.endsWith(
     const away = arc(layout.start.dir, c.dir)
     const limit = c.kind === 'island' ? c.shape.maxShoreline : c.radius
     if (away < limit + BOAT.shoreMargin) problems.push(`the start is inside ${c.kind} collider`)
+  }
+  // The dock: on clear water, and its own circle stops a boat.
+  {
+    const dock = layout.colliders.at(-1)
+    const others = layout.colliders.slice(0, -1)
+    const clearance = Math.min(...others.map((c) => arc(layout.harbour.dir, c.dir) - (c.kind === 'island' ? c.shape.maxShoreline : c.radius)))
+    if (!(clearance > 0.5)) problems.push(`the harbour is only ${clearance.toFixed(2)} from land`)
+    if (layout.buoys.some((b) => arc(b.dir, layout.harbour.dir) < 0.6)) problems.push('a buoy is at the harbour')
+    if (layout.fishingSpots.some((s) => arc(s.dir, layout.harbour.dir) < 0.9)) problems.push('a fishing spot is at the harbour')
+    if (arc(layout.harbour.dir, layout.start.dir) > 4) problems.push('the harbour is far from the start')
+    if (dock.kind !== 'circle') problems.push('the last collider is not the dock')
   }
   // Sail into every island and every rock: the collision must stop the boat short of the land (and not throw).
   for (const collider of layout.colliders) {

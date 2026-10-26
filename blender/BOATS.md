@@ -50,9 +50,19 @@ as `wake-boat.glb` next to it.
     description:  one line for the boat picker
     speed:        slow / medium / fast          (the current boat is medium: 5 knots, 8 with boost)
     handling:     heavy / medium / nimble       (the current boat is medium)
+    price:        900                            (coins in the harbour shop; default 600)
+    hold:         30                             (kg of fish it carries; default 20)
     anything special: e.g. "carries a bigger crate", "louder horn", "starts at night"
 
 ## What I do with it
 
 I add the boat to the dev version (a boat list, a picker, the hull and wake sized from your model, the
 speed and handling from the card), and tell you what it looks like next to the old one.
+
+## Money
+
+Boats are bought with coins from selling fish at the harbour (src/economy.js). Everything about a boat's
+economy lives on its card, so changing a boat means editing its card (and restarting the dev server):
+`price` and `hold`. The save only remembers which boats the player owns by id, so a changed price applies
+at once, and a boat that is removed from the folder simply stops being offered. Use the same `id` when you
+replace a boat's model and the player keeps it.

@@ -2764,3 +2764,291 @@ body.touch.fishing-open #tutorial {
     display: none;
   }
 }
+
+/* ---------------------------------------------------------------------------------------------
+   Harbour (src/harbourScreen.js): tabs for Sell, Boats and Charts
+   --------------------------------------------------------------------------------------------- */
+
+#harbour {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at 50% 45%, rgba(9, 22, 34, 0.18), rgba(3, 7, 11, 0.62));
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  text-transform: uppercase;
+}
+
+#harbour.show {
+  display: flex;
+}
+
+.harbour-card {
+  display: flex;
+  flex-direction: column;
+  width: min(720px, 92vw);
+  max-height: calc(92vh / var(--menu-scale, 1));
+  padding: 20px 34px 14px;
+}
+
+.harbour-card h1 {
+  font-size: clamp(30px, 5vw, 44px);
+}
+
+.harbour-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin: 12px 0 10px;
+}
+
+.harbour-tabs button {
+  min-height: 38px;
+  padding: 0 22px;
+  margin-left: -2px;
+  font: 700 13px var(--font);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(241, 236, 224, 0.85);
+  background: rgba(5, 7, 10, 0.62);
+  border: 2px solid rgba(241, 236, 224, 0.4);
+  cursor: pointer;
+}
+
+.harbour-tabs button:first-child {
+  margin-left: 0;
+}
+
+.harbour-tabs button[aria-selected='true'] {
+  color: #04070a;
+  background: var(--teal-light);
+  border-color: var(--teal-light);
+}
+
+.harbour-body {
+  flex: 1 1 auto;
+  min-height: 120px;
+  overflow-y: auto;
+}
+
+.h-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.h-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  background: linear-gradient(180deg, #1d3347, #152433);
+  border: 1px solid rgba(241, 236, 224, 0.18);
+  border-left: 4px solid var(--rarity, rgba(127, 214, 230, 0.5));
+  text-transform: none;
+}
+
+.h-row.active {
+  border-color: var(--teal-light);
+  box-shadow: 0 0 18px rgba(127, 214, 230, 0.25);
+}
+
+.h-main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.h-main b {
+  font-size: 17px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.h-desc {
+  font-size: 13px;
+  line-height: 1.35;
+  letter-spacing: 0.03em;
+  color: rgba(241, 236, 224, 0.8);
+}
+
+.h-sub {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(241, 236, 224, 0.6);
+}
+
+.h-sub.warn {
+  color: var(--warn);
+}
+
+.h-price,
+.h-state {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--warn);
+}
+
+.h-state {
+  color: var(--teal-light);
+}
+
+.h-button {
+  min-height: 36px;
+  padding: 0 16px;
+  font: 700 12px var(--font);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--cream);
+  background: rgba(5, 10, 15, 0.45);
+  border: 1px solid var(--teal-light);
+  cursor: pointer;
+}
+
+.h-button.primary {
+  background: var(--teal);
+}
+
+.h-button:hover:not(:disabled),
+.h-button:focus-visible {
+  outline: none;
+  background: var(--teal);
+  box-shadow: 0 0 14px rgba(127, 214, 230, 0.4);
+}
+
+.h-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  border-color: rgba(241, 236, 224, 0.3);
+}
+
+.h-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.h-empty {
+  margin: 28px auto;
+  max-width: 28em;
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: rgba(241, 236, 224, 0.8);
+}
+
+.harbour-note {
+  min-height: 1.4em;
+  margin: 10px 0 0;
+  text-align: center;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: none;
+  color: var(--teal-light);
+}
+
+#harbour .big-button {
+  margin-top: 8px;
+  padding-block: 10px;
+}
+
+#harbour .menu-foot {
+  margin-top: 8px;
+}
+
+.result-value {
+  margin: 8px 0 0;
+  text-align: center;
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  color: var(--warn);
+}
+
+.result-value:empty,
+#fishing-result:not(.caught) .result-value {
+  display: none;
+}
+
+body.touch .harbour-card {
+  transform: none; /* (the cards are laid out for the screen on a phone, not scaled) */
+  max-height: calc(100vh - 20px);
+  padding: 14px 14px 10px;
+}
+
+@media (max-width: 560px) {
+  .h-row {
+    flex-wrap: wrap;
+  }
+
+  .h-button,
+  .h-state,
+  .h-price {
+    margin-left: auto;
+  }
+}
+
+/* A phone held sideways: the card is compact (no big title) and only the list scrolls. */
+@media (orientation: landscape) and (max-height: 520px) {
+  body.touch #harbour {
+    align-items: center;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  body.touch .harbour-card {
+    max-height: calc(100vh - 16px);
+    margin: 0;
+    padding: 8px 14px 8px;
+  }
+
+  body.touch #harbour .harbour-card h1 {
+    display: none;
+  }
+
+  body.touch #harbour .menu-state {
+    margin: 0;
+    font-size: 13px;
+    letter-spacing: 0.3em;
+  }
+
+  body.touch .harbour-tabs {
+    margin: 6px 0;
+  }
+
+  body.touch .harbour-tabs button {
+    min-height: 32px;
+    padding: 0 16px;
+    font-size: 12px;
+  }
+
+  body.touch .harbour-body {
+    min-height: 60px;
+  }
+
+  body.touch .h-row {
+    padding: 6px 10px;
+  }
+
+  body.touch #harbour .big-button {
+    margin-top: 6px;
+    padding: 7px 24px;
+    font-size: 14px;
+  }
+
+  body.touch #harbour .menu-foot,
+  body.touch .harbour-note:empty {
+    display: none;
+  }
+}

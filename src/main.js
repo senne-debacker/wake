@@ -2,7 +2,7 @@ import {
   WebGPURenderer, Scene, PerspectiveCamera, Color, Vector3, ACESFilmicToneMapping,
 } from 'three/webgpu'
 
-import { PALETTE, INTRO, BOAT, FISHING, CAMERA } from './config.js'
+import { PALETTE, INTRO, BOAT, FISHING, CAMERA, PLANET, WORLD } from './config.js'
 import { uniforms } from './uniforms.js'
 import { createPlanet } from './scene/planet.js'
 import { createFish } from './scene/fish.js'
@@ -16,8 +16,10 @@ import { createAtmosphere } from './world/atmosphere.js'
 import { createWeather } from './world/weather.js'
 import { createWind } from './world/wind.js'
 import { createDisplay } from './display.js'
-import { loadBoats } from './boats.js'
-import { loadWorlds, chosenWorldId } from './worlds.js'
+import { loadBoats, applyBoatStats } from './boats.js'
+import { loadWorlds, chosenWorldId, clearWorldChoice } from './worlds.js'
+import { createEconomy, fishValue } from './economy.js'
+import { createHarbourScreen } from './harbourScreen.js'
 import { importWorldLayout } from './world/importWorld.js'
 import { createTutorial } from './tutorial.js'
 import { setupTouchMode, setupStick, isTouch } from './touch.js'
@@ -92,7 +94,9 @@ async function main() {
   // Where islands, rocks and buoys are (also used for collisions): the game's own world, or a world made in Blender that the
   // developer panel asked for (src/worlds.js, world/importWorld.js). A world that cannot be read falls back to the own one.
   const worlds = await loadWorlds()
-  const wantedWorld = worlds.find((entry) => entry.id === chosenWorldId())
+  const boats = await loadBoats() // the game's own boat and the ones of public/models/boats
+  const economy = createEconomy({ boats, worlds }) // coins, the hold, the boats and charts owned (economy.js)
+  const wantedWorld = worlds.find((entry) => entry.id === (chosenWorldId() ?? economy.world.id)) // the developer panel's choice, else the world the player sailed to
   let layout
   try {
     layout = wantedWorld?.file ? await importWorldLayout(wantedWorld.file) : createLayout()
@@ -101,6 +105,7 @@ async function main() {
     layout = createLayout()
   }
   const activeWorld = layout.imported ? wantedWorld : worlds[0]
+  const dock = layout.harbour // where the harbour is: anchor next to it to trade
   const world = createWorld(layout)
   const spots = createFishingSpots(layout.fishingSpots) // patches of bubbling water: drop the anchor on one to fish
   const sky = createSky()
@@ -154,6 +159,10 @@ async function main() {
       fightOutcome = result.outcome
       if (result.outcome === 'caught') {
         audio.fishCaught(result.fish.rarity)
+        const { kept, value } = economy.addCatch(result.fish, result.weight)
+        document.getElementById('result-value').textContent = kept
+          ? `Worth ${value} coins  ·  hold ${economy.holdWeight.toFixed(1)} / ${economy.capacity} kg`
+          : `Your hold is full (${economy.capacity} kg): it swims off. Sell at the harbour.`
       } else if (result.outcome === 'snapped') {
         audio.lineSnap()
       }
@@ -171,6 +180,34 @@ async function main() {
     setState('fishing')
     fishing.open({ fish: fish ?? rollFish(Math.random, { hour: clock.timeOfDay * 24, ...weather.levels }) }) // some rare fish bite better in the right weather and hour (fishing/habitat.js)
   }
+
+  // --- The harbour: the anchor goes down next to the dock -> sell the catch, buy boats and charts ----------
+  const harbourScreen = createHarbourScreen({
+    economy,
+    boats,
+    worlds,
+    onEquip: async (entry) => {
+      const result = await boat.setBoat(entry)
+      if (!result) return false
+      economy.equipBoat(entry.id)
+      dev.setCurrentBoat(entry, result.hull) // the hull and handling of the new boat
+      return true
+    },
+    onTravel: () => {
+      clearWorldChoice()
+      hud.toast('Setting sail...', 2)
+      setTimeout(() => location.reload(), 700) // the whole world is built at start-up: the page loads into the new one
+    },
+    onSold: (count) => audio.coins(count),
+    onClose: () => {
+      interaction.input.anchored = false // up with the anchor: off you go
+      if (state === 'harbour') setState('playing')
+    },
+  })
+  function openHarbour() {
+    setState('harbour')
+    harbourScreen.open()
+  }
   atmosphere.update(clock.timeOfDay, boatState.dir, camera.position.length(), spaceAmount, weather.levels) // correct lighting from the first frame
 
   // --- Game state: start screen -> starting -> playing <-> paused -----------------------------------
@@ -180,6 +217,7 @@ async function main() {
   //   paused    the pause screen
   //   fishing   the minigame is up: the world runs, the controls are locked
   //   logbook   the fish logbook is open: like paused, without the pause screen
+  //   harbour   the harbour screen is open (sell, boats, charts): like the logbook
   // Whenever it is not "playing", the game clock (`sim` below) is 0: the boat, the day and the
   // weather hold still, while the waves, the clouds and the boat's bobbing carry on, so the world
   // still looks alive behind the screens.
@@ -209,7 +247,7 @@ async function main() {
   const tutorial = createTutorial() // pop-ups that explain sailing and fishing, the first time and from the pause menu
   const menu = createMenu({
     audio,
-    onMute: toggleSound,
+    purse: () => `${economy.coins.toLocaleString('en')} coins  ·  hold ${economy.holdWeight.toFixed(1)} / ${economy.capacity} kg`,
     display,
     onFullscreen: () => fullscreen.toggle(),
     onLogbook: () => {
@@ -256,8 +294,19 @@ async function main() {
     for (const point of uniforms.wakeTrail.array) point.w = 0
     rig.snap()
   }
-  const boats = await loadBoats() // the game's own boat and the ones of public/models/boats (dev panel: Boat)
-  const dev = createDevMode({ interaction, clock, atmosphere, boat, boats, worlds, activeWorld, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState: () => state }) // ?dev + code: weather, time, boat and fishing tools
+  const dev = createDevMode({ interaction, clock, atmosphere, boat, boats, economy, worlds, activeWorld, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState: () => state }) // ?dev + code: weather, time, boat and fishing tools
+  // The boat the player is in (the economy's): shown now, unless the developer panel has chosen another for this tab.
+  let devBoat = null
+  try {
+    devBoat = sessionStorage.getItem('wake.dev') === '1' ? sessionStorage.getItem('wake.dev.boat') : null
+  } catch {
+    // no storage
+  }
+  if (!devBoat && economy.boat.id !== boats[0].id) {
+    const result = await boat.setBoat(economy.boat)
+    if (result) dev.setCurrentBoat(economy.boat, result.hull)
+    else economy.equipBoat(boats[0].id) // (its model is gone: back to the game's own)
+  }
   const cursor = createCursorHider()
   // The clickable HUD: every button triggers the same action as its key; buttons marked data-hold
   // (horn, hold-for-time) act while the mouse button is down.
@@ -278,20 +327,20 @@ async function main() {
     state = next
     cursor.setEnabled(next === 'playing')
     interaction.enabled = next === 'playing'
-    hud.show(next === 'playing' || next === 'paused' || next === 'fishing' || next === 'logbook')
+    hud.show(next === 'playing' || next === 'paused' || next === 'fishing' || next === 'logbook' || next === 'harbour')
     menu.showCorner(next === 'menu') // (the Settings button and the "Made by" tag)
     if (next === 'menu') {
       menu.closePause() // (coming home from the pause screen)
       menu.showStart()
     }
     if (next === 'starting') menu.hideStart()
-    if (next === 'playing' || next === 'logbook') menu.closePause()
+    if (next === 'playing' || next === 'logbook' || next === 'harbour') menu.closePause()
     if (next === 'paused') menu.openPause()
-    audio.setPaused(next === 'paused' || next === 'logbook')
+    audio.setPaused(next === 'paused' || next === 'logbook' || next === 'harbour')
   }
   setState('menu')
 
-  if (import.meta.env.DEV) window.__game = { boatState, boatPose, input: interaction.input, uniforms, lights: { sun, moon, fill }, clock, atmosphere, weather, lightning, dolphins, boat, layout, world, spots, fishing, logbook, startFishing, scene, camera, audio, fish, getState: () => state } // for debugging in the console
+  if (import.meta.env.DEV) window.__game = { boatState, boatPose, input: interaction.input, uniforms, lights: { sun, moon, fill }, clock, atmosphere, weather, lightning, dolphins, boat, layout, world, spots, fishing, logbook, startFishing, scene, camera, audio, fish, economy, harbourScreen, getState: () => state } // for debugging in the console
 
   // `?fish` checks the fish simulation on the GPU (see src/debug/fishTest.js).
   if (new URLSearchParams(location.search).has('fish')) {
@@ -320,6 +369,7 @@ async function main() {
   let darkHinted = false
   let lastDay = clock.days // the spots refill when the day changes (midnight)
   let hintedSpot = null // the fishing spot the player was last told about
+  let hintedDock = false // ... and whether the harbour was just pointed out
 
   renderer.setAnimationLoop((now) => {
     const delta = Math.min((now - last) / 1000, 0.1) // clamp after tab switches
@@ -395,9 +445,16 @@ async function main() {
       const biting = input.anchored ? null : spots.nearest(boatState.dir, FISHING.spots.triggerRadius)?.spot ?? null
       if (biting && biting !== hintedSpot) hud.toast(isTouch() ? 'Fish are biting here: tap the anchor' : 'Fish are biting here: drop the anchor (Space)', 3.5)
       hintedSpot = biting
+      // The harbour dock: the same, with the anchor.
+      const nearDock = Math.acos(Math.min(1, boatState.dir.dot(dock.dir))) * PLANET.radius < WORLD.harbour.triggerRadius
+      if (nearDock && !hintedDock && !input.anchored) hud.toast(isTouch() ? 'The harbour: tap the anchor to trade' : 'The harbour: drop the anchor (Space) to trade', 3.5)
+      hintedDock = nearDock
       if (input.anchored && !previous.anchored) {
-        const here = spots.nearest(boatState.dir, FISHING.spots.triggerRadius)
-        if (here) startFishing(here.spot)
+        if (nearDock) openHarbour()
+        else {
+          const here = spots.nearest(boatState.dir, FISHING.spots.triggerRadius)
+          if (here) startFishing(here.spot)
+        }
       }
 
       const dark = atmosphere.state.elevation < 0.02

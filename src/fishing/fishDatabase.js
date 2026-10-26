@@ -23,12 +23,12 @@ import { habitatActive } from './habitat.js'
 
 // Order = display order of the logbook. `rate` is the chance that a catch is of this rarity
 // (the four add up to 1); `difficulty` scales the fight (see fishing/fishingMinigame.js);
-// `colour` tints the cards in the interface.
+// `colour` tints the cards in the interface; `price` is what the harbour pays per kilo (economy.js).
 export const RARITIES = {
-  common: { label: 'Common', rate: 0.6, difficulty: 0.85, colour: '#cfc9bb' },
-  uncommon: { label: 'Uncommon', rate: 0.27, difficulty: 1, colour: '#6fd16f' },
-  rare: { label: 'Rare', rate: 0.1, difficulty: 1.25, colour: '#b79bff' },
-  legendary: { label: 'Legendary', rate: 0.03, difficulty: 1.6, colour: '#f0b34a' },
+  common: { label: 'Common', rate: 0.6, difficulty: 0.85, colour: '#cfc9bb', price: 2 },
+  uncommon: { label: 'Uncommon', rate: 0.27, difficulty: 1, colour: '#6fd16f', price: 6 },
+  rare: { label: 'Rare', rate: 0.1, difficulty: 1.25, colour: '#b79bff', price: 25 },
+  legendary: { label: 'Legendary', rate: 0.03, difficulty: 1.6, colour: '#f0b34a', price: 150 },
 }
 
 const SVG = 'xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60"'

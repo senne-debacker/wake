@@ -417,6 +417,11 @@ export const WORLD = {
   ],
   scatteredBuoys: 6,
   maxBodies: 32, // islands + rocks the water shader draws shore foam for
+  // The harbour: a floating dock where the catch is sold and boats and charts are bought (scene/harbour.js, harbour.js).
+  // Placed like a landmark (bearing in degrees from the start heading, distance in radians of arc); a world made in
+  // Blender can put a `Harbour` empty where it wants (world/importWorld.js). Dropping the anchor within `triggerRadius`
+  // of it opens the harbour; the dock is a solid circle of `radius` (the boat stays outside it).
+  harbour: { bearing: -42, distance: 0.2, radius: 0.34, triggerRadius: 1.15 },
 }
 
 export const WORLD_PALETTE = {

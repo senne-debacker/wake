@@ -34,6 +34,15 @@ export function chosenWorldId() {
   }
 }
 
+// The developer panel's choice is dropped when the player sails to a world by buying a chart.
+export function clearWorldChoice() {
+  try {
+    sessionStorage.removeItem(WORLD_KEY)
+  } catch {
+    // nothing to clear
+  }
+}
+
 // Remembers the choice and reloads.
 export function chooseWorld(id) {
   try {

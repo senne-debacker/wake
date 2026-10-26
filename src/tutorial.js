@@ -49,7 +49,7 @@ const STEPS = [
   },
   {
     id: 'finish',
-    text: (c) => (c.touch ? 'Every catch goes in your <b>logbook</b> (top left). Tap the anchor again to sail on. Good luck!' : `Every catch goes in your <b>logbook</b> (${kbd('B')}). Lift the anchor with ${SPACE} to sail on. Good luck!`),
+    text: (c) => (c.touch ? 'Every catch goes in your <b>logbook</b> (top left) and your hold. Sell it at the <b>harbour</b> dock: drop the anchor beside it. Good luck!' : `Every catch goes in your <b>logbook</b> (${kbd('B')}) and your hold. Sell it at the <b>harbour</b> dock: drop the anchor beside it. Good luck!`),
     after: 12,
   },
 ]

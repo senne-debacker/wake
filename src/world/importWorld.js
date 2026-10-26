@@ -1,6 +1,7 @@
 import { Vector3, Quaternion, Box3, Raycaster, Mesh } from 'three/webgpu'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { PLANET, WORLD, BOAT } from '../config.js'
+import { fromStart } from './layout.js'
 import { islandFrame, shorelineFromContour, CONTOUR_COUNT } from '../physics/islandShape.js'
 
 // A world made in Blender (see blender/WORLDS.md) read into the same structure as world/layout.js builds,
@@ -9,7 +10,8 @@ import { islandFrame, shorelineFromContour, CONTOUR_COUNT } from '../physics/isl
 //   Trees, Rocks                meshes standing on the sea; the Rocks collide (icebergs are rocks too)
 //   Lighthouse                  an empty or group: where the (generated) lighthouse stands
 //   Buoys > Buoy_nn             where the (generated, floating) buoys are
-//   Markers > Start             the boat's start; its -Z is the bow. FishingSpot_n, Open_Ocean (extras: radius)
+//   Markers > Start             the boat's start; its -Z is the bow. FishingSpot_n, Open_Ocean (extras: radius), and
+//                               optionally Harbour: where the dock goes (else near the start on clear water)
 // The coastline of every island is measured from its mesh (rays down onto the land, outwards from the
 // island's centre), so the collisions follow what you see.
 //
@@ -73,10 +75,34 @@ export function layoutFromScene(scene) {
   }
   const trees = (find(scene, 'Trees')?.children ?? []).filter((mesh) => mesh.isMesh)
 
+  // ---- the harbour: a `Harbour` marker, else near the start where nothing stands --------------------------
+  const harbourNode = find(scene, 'Harbour')
+  const arc = (a, b) => Math.acos(Math.min(1, Math.max(-1, a.dot(b)))) * R
+  const clearOfLand = (dir) =>
+    [...islands.map((i) => [i.dir, i.shape.maxShoreline]), ...rocks.map((r) => [r.dir, r.radius])].every(([centre, extent]) => arc(dir, centre) > extent + WORLD.harbour.radius + BOAT.shoreMargin + 0.5) &&
+    buoys.every((b) => arc(dir, b.dir) > 0.8) &&
+    fishingSpots.every((spot) => arc(dir, spot.dir) > 1.1)
+  let harbourDir = harbourNode ? direction(harbourNode) : null
+  if (!harbourDir) {
+    // near the start, on the port side first; the first place that is clear of land, buoys and fishing spots
+    search: for (const distance of [WORLD.harbour.distance, WORLD.harbour.distance * 1.4, WORLD.harbour.distance * 1.8]) {
+      for (const bearing of [WORLD.harbour.bearing, -WORLD.harbour.bearing, -90, 90, 180, -135, 135, -20, 20]) {
+        const candidate = fromStart(start, bearing, distance)
+        if (clearOfLand(candidate)) {
+          harbourDir = candidate
+          break search
+        }
+      }
+    }
+    harbourDir ??= fromStart(start, WORLD.harbour.bearing, WORLD.harbour.distance)
+  }
+  const harbour = { dir: harbourDir, heading: new Vector3(1, 0, 0) }
+
   // ---- what the rest of the game reads (as in world/layout.js) -------------------------------------------
   const colliders = [
     ...islands.map((island) => ({ kind: 'island', dir: island.dir, shape: island.shape, reach: island.shape.maxShoreline + BOAT.shoreMargin * 2 })),
     ...rocks.map((rock) => ({ kind: 'circle', dir: rock.dir, radius: rock.radius + BOAT.shoreMargin, reach: rock.radius + BOAT.shoreMargin * 2 })),
+    { kind: 'circle', dir: harbour.dir, radius: WORLD.harbour.radius + BOAT.shoreMargin, reach: WORLD.harbour.radius + BOAT.shoreMargin * 2 }, // the dock
   ]
   // The water shader draws shore foam round at most WORLD.maxBodies bodies: every island, then the biggest rocks.
   const bodies = [
@@ -93,6 +119,7 @@ export function layoutFromScene(scene) {
     bodies,
     ocean,
     fishingSpots,
+    harbour,
     imported: { scene, trees, lighthouse },
   }
 }
