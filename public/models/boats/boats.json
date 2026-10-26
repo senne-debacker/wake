@@ -3,36 +3,36 @@
     "id": "dinghy",
     "name": "Patched Dinghy",
     "description": "A leaky rowing boat with a rusty outboard: cheap, small and nobody's pride.",
-    "speed": "slow",
-    "handling": "nimble",
     "special": "the cheapest boat; open hull with no cabin, so no windows glow at night (only the bow lantern)",
-    "file": "models/boats/dinghy.glb"
+    "file": "models/boats/dinghy.glb",
+    "speed": "slow",
+    "handling": "nimble"
   },
   {
     "id": "sloop",
     "name": "Classic Sloop",
     "description": "A white wooden sailboat with brass portholes and a red-striped mainsail.",
-    "speed": "medium",
-    "handling": "medium",
     "special": "tallest boat (mast 1.08 above the waterline) with a deep keel (0.25 below); a red pennant flies at the masthead",
-    "file": "models/boats/sloop.glb"
+    "file": "models/boats/sloop.glb",
+    "speed": "medium",
+    "handling": "medium"
   },
   {
     "id": "speedboat",
     "name": "Red Runabout",
     "description": "A low deep-V speedboat with twin outboards and a racing stripe.",
-    "speed": "fast",
-    "handling": "nimble",
     "special": "the fastest boat; low and open, so it has no flag and no windows that glow (the nav light is the lamp)",
-    "file": "models/boats/speedboat.glb"
+    "file": "models/boats/speedboat.glb",
+    "speed": "fast",
+    "handling": "nimble"
   },
   {
     "id": "yacht",
     "name": "Gilded Yacht",
     "description": "A navy and gold motor yacht with two decks, a hot tub and chrome railings.",
-    "speed": "medium",
-    "handling": "heavy",
     "special": "the most expensive boat; its window bands and portholes glow warm when the lamp is on, and a gold flag flies at the stern",
-    "file": "models/boats/yacht.glb"
+    "file": "models/boats/yacht.glb",
+    "speed": "medium",
+    "handling": "heavy"
   }
 ]

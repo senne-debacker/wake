@@ -1,7 +1,7 @@
 import { BOAT } from './config.js'
 
 // The boats. The first one is the game's own fishing boat (the built-in model, or public/models/boat.glb);
-// the others come from public/models/boats/boats.json (made from the boat cards by scripts/buildBoats.mjs).
+// the others come from public/models/boats/boats.json (made from the boat cards by scripts/buildModelLists.mjs).
 // A boat changes three things: its look (the model), how big its hull is (measured from the model) and how
 // it handles (the card's speed and handling words, as factors on the BOAT numbers in config.js).
 //

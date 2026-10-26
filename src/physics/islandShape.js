@@ -77,6 +77,16 @@ export function createIslandShape(island) {
     }
   }
 
+  const { shorelineAt, shorelineSlope, maxShoreline } = shorelineFromContour(contour)
+
+  return { centre, t1, t2, outer, pointAt, shorelineAt, shorelineSlope, maxShoreline }
+}
+
+// A table of shoreline distances (CONTOUR_SAMPLES of them, one per bearing, world units from the island's
+// centre) becomes the lookups the collision needs. Used for the generated islands and for islands imported
+// from a world file (world/importWorld.js).
+export const CONTOUR_COUNT = CONTOUR_SAMPLES
+export function shorelineFromContour(contour) {
   // Tidy the table so the collision behaves: take the largest value among the neighbours (so a
   // detached bump of land is not skipped) and blur it a little (so there are no needle-sharp
   // spikes, whose normals would point sideways).
@@ -101,5 +111,5 @@ export function createIslandShape(island) {
     return (shorelineAt(theta + e) - shorelineAt(theta - e)) / (2 * e)
   }
 
-  return { centre, t1, t2, outer, pointAt, shorelineAt, shorelineSlope, maxShoreline: Math.max(...contour) }
+  return { shorelineAt, shorelineSlope, maxShoreline: Math.max(...contour) }
 }

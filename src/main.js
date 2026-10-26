@@ -17,6 +17,8 @@ import { createWeather } from './world/weather.js'
 import { createWind } from './world/wind.js'
 import { createDisplay } from './display.js'
 import { loadBoats } from './boats.js'
+import { loadWorlds, chosenWorldId } from './worlds.js'
+import { importWorldLayout } from './world/importWorld.js'
 import { createTutorial } from './tutorial.js'
 import { setupTouchMode, setupStick, isTouch } from './touch.js'
 import { setupTilt } from './tilt.js'
@@ -87,7 +89,18 @@ async function main() {
   const { sun, moon, fill } = createLighting()
   const boat = createBoat()
   await boat.ready // your own boat model (public/models/boat.glb), if there is one, replaces the built-in boat
-  const layout = createLayout() // where islands, rocks and buoys are (also used for collisions)
+  // Where islands, rocks and buoys are (also used for collisions): the game's own world, or a world made in Blender that the
+  // developer panel asked for (src/worlds.js, world/importWorld.js). A world that cannot be read falls back to the own one.
+  const worlds = await loadWorlds()
+  const wantedWorld = worlds.find((entry) => entry.id === chosenWorldId())
+  let layout
+  try {
+    layout = wantedWorld?.file ? await importWorldLayout(wantedWorld.file) : createLayout()
+  } catch (error) {
+    console.error(`World "${wantedWorld?.id}" could not be read:`, error)
+    layout = createLayout()
+  }
+  const activeWorld = layout.imported ? wantedWorld : worlds[0]
   const world = createWorld(layout)
   const spots = createFishingSpots(layout.fishingSpots) // patches of bubbling water: drop the anchor on one to fish
   const sky = createSky()
@@ -244,7 +257,7 @@ async function main() {
     rig.snap()
   }
   const boats = await loadBoats() // the game's own boat and the ones of public/models/boats (dev panel: Boat)
-  const dev = createDevMode({ interaction, clock, atmosphere, boat, boats, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState: () => state }) // ?dev + code: weather, time, boat and fishing tools
+  const dev = createDevMode({ interaction, clock, atmosphere, boat, boats, worlds, activeWorld, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState: () => state }) // ?dev + code: weather, time, boat and fishing tools
   const cursor = createCursorHider()
   // The clickable HUD: every button triggers the same action as its key; buttons marked data-hold
   // (horn, hold-for-time) act while the mouse button is down.

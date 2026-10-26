@@ -35,4 +35,23 @@ sphere: keep the `Water` sphere as it is and change what stands on it.
 5. Write a world card next to the file: `id`, `name`, one line of description, and anything special
    (it only rains here, it is always night, ...).
 
-Send me the first one and I will write the importer for it and add a world picker to the dev version.
+## Putting a new world in the game
+
+Export it as glTF Binary the same way as the boats (+Y Up, Apply Modifiers) and save it as
+`public/models/worlds/<id>.glb`, with a card `<id>.txt` next to it (`id`, `name`, `description`, and an
+`anything special:` that may go on indented lines below). Restart the dev server and pick it in the developer
+panel under **World**: the page reloads into that world (the choice is kept for the tab; "Lock developer
+mode" goes back to the original).
+
+What the game takes from the file (src/world/importWorld.js):
+- `Islands`: each mesh is shown as it is and measured for the coastline (rays onto the land, outwards from the
+  island's centre), so the collisions follow the mesh. The custom properties are only a fallback.
+- `Trees` and `Rocks`: shown as they are. **Every mesh in `Rocks` collides**, like an iceberg or a boulder (its
+  size is the mesh's biggest extent).
+- `Lighthouse`, `Buoys`: only the positions: the lighthouse (with its sweeping light) and the floating buoys are
+  the game's own.
+- `Markers`: `Start` (the bow points along its -Z, +Y in Blender), up to **6** `FishingSpot_n`, `Open_Ocean`.
+- The `Water` sphere in the file is ignored: the game draws its own sea (the same sphere, radius 5).
+- The shore foam goes round at most **32** bodies: every island, then the biggest rocks.
+- Not read yet: a mood for the world (sea colour, snow instead of rain, the sun). The card can describe it.
+

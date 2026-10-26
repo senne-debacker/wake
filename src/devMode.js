@@ -1,5 +1,6 @@
 import { FISH_SPECIES } from './fishing/fishDatabase.js'
 import { applyBoatStats } from './boats.js'
+import { chooseWorld } from './worlds.js'
 
 // Developer mode. The normal game has no way to force the weather or to run the clock: those keys
 // (1 2 3 4, T) and everything else in here are locked. Open the page with `?dev`, type the code on the
@@ -12,7 +13,7 @@ import { applyBoatStats } from './boats.js'
 const CODE = '1815'
 const STORAGE_KEY = 'wake.dev'
 
-export function createDevMode({ interaction, clock, atmosphere, boat, boats, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState }) {
+export function createDevMode({ interaction, clock, atmosphere, boat, boats, worlds, activeWorld, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState }) {
   const $ = (id) => document.getElementById(id)
   const gate = $('dev-gate')
   const panel = $('dev')
@@ -117,6 +118,13 @@ export function createDevMode({ interaction, clock, atmosphere, boat, boats, wor
   }
   const percent = (v) => `${Math.round(v * 100)}%`
   const times = (v) => `x${v.toFixed(2)}`
+
+  // World (worlds.js): the game's own or one made in Blender. The whole world is built at start-up, so a change reloads the page.
+  const worldSelect = $('dev-world')
+  for (const entry of worlds) worldSelect.append(new Option(entry.name, entry.id))
+  worldSelect.value = activeWorld.id
+  $('dev-world-info').textContent = `${activeWorld.description}${activeWorld.special ? ` (${activeWorld.special.slice(0, 160)}${activeWorld.special.length > 160 ? '...' : ''})` : ''}`
+  worldSelect.addEventListener('change', () => chooseWorld(worldSelect.value))
 
   // Weather: the presets, and three sliders that take over ('custom') as soon as one is moved.
   const weatherButtons = [...panel.querySelectorAll('[data-weather]')]
@@ -250,6 +258,7 @@ export function createDevMode({ interaction, clock, atmosphere, boat, boats, wor
     windAuto.checked = true
     speedFactor = 1
     selectBoat(boats[0].id) // back to the game's own boat
+    if (activeWorld.id !== worlds[0].id) chooseWorld(worlds[0].id) // ... and the game's own world (the page reloads)
     fpsRead.hidden = true
     document.body.classList.remove('dev-nohud')
     for (const id of ['dev-speed', 'dev-clock-speed', 'dev-fog', 'dev-boat-size', 'dev-buoy-size']) $(id).value = 1

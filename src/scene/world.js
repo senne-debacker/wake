@@ -42,6 +42,7 @@ function scatter(island, terrain, count, [minU, maxU], random, { minHeight, maxH
 // trees, rocks), the lighthouse and the buoys. Also tells the water shader where
 // the shores are. `update` animates the lighthouse and buoys.
 export function createWorld(layout) {
+  if (layout.imported) return createImportedWorld(layout)
   const group = new Group()
   group.name = 'world'
   const random = mulberry32(WORLD.seed + 1)
@@ -124,6 +125,45 @@ export function createWorld(layout) {
     setBuoyScale: buoys.setScale, // dev panel
     // `darkness` 0..1: lamps on the lighthouse and buoys switch on with it.
     // Returns how hard the boat hit a buoy this frame (0 = none).
+    update(elapsed, storm, darkness, boat, delta) {
+      lighthouse?.update(elapsed, darkness)
+      return buoys.update(elapsed, storm, darkness, boat, delta)
+    },
+  }
+}
+
+// A world made in Blender (world/importWorld.js): the islands, trees and rocks of the file are shown as they are;
+// the lighthouse and the buoys are the game's own (they sweep and float), placed where the file says.
+function createImportedWorld(layout) {
+  const group = new Group()
+  group.name = 'world'
+  const { scene, lighthouse: place } = layout.imported
+  for (const name of ['Water', 'Lighthouse', 'Buoys', 'Markers']) scene.getObjectByName(name)?.removeFromParent() // (the water, the lighthouse and the buoys are the game's own)
+  scene.traverse((node) => {
+    if (!node.isMesh) return
+    node.frustumCulled = false
+    for (const material of [node.material].flat()) material.flatShading = true // the low-poly look
+  })
+  group.add(scene)
+
+  let lighthouse = null
+  if (place) {
+    lighthouse = createLighthouse()
+    lighthouse.root.position.copy(place.position)
+    lighthouse.root.quaternion.copy(place.quaternion)
+    group.add(lighthouse.root)
+  }
+
+  // Shore foam in the water shader.
+  layout.bodies.forEach((body, i) => uniforms.shoreBodies.array[i].set(body.dir.x, body.dir.y, body.dir.z, body.radius))
+
+  const buoys = createBuoys(layout.buoys)
+  group.add(buoys.group)
+
+  return {
+    group,
+    lighthouse,
+    setBuoyScale: buoys.setScale, // dev panel
     update(elapsed, storm, darkness, boat, delta) {
       lighthouse?.update(elapsed, darkness)
       return buoys.update(elapsed, storm, darkness, boat, delta)
