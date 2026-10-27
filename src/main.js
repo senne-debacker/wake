@@ -5,6 +5,7 @@ import {
 import { PALETTE, INTRO, BOAT, FISHING, CAMERA, PLANET, WORLD, waterEdge } from './config.js'
 import { uniforms } from './uniforms.js'
 import { createPlanet } from './scene/planet.js'
+import { createAdaptiveResolution } from './adaptive.js'
 import { createFish } from './scene/fish.js'
 import { createSmoke } from './scene/smoke.js'
 import { createLighting } from './scene/lighting.js'
@@ -70,6 +71,15 @@ async function main() {
       renderer.setSize(innerWidth, innerHeight)
     } else if (key === 'glow') post.setGlow(value === 'on')
     else if (key === 'hud') hud.setSize(value)
+  })
+  // Auto resolution (adaptive.js): the pixel ratio follows how fast this computer draws, while the Resolution setting is "Auto".
+  const adaptive = createAdaptiveResolution({
+    onChange: (ratio) => {
+      display.setAutoRatio(ratio)
+      if (display.get('resolution') !== 'auto') return
+      renderer.setPixelRatio(ratio)
+      renderer.setSize(innerWidth, innerHeight)
+    },
   })
   const loader = createLoader()
   await loader.stage(0.08, 'Starting the engine')
@@ -384,6 +394,7 @@ async function main() {
 
   renderer.setAnimationLoop((now) => {
     const delta = Math.min((now - last) / 1000, 0.1) // clamp after tab switches
+    if (display.get('resolution') === 'auto') adaptive.frame(now - last)
     last = now
     elapsed += delta
 

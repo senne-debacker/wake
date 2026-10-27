@@ -2585,3 +2585,8 @@ body.touch .logbook-tab {
 body.touch .logbook-tab small {
   font-size: 13px;
 }
+
+/* a phone starts on Low resolution and stays there: no Auto button on it */
+body.touch [data-setting='resolution'] [data-value='auto'] {
+  display: none;
+}
