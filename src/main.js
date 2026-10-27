@@ -6,6 +6,7 @@ import { PALETTE, INTRO, BOAT, FISHING, CAMERA, PLANET, WORLD, waterEdge } from 
 import { uniforms } from './uniforms.js'
 import { createPlanet } from './scene/planet.js'
 import { createFish } from './scene/fish.js'
+import { createSmoke } from './scene/smoke.js'
 import { createLighting } from './scene/lighting.js'
 import { createBoat } from './scene/boat.js'
 import { createSky } from './scene/sky.js'
@@ -120,7 +121,9 @@ async function main() {
   const rain = createRain()
   const fish = createFish(renderer, layout)
   const planet = createPlanet(fish, QUALITY.waterDetail) // the water paints the fish's shadows
-  scene.add(sky.mesh, planet, world.group, spots.mesh, clouds.group, rain.mesh, sun, moon, fill, boat.root)
+  const smoke = createSmoke() // puffs from the chimney of a boat that has one (scene/smoke.js)
+  const chimney = new Vector3()
+  scene.add(sky.mesh, planet, world.group, spots.mesh, clouds.group, rain.mesh, sun, moon, fill, boat.root, smoke.mesh)
 
   const clock = createClock()
   const weather = createWeather()
@@ -236,6 +239,7 @@ async function main() {
   }
   const interaction = setupInteraction({
     onMenu: () => (state === 'playing' ? setState('paused') : state === 'paused' ? (menu.back() ? null : setState('playing')) : state === 'menu' ? menu.back() : null), // on a page of the pause screen Esc goes back to the list; the Settings page on the start screen closes
+    onMute: toggleSound, // M, and the sound tab of the HUD (it was dropped when the start screen got its Settings sheet)
     onFullscreen: () => fullscreen.toggle(),
     onLogbook: () => {
       if (state !== 'playing') return
@@ -407,6 +411,7 @@ async function main() {
     fish.update(delta, Math.min(1.6, boatState.vel.length() / BOAT.maxSpeed), input.anchored) // the schools of fish swim on the GPU
     wind.update(elapsed, weather.levels.storm)
     boat.update(delta, input.lights, input.horn, elapsed, { angle: wind.bearing - (compassHeading(boatState) * Math.PI) / 180, strength: wind.strength }) // the flag streams downwind
+    smoke.update(running || state === 'menu' || state === 'starting' ? delta : 0, boat.smokePoint(chimney), boatState.vel.length() / BOAT.maxSpeed) // (frozen with the game, but alive on the title screen)
     // The lamp's pool of light on the water (tsl/lampPool.js) follows the boat over the curved surface.
     uniforms.lampDir.value.copy(boatState.dir)
     uniforms.lampForward.value.copy(boatState.heading).addScaledVector(boatState.dir, -boatState.heading.dot(boatState.dir)).normalize()

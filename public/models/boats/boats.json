@@ -33,6 +33,18 @@
     "hold": 15
   },
   {
+    "id": "tug",
+    "name": "Little Tug",
+    "description": "A stubby red harbour tug with a cream wheelhouse, round portholes and a striped funnel.",
+    "special": "a bit longer and broader than the starter boat (hull 1.05 long, 0.43 wide); its wheelhouse windows and portholes glow warm when the lamp is on, and a teal pennant flies from the mast",
+    "file": "models/boats/tug.glb",
+    "speed": "medium",
+    "handling": "heavy",
+    "price": 700,
+    "hold": 25,
+    "light": 0.8
+  },
+  {
     "id": "yacht",
     "name": "Gilded Yacht",
     "description": "A navy and gold motor yacht with two decks, a hot tub and chrome railings.",

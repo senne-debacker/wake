@@ -157,6 +157,7 @@ export function createBoat() {
   model.add(cone.mesh)
 
   let level = 0 // 0 = off, 1 = on; eased so the lamp warms up instead of popping
+  let shine = 1 // how strongly this boat's lamp lights the world (the spot, the cone and the pool on the water; its card's `light`)
   let hornLevel = 0
 
   // What update() animates. For the built-in boat: the horn, the horn bell and the glowing
@@ -166,7 +167,7 @@ export function createBoat() {
   // Every boat that has been shown, by id: the object in the scene, what update() animates, where its
   // bow lamp is and (for the extra boats) how big its hull is. The first is the game's own boat.
   const lampHome = [...L.lampPosition]
-  const variants = new Map([['fishing-boat', { object: look, parts, lamp: lampHome, hull: null }]])
+  const variants = new Map([['fishing-boat', { object: look, parts, lamp: lampHome, hull: null, smoke: null }]])
   let current = variants.get('fishing-boat')
 
   // The lamp's light and its beam sit at the boat's lamp position (the Bow_Lamp empty of a model).
@@ -182,7 +183,7 @@ export function createBoat() {
     parts = variant.parts
     placeLamp(variant.lamp)
   }
-  const variantOf = (loaded) => ({ object: loaded.root, parts: { flag: loaded.flag, horn: loaded.horn, bell: loaded.bell, glow: loaded.glow }, lamp: loaded.lamp ?? lampHome, hull: loaded.hull })
+  const variantOf = (loaded) => ({ object: loaded.root, parts: { flag: loaded.flag, horn: loaded.horn, bell: loaded.bell, glow: loaded.glow }, lamp: loaded.lamp ?? lampHome, hull: loaded.hull, smoke: loaded.smoke })
 
   // Resolves when the model file (if there is one) has replaced the built-in boat.
   const ready = loadBoatModel(BOAT.model.file, BOAT.model.fitLength).then((loaded) => {
@@ -196,10 +197,16 @@ export function createBoat() {
   return {
     root,
     get lampLevel() {
-      return level // 0..1, how far the lamp has faded on
+      return level * shine // 0..1, how far the lamp has faded on (and how bright this boat's lamp is)
     },
     model,
     ready,
+    // Writes the world position of the chimney's mouth into `target` and returns it; null for a boat without a chimney.
+    smokePoint(target) {
+      if (!current.smoke) return null
+      model.updateWorldMatrix(true, false)
+      return model.localToWorld(target.set(...current.smoke))
+    },
     // Shows another boat (an entry of boats.js), loading its model the first time. Resolves with
     // { hull } (null for the game's own boat), or null when the model could not be loaded.
     async setBoat(entry) {
@@ -211,6 +218,7 @@ export function createBoat() {
         variants.set(entry.id, variant)
       }
       show(variant)
+      shine = entry.light ?? 1
       return { hull: variant.hull }
     },
     // Dev panel: draws the boat bigger or smaller (the hull used for collisions stays as it is).
@@ -225,8 +233,8 @@ export function createBoat() {
       parts.bell?.scale.setScalar(1 + 0.1 * hornLevel * Math.sin(time * 75)) // the bell trembles while it sounds
       if (parts.horn) parts.horn.rotation.z = 0.025 * hornLevel * Math.sin(time * 61)
       level += ((lightsOn ? 1 : 0) - level) * (1 - Math.exp(-delta * 6))
-      spot.intensity = L.intensity * level
-      cone.level.value = level
+      spot.intensity = L.intensity * level * shine
+      cone.level.value = level * shine
       for (const { material, strength } of parts.glow) material.emissiveIntensity = strength * level
     },
   }
@@ -240,6 +248,7 @@ export function createBoat() {
 // camera keep fitting) when `fitLength` is on (the game's own boat); the other boats keep their size and
 // the hull is measured from them.
 //   an empty named "Bow_Lamp"                 where the bow lamp's light and its beam start
+//   an empty named "Smoke" (or a node "Funnel..." / "Chimney..." / "Stack...")  the chimney: smoke comes out of it (scene/smoke.js)
 // Roles are found by name:
 //   a node whose name starts with "Horn"      trembles while the horn sounds (its child named
 //                                             "Bell..." grows and shrinks)
@@ -270,6 +279,20 @@ async function loadBoatModel(file, fitLength) {
   const lampNode = root.getObjectByName('Bow_Lamp')
   const lamp = lampNode ? lampNode.getWorldPosition(new Vector3()).toArray() : null
 
+  // The chimney: an empty named "Smoke...", else the top of the node named "Funnel...", "Chimney..." or "Stack...".
+  let smoke = null
+  let smokeNode = null
+  let funnelNode = null
+  root.traverse((node) => {
+    if (!smokeNode && /^smoke/i.test(node.name)) smokeNode = node
+    if (!funnelNode && /^(funnel|chimney|stack)/i.test(node.name)) funnelNode = node
+  })
+  if (smokeNode) smoke = smokeNode.getWorldPosition(new Vector3()).toArray()
+  else if (funnelNode) {
+    const box = new Box3().setFromObject(funnelNode)
+    smoke = [(box.min.x + box.max.x) / 2, box.max.y, (box.min.z + box.max.z) / 2]
+  }
+
   let horn = null
   let bell = null
   const glow = []
@@ -291,5 +314,5 @@ async function loadBoatModel(file, fitLength) {
       glow.push({ material, strength: kind.startsWith('lamp') ? 0.4 : 0.45 })
     }
   })
-  return { root, horn, bell, glow, flag: setupFlag(root), hull, lamp }
+  return { root, horn, bell, glow, flag: setupFlag(root), hull, lamp, smoke }
 }

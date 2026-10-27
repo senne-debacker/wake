@@ -357,12 +357,19 @@ export function createAudio() {
     setMusicVolume(value) {
       settings.music = clamp(value)
       save()
-      if (ctx) bus.music.gain.setTargetAtTime(settings.music * (paused ? 0.4 : 1), ctx.currentTime, 0.1)
+      if (ctx) {
+        // (the fade-in at start() is still scheduled for its end value: drop it, or it would put the old volume back)
+        bus.music.gain.cancelScheduledValues(ctx.currentTime)
+        bus.music.gain.setTargetAtTime(settings.music * (paused ? 0.4 : 1), ctx.currentTime, 0.1)
+      }
     },
     setSfxVolume(value) {
       settings.sfx = clamp(value)
       save()
-      if (ctx) bus.sfx.gain.setTargetAtTime(settings.sfx, ctx.currentTime, 0.1)
+      if (ctx) {
+        bus.sfx.gain.cancelScheduledValues(ctx.currentTime)
+        bus.sfx.gain.setTargetAtTime(settings.sfx, ctx.currentTime, 0.1)
+      }
     },
     setMuted(value) {
       settings.muted = value

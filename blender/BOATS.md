@@ -52,6 +52,7 @@ as `wake-boat.glb` next to it.
     handling:     heavy / medium / nimble       (the current boat is medium)
     price:        900                            (coins in the harbour shop; default 600)
     hold:         30                             (kg of fish it carries; default 20)
+    light:        0.8                            (how brightly its lamp shines on the sea and the beam; default 1)
     anything special: e.g. "carries a bigger crate", "louder horn", "starts at night"
 
 ## What I do with it
