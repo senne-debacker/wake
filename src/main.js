@@ -2,7 +2,7 @@ import {
   WebGPURenderer, Scene, PerspectiveCamera, Color, Vector3, ACESFilmicToneMapping,
 } from 'three/webgpu'
 
-import { PALETTE, INTRO, BOAT, FISHING, CAMERA, PLANET, WORLD } from './config.js'
+import { PALETTE, INTRO, BOAT, FISHING, CAMERA, PLANET, WORLD, waterEdge } from './config.js'
 import { uniforms } from './uniforms.js'
 import { createPlanet } from './scene/planet.js'
 import { createFish } from './scene/fish.js'
@@ -107,7 +107,7 @@ async function main() {
   }
   const activeWorld = layout.imported ? wantedWorld : worlds[0]
   const dock = layout.harbour // where the harbour is: anchor next to it to trade
-  const world = createWorld(layout)
+  const world = createWorld(layout, waterEdge(QUALITY.waterDetail))
   const spots = createFishingSpots(layout.fishingSpots) // patches of bubbling water: drop the anchor on one to fish
   const sky = createSky()
   const clouds = createClouds()

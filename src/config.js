@@ -8,6 +8,10 @@ export const PLANET = {
   // so the planet has 20 * (detail + 1)^2 triangles.
   detail: 32,
 }
+// The length of a triangle's edge on the sea at a given icosphere detail (world units). An icosahedron's edge spans
+// 63.4 degrees; each edge is split into (detail + 1). The islands are meshed with the same edge length.
+export const waterEdge = (detail, radius = PLANET.radius) => (radius * 2 * Math.asin(1 / Math.sqrt(1 + ((1 + Math.sqrt(5)) / 2) ** 2))) / (detail + 1)
+
 
 export const WAVES = {
   frequency: 2.4, // how many noise cells fit on the unit sphere

@@ -41,8 +41,9 @@ function scatter(island, terrain, count, [minU, maxU], random, { minHeight, maxH
 
 // Builds everything that stands on or floats around the planet: islands (terrain,
 // trees, rocks), the lighthouse and the buoys. Also tells the water shader where
-// the shores are. `update` animates the lighthouse and buoys.
-export function createWorld(layout) {
+// the shores are. `update` animates the lighthouse and buoys. `edge`: the triangle edge of the islands (world
+// units), the same as the sea's so they match (`waterEdge(QUALITY.waterDetail)`); an imported world keeps its own.
+export function createWorld(layout, edge) {
   if (layout.imported) return createImportedWorld(layout)
   const group = new Group()
   group.name = 'world'
@@ -54,7 +55,7 @@ export function createWorld(layout) {
   let lighthouse = null
 
   for (const island of layout.islands) {
-    const terrain = createTerrain(island)
+    const terrain = createTerrain(island, edge)
     group.add(terrain.mesh)
 
     // Trees on the plateau and upper slopes; the lighthouse island keeps its centre free.

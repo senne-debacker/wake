@@ -437,6 +437,10 @@ User asked for: effects in planet view (rain, ripples, fog, fishing particles), 
 ### Step 50 — Tidy the blender folder  *(done, on `dev`)*
 - [x] `blender/` is the workshop (the game never reads it), `public/models/` is what the game loads. `.blend` files and the two starting-point exports now sit in `blender/boats/` (`boat.blend`, `wake-boat.glb`) and `blender/worlds/` (`snow-world.blend`, `wake-world.glb`). `npm run export:world` writes `blender/worlds/wake-world.glb`; paths updated in `exportWorld.mjs`, `tests/world.check.mjs`, `BOATS.md`, `public/models/README.txt`, `blender/README.txt`. `*.blend1` (Blender's backups) is git-ignored.
 
+### Step 51 — Islands meshed as finely as the sea  *(done, on `dev`)*
+- [x] After the finer water (Step 49) the islands' big triangles (10 rings x 28 segments: about 0.2 x 0.45 units) did not match the sea's (0.085). `scene/terrain.js` now picks its rings from an `edge` length: rings `edge` apart, each ring with as many vertices as fit round it (at least 6), neighbouring rings zipped together, so triangles are about `edge` everywhere (no slivers near the centre). `waterEdge(detail)` in `config.js` is the sea's triangle edge (detail 64: 0.085, 40: 0.135, 32: 0.168); `createWorld(layout, edge)` takes it and `main.js` passes `waterEdge(QUALITY.waterDetail)`, so a phone gets the coarser islands with its coarser sea. The 7 generated islands are about 12,200 triangles together. Coastlines are the same shape (the collision shape is untouched); the finer grid just shows more of the noise
+- Not changed: islands of an imported world (`public/models/worlds/*.glb`, e.g. Frostmere) keep the triangles they were exported with: make them finer in Blender (or re-export). The developer panel's Water detail picker re-cuts only the sea; the islands follow after a reload. `blender/worlds/wake-world.glb` was not re-made, so it still has the old coarse islands: run `npm run export:world` for a finer template
+
 ## Final requirements check (re-run before handing in)
 
 ```
