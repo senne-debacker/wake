@@ -1,4 +1,4 @@
-// World import checks: a world file (blender/wake-world.glb, public/models/worlds/*.glb) is read into the layout
+// World import checks: a world file (blender/worlds/wake-world.glb, public/models/worlds/*.glb) is read into the layout
 // the game uses. The original world is the reference: reading its exported file must give back the
 // coastlines, rocks and markers of the generated layout.
 import { readFileSync } from 'node:fs'
@@ -32,7 +32,7 @@ const arc = (a, b) => Math.acos(Math.min(1, Math.max(-1, a.dot(b)))) * R
 // ---- the original world, exported and read back --------------------------------------------------------------
 {
   const generated = createLayout()
-  const read = await load('blender/wake-world.glb')
+  const read = await load('blender/worlds/wake-world.glb')
   // The generated world's harbour: clear of islands, rocks, buoys and fishing spots, close to the start.
   {
     const dockClear = Math.min(...generated.colliders.slice(0, -1).map((c) => arc(generated.harbour.dir, c.dir) - (c.kind === 'island' ? c.shape.maxShoreline : c.radius)))

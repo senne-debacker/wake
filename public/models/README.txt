@@ -12,7 +12,7 @@ The game loads it automatically; without the file a low-poly dolphin built in co
 ----------------------------------------------------------------------------------------------
 Optional: your own boat.  Save it here as  boat.glb  and it replaces the built-in boat.
 
-Start from  blender/wake-boat.glb  (in the project root): File > Import > glTF 2.0 in Blender.
+Start from  blender/boats/wake-boat.glb  (in the project root): File > Import > glTF 2.0 in Blender.
 That is the current boat, every part named, so you can edit it or model a new one next to it.
 
 Rules for the model (Blender, Z up):

@@ -1,7 +1,7 @@
 // Exports the world the game builds (the sea, the islands, the trees and rocks, the lighthouse, the buoys,
 // the start position and the fishing spots) as a .glb that Blender can import:
 //
-//   npm run export:world        ->  blender/wake-world.glb
+//   npm run export:world        ->  blender/worlds/wake-world.glb
 //
 // It runs the game's own generator (world/layout.js + scene/world.js), so the file is what you see in the
 // game. The sea is the flat sphere (radius 5): the waves are drawn by the GPU on top of it while playing.
@@ -178,7 +178,7 @@ markers.add(ocean)
 const scene = new THREE.Scene()
 scene.add(out)
 const glb = await new GLTFExporter().parseAsync(scene, { binary: true, onlyVisible: false })
-const target = fileURLToPath(new URL('../blender/wake-world.glb', import.meta.url))
+const target = fileURLToPath(new URL('../blender/worlds/wake-world.glb', import.meta.url))
 writeFileSync(target, Buffer.from(glb))
 
 let triangles = 0

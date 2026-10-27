@@ -434,6 +434,9 @@ User asked for: effects in planet view (rain, ripples, fog, fishing particles), 
 - [x] The sea's icosphere is cut finer: `QUALITY.waterDetail` (`quality.js`) is 64 on a computer (84,500 triangles, was 21,780 at `PLANET.detail` 32) and 40 on a phone (33,620). `createPlanet(fish, detail)` takes it and `setWaterDetail(mesh, detail)` (`scene/planet.js`) re-cuts the sea at run time. The wave height is still the same function (CPU twin included), so the boat floats exactly as before; only the facets are smaller and show the waves in more detail
 - [x] Developer panel > View > Water detail: Coarse 32 (the old look) / Fine 48 / Finer 64 / Smooth 96; kept for the tab (`wake.dev.water`), reset by "Lock developer mode". Measured in headless Chrome: 60 fps at every level up to 188,180 triangles on this GPU (the frame rate is capped, so the real cost is not visible here); 96 is nearly smooth and loses the faceted look, 48 to 64 keeps it. NOT measured on a phone
 
+### Step 50 — Tidy the blender folder  *(done, on `dev`)*
+- [x] `blender/` is the workshop (the game never reads it), `public/models/` is what the game loads. `.blend` files and the two starting-point exports now sit in `blender/boats/` (`boat.blend`, `wake-boat.glb`) and `blender/worlds/` (`snow-world.blend`, `wake-world.glb`). `npm run export:world` writes `blender/worlds/wake-world.glb`; paths updated in `exportWorld.mjs`, `tests/world.check.mjs`, `BOATS.md`, `public/models/README.txt`, `blender/README.txt`. `*.blend1` (Blender's backups) is git-ignored.
+
 ## Final requirements check (re-run before handing in)
 
 ```

@@ -5,7 +5,7 @@ dashes (`trawler`, `sloop`, `old-tug`), and write a boat card (the last section)
 
 ## In Blender
 
-1. **Scale.** 1 Blender unit = 1 game unit. Import `blender/wake-boat.glb` into the same scene as a
+1. **Scale.** 1 Blender unit = 1 game unit. Import `blender/boats/wake-boat.glb` into the same scene as a
    reference and model next to it: it is 0.9 long and 0.38 wide. A bigger boat is simply bigger than it
    (a boat twice as long = 1.8). The game keeps the size you model, and measures the hull from it.
 2. **Orientation.** The bow points towards **+Y**: in Blender's Front view (numpad 1) the bow points away from you.
