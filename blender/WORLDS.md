@@ -40,7 +40,9 @@ sphere: keep the `Water` sphere as it is and change what stands on it.
 Export it as glTF Binary the same way as the boats (+Y Up, Apply Modifiers) and save it as
 `public/models/worlds/<id>.glb`, with a card `<id>.txt` next to it (`id`, `name`, `description`, and an
 `anything special:` that may go on indented lines below). Optional numbers: `price:` (what the chart of this world
-costs in the harbour; default 500) and `requires:` (the id of a boat the player must own first, e.g. `sloop`). Restart the dev server and pick it in the developer
+costs in the harbour; default 500) and `requires:` (the id of a boat the player must own first, e.g. `sloop`). `fish:` is the world's set of 32 fish
+(`home` or `frostmere`; no line = `home`): a world with its own fish needs a set in `src/fishing/species/`, see
+`src/fishing/fishDatabase.js` (10 common, 9 uncommon, 7 rare, 5 epic and exactly 1 legendary). Restart the dev server and pick it in the developer
 panel under **World**: the page reloads into that world (the choice is kept for the tab; "Lock developer
 mode" goes back to the original).
 

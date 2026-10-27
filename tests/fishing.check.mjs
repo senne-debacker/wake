@@ -1,7 +1,7 @@
 // Checks of the fishing rules, run with `npm run check`. No browser needed: the fish database, the
 // fight rules and the logbook's bookkeeping have no DOM in them. Exits with an error if a check fails.
 //
-//   1. database  16 species, 6 / 5 / 3 / 2 per rarity, clean SVGs, drop rates really are the drop rates
+//   1. database  32 species per world (10 / 9 / 7 / 5 / 1 per rarity), clean SVGs and svg files, drop rates really are the drop rates
 //   2. fight     the rules of the minigame: hold = progress slowly and tension quickly, release = tension
 //                drops, 100% tension snaps, 100% progress lands the fish, pulls are announced, a careful
 //                player can win at every difficulty and one that just holds cannot
@@ -9,12 +9,13 @@
 //   4. spots     where the fishing spots are (open water with room to anchor, deterministic, the rest of
 //                the world untouched) and how they behave (nearest, empty until midnight after a catch)
 
+import { existsSync } from 'node:fs'
 import { Vector3 } from 'three/webgpu'
 import { FISHING, PLANET } from '../src/config.js'
 import { createLayout } from '../src/world/layout.js'
 import { createFishingSpots } from '../src/scene/fishingSpots.js'
 import {
-  FISH_SPECIES, FISH_BY_ID, RARITIES, fishInRarity, rollRarity, rollFish, rollWeight, formatWeight, speciesWeights,
+  FISH_SPECIES, FISH_SETS, FISH_BY_ID, RARITIES, fishSet, fishInRarity, rollRarity, rollFish, rollWeight, formatWeight, speciesWeights,
 } from '../src/fishing/fishDatabase.js'
 import { createFight, stepFight } from '../src/fishing/fishingMinigame.js'
 import { createLogbookStore } from '../src/fishing/logbook.js'
@@ -34,14 +35,19 @@ const mulberry32 = (seed) => () => {
 
 // ---- 1. database -----------------------------------------------------------------------------------
 {
-  check('database: 16 species', FISH_SPECIES.length === 16, `${FISH_SPECIES.length}`)
-  const counts = Object.keys(RARITIES).map((rarity) => fishInRarity(rarity).length)
-  check('database: 6 common, 5 uncommon, 3 rare, 2 legendary', counts.join() === '6,5,3,2', counts.join(' / '))
+  check('database: 32 species in each world, 64 in all', Object.values(FISH_SETS).every((set) => set.length === 32) && FISH_SPECIES.length === 64 && Object.keys(FISH_SETS).join() === 'home,frostmere', `${FISH_SPECIES.length}`)
+  for (const [name, set] of Object.entries(FISH_SETS)) {
+    const counts = Object.keys(RARITIES).map((rarity) => fishInRarity(rarity, set).length)
+    check(`database: ${name} has 10 common, 9 uncommon, 7 rare, 5 epic and exactly 1 legendary`, counts.join() === '10,9,7,5,1', counts.join(' / '))
+  }
+  check('database: the Wake-Eater is the home waters\u2019 only legendary fish', fishInRarity('legendary', FISH_SETS.home).map((f) => f.id).join() === 'wake-eater')
+  check('database: every species knows its set, and no species is in two', FISH_SPECIES.every((f) => FISH_SETS[f.set].includes(f)) && FISH_SETS.home.every((f) => f.set === 'home') && FISH_SETS.frostmere.every((f) => f.set === 'frostmere'))
+  check('database: a missing or unknown fish set is the home waters', fishSet(undefined) === FISH_SETS.home && fishSet('nowhere') === FISH_SETS.home && fishSet('frostmere') === FISH_SETS.frostmere)
   check('database: every species has a known rarity', FISH_SPECIES.every((fish) => fish.rarity in RARITIES))
-  check('database: ids and names are unique', new Set(FISH_SPECIES.map((f) => f.id)).size === 16 && new Set(FISH_SPECIES.map((f) => f.name)).size === 16 && FISH_BY_ID.size === 16)
+  check('database: ids and names are unique', new Set(FISH_SPECIES.map((f) => f.id)).size === 64 && new Set(FISH_SPECIES.map((f) => f.name)).size === 64 && FISH_BY_ID.size === 64)
   check('database: ids are plain slugs (the logbook is saved under them)', FISH_SPECIES.every((f) => /^[a-z]+(-[a-z]+)*$/.test(f.id)))
   check('database: weight ranges are sane (0 < min < max)', FISH_SPECIES.every((f) => f.weight.length === 2 && f.weight[0] > 0 && f.weight[0] < f.weight[1]))
-  check('database: rarer fish can be heavier', Math.max(...fishInRarity('legendary').map((f) => f.weight[1])) > Math.max(...fishInRarity('common').map((f) => f.weight[1])) * 20)
+  check('database: rarer fish can be heavier', Object.values(FISH_SETS).every((set) => Math.max(...fishInRarity('legendary', set).map((f) => f.weight[1])) > Math.max(...fishInRarity('common', set).map((f) => f.weight[1])) * 20))
   check('database: every species has a description', FISH_SPECIES.every((f) => typeof f.description === 'string' && f.description.length > 20))
 
   // The pictures: inline SVG, same size, and nothing that could clash or run.
@@ -61,13 +67,14 @@ const mulberry32 = (seed) => () => {
     if (!/<(polygon|path|circle|ellipse)/.test(svg)) problems.push(`${fish.id}: empty picture`)
   }
   check('database: every picture is a clean, balanced 120 x 60 inline svg without ids, references or scripts', problems.length === 0, problems.join('; '))
+  check('database: every species has a SVG file in public/models/fish (npm run export:fish)', FISH_SPECIES.every((f) => existsSync(new URL(`../public/models/fish/${f.set}/${f.id}.svg`, import.meta.url))), FISH_SPECIES.filter((f) => !existsSync(new URL(`../public/models/fish/${f.set}/${f.id}.svg`, import.meta.url))).map((f) => f.id).join())
   check('database: drop rates add up to 1 and difficulty rises with rarity', Math.abs(Object.values(RARITIES).reduce((sum, r) => sum + r.rate, 0) - 1) < 1e-9 && Object.values(RARITIES).every((r, i, all) => i === 0 || (r.difficulty > all[i - 1].difficulty && r.rate < all[i - 1].rate)))
 
   // Rolling: the observed shares match the rates, every species can come up, weights stay in range.
   const random = mulberry32(7)
   const draws = 300000
-  const seen = new Map(FISH_SPECIES.map((f) => [f.id, 0]))
-  const byRarity = { common: 0, uncommon: 0, rare: 0, legendary: 0 }
+  const seen = new Map(FISH_SETS.home.map((f) => [f.id, 0]))
+  const byRarity = Object.fromEntries(Object.keys(RARITIES).map((name) => [name, 0]))
   for (let i = 0; i < draws; i++) {
     const fish = rollFish(random)
     seen.set(fish.id, seen.get(fish.id) + 1)
@@ -76,9 +83,22 @@ const mulberry32 = (seed) => () => {
   const worst = Object.entries(RARITIES).reduce((w, [name, r]) => Math.max(w, Math.abs(byRarity[name] / draws - r.rate)), 0)
   check('rolling: the share of each rarity matches its drop rate', worst < 0.004, `worst deviation ${(worst * 100).toFixed(2)} points over ${draws} rolls; ${Object.values(byRarity).join(' / ')}`)
   check('rolling: every species comes up', [...seen.values()].every((n) => n > 0), `rarest seen ${Math.min(...seen.values())} times`)
+  {
+    // The other world rolls its own fish only, with the same odds.
+    const frost = new Map(FISH_SETS.frostmere.map((f) => [f.id, 0]))
+    const r = mulberry32(21)
+    let foreign = 0
+    for (let i = 0; i < 200000; i++) {
+      const fish = rollFish(r, null, FISH_SETS.frostmere)
+      if (!frost.has(fish.id)) foreign++
+      else frost.set(fish.id, frost.get(fish.id) + 1)
+    }
+    const glacier = frost.get('glacier-maw') / 200000
+    check('rolling: Frostmere rolls only Frostmere\u2019s fish, every one of them, the legendary at its rate', foreign === 0 && [...frost.values()].every((n) => n > 0) && Math.abs(glacier - RARITIES.legendary.rate) < 0.003, `legendary ${(glacier * 100).toFixed(2)}%`)
+  }
   const share = (rarity) => fishInRarity(rarity).map((f) => seen.get(f.id) / byRarity[rarity])
   check('rolling: within a rarity every species is about equally likely', Object.keys(RARITIES).every((rarity) => share(rarity).every((s) => Math.abs(s - 1 / fishInRarity(rarity).length) < 0.02)))
-  check('rolling: rollRarity never returns an unknown name, even at the extremes', [0, 0.5999, 0.6, 0.8699, 0.87, 0.9699, 0.97, 0.999999].every((x) => rollRarity(() => x) in RARITIES) && rollRarity(() => 0) === 'common' && rollRarity(() => 0.999999) === 'legendary')
+  check('rolling: rollRarity never returns an unknown name, even at the extremes', [0, 0.5199, 0.52, 0.7899, 0.79, 0.9299, 0.93, 0.9849, 0.985, 0.999999].every((x) => rollRarity(() => x) in RARITIES) && rollRarity(() => 0) === 'common' && rollRarity(() => 0.999999) === 'legendary')
   let outside = 0, sum = 0
   const heavy = FISH_BY_ID.get('wake-eater')
   for (let i = 0; i < 20000; i++) {
@@ -92,7 +112,7 @@ const mulberry32 = (seed) => () => {
   // Habitats: only rare and legendary fish have one, the rule is checked against the weather and the hour,
   // and a fish whose habitat is right comes up about `boost` times as often.
   const withHabitat = FISH_SPECIES.filter((f) => f.habitat)
-  check('habitat: only rare and legendary species have one, each with a hint and a boost above 1', withHabitat.length > 0 && withHabitat.every((f) => (f.rarity === 'rare' || f.rarity === 'legendary') && f.habitat.hint && f.habitat.boost > 1 && (f.habitat.weather || f.habitat.hours) && (!f.habitat.weather || f.habitat.weather in WEATHER_KINDS)))
+  check('habitat: only rare, epic and legendary species have one, each with a hint and a boost above 1', withHabitat.length > 0 && withHabitat.every((f) => (f.rarity === 'rare' || f.rarity === 'epic' || f.rarity === 'legendary') && f.habitat.hint && f.habitat.boost > 1 && (f.habitat.weather || f.habitat.hours) && (!f.habitat.weather || f.habitat.weather in WEATHER_KINDS)))
   check('habitat: the wake-eater wants a thunderstorm between 02:00 and 04:00', (() => {
     const h = FISH_BY_ID.get('wake-eater').habitat
     const storm = { storm: 1, cover: 1, rain: 1 }

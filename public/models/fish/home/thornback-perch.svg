@@ -1,0 +1,12 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Thornback Perch (Common)</title>
+  <polygon points="26,30 7,18 12,30 7,42" fill="#7e8a2c"/>
+  <polygon points="42,16 46,4 52,13 58,1 64,11 72,3 77,11 86,7 90,17" fill="#7e8a2c"/>
+  <polygon points="108,32 98,17 70,10 44,16 26,30" fill="#b4b445"/>
+  <polygon points="108,32 98,47 70,54 44,48 26,30" fill="#e6dc8a"/>
+  <path d="M51 18 L53 48 M65 13 L66 52 M79 14 L80 50" fill="none" stroke="#5d6420" stroke-width="3" opacity="0.7"/>
+  <polygon points="84,36 70,40 82,47" fill="#7e8a2c"/>
+  <polygon points="66,52 62,58 74,54" fill="#7e8a2c"/>
+  <circle cx="96" cy="27" r="4.6" fill="#ffb347"/>
+  <circle cx="97" cy="27" r="2.2" fill="#0b0f14"/>
+</svg>

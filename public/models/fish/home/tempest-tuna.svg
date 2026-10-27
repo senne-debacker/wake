@@ -1,0 +1,22 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Tempest Tuna (Rare)</title>
+  <polygon points="27,28 7.2,8.8 20.3,30" fill="#1e3556"/>
+  <polygon points="27,32 20.3,30 7.2,51.3" fill="#1a2d49"/>
+  <polygon points="50.4,17.6 54.8,0.5 68,14.7" fill="#1e3556"/>
+  <polygon points="72.4,15 75.7,5.9 85.6,17.6" fill="#1e3556"/>
+  <polygon points="43.4,39.1 39.4,48.3 59.2,42.8" fill="#1e3556"/>
+  <polygon points="69.8,44.1 66.8,52.4 80.3,42.6" fill="#1a2f4c"/>
+  <polygon points="112,30 101.4,22.4 85.6,16.1 69.8,13 53.9,15 39,19.5 24,24.9 24,30" fill="#2a4a78"/>
+  <polygon points="112,30 101.4,37.1 85.6,43.3 69.8,45.6 53.9,43.6 39,39.4 24,34.4 24,30" fill="#d8e4f0"/>
+  <polygon points="39,19.5 53.9,15 69.8,13 85.6,16.1 85.6,30 69.8,30 53.9,30 39,30" fill="#5b759a"/>
+  <polygon points="53.9,15 69.8,13 69.8,24.1" fill="#233e65"/>
+  <polygon points="85.6,16.1 101.4,22.4 112,30 101.4,30" fill="#48638b"/>
+  <polygon points="53.9,43.6 69.8,45.6 85.6,43.3 85.6,32 53.9,32" fill="#e4ecf5"/>
+  <polygon points="52.9,16.4 60.3,15.2 60.3,43.4 52.9,42.3" fill="#16284a" opacity="0.85"/>
+  <polygon points="65.2,14.6 72.6,14.5 72.6,44.2 65.2,44.1" fill="#16284a" opacity="0.85"/>
+  <polygon points="77.5,15.5 84.9,16.9 84.9,42.4 77.5,43.5" fill="#16284a" opacity="0.85"/>
+  <polygon points="82.1,29.2 73.1,34.8 81.1,37.1" fill="#1b304d"/>
+  <path d="M92.6 22.9 Q88.6 30 92.6 36.5" fill="none" stroke="#192c48" stroke-width="1.5"/>
+  <circle cx="103.2" cy="26.9" r="3.4" fill="#ffffff"/>
+  <circle cx="104" cy="26.9" r="1.7" fill="#0b0f14"/>
+</svg>

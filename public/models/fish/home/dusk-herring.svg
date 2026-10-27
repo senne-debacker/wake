@@ -1,0 +1,12 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Dusk Herring (Common)</title>
+  <polygon points="24,30 5,15 10,30 5,45" fill="#4a647c"/>
+  <polygon points="58,18 68,8 76,19" fill="#4a647c"/>
+  <polygon points="62,42 69,51 76,41" fill="#4a647c"/>
+  <polygon points="113,30 90,20 58,17 30,24 20,30" fill="#6d8fae"/>
+  <polygon points="113,30 90,40 58,43 30,36 20,30" fill="#cdd9e3"/>
+  <polygon points="90,20 58,17 66,30 94,30" fill="#86a6c2"/>
+  <path d="M89 24 Q85 30 89 37" fill="none" stroke="#4a647c" stroke-width="1.6"/>
+  <circle cx="102" cy="27" r="3.4" fill="#fff"/>
+  <circle cx="103" cy="27" r="1.7" fill="#0b0f14"/>
+</svg>

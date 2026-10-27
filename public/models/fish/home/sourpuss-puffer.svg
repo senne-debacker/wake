@@ -1,0 +1,27 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Sourpuss Puffer (Uncommon)</title>
+  <polygon points="38,30 24,21 27,30 24,39" fill="#a8821b"/>
+  <g fill="#a8821b">
+    <polygon points="73.9,38.4 80.4,45.1 71.7,41.6"/>
+    <polygon points="69.5,43.8 72.9,52.5 66.2,46"/>
+    <polygon points="63.4,47.2 63.2,56.5 59.5,47.9"/>
+    <polygon points="56.4,47.9 52.6,56.5 52.5,47.1"/>
+    <polygon points="49.6,45.9 42.9,52.4 46.4,43.7"/>
+    <polygon points="44.2,41.5 35.5,44.9 42,38.2"/>
+    <polygon points="40.8,35.4 31.5,35.2 40.1,31.5"/>
+    <polygon points="40.1,28.4 31.5,24.6 40.9,24.5"/>
+    <polygon points="42.1,21.6 35.6,14.9 44.3,18.4"/>
+    <polygon points="46.5,16.2 43.1,7.5 49.8,14"/>
+    <polygon points="52.6,12.8 52.8,3.5 56.5,12.1"/>
+    <polygon points="59.6,12.1 63.4,3.5 63.5,12.9"/>
+    <polygon points="66.4,14.1 73.1,7.6 69.6,16.3"/>
+    <polygon points="71.8,18.5 80.5,15.1 74,21.8"/>
+  </g>
+  <polygon points="78,32.6 72.1,40.8 65.7,48.7 55.7,47.6 45.7,46 41.6,36.8 38,27.4 43.9,19.2 50.3,11.3 60.3,12.4 70.3,14 74.4,23.2" fill="#e8c240"/>
+  <polygon points="78,32.6 72.1,40.8 65.7,48.7 55.7,47.6 45.7,46 41.6,36.8 50,34 66,34" fill="#f6e7a0"/>
+  <polygon points="56,34 46,40 58,43" fill="#c9a22b"/>
+  <circle cx="68" cy="25" r="6.2" fill="#fff"/>
+  <circle cx="70" cy="26" r="3" fill="#0b0f14"/>
+  <path d="M60 17 L75 22" stroke="#5a4510" stroke-width="2.6" stroke-linecap="round"/>
+  <ellipse cx="77" cy="34" rx="2.4" ry="2.9" fill="#5a4510"/>
+</svg>

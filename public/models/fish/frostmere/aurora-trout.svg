@@ -1,0 +1,26 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Aurora Trout (Uncommon)</title>
+  <polygon points="27,30 9.7,17 16.1,30" fill="#8a6ac0"/>
+  <polygon points="27,30 16.1,30 9.7,43" fill="#755aa3"/>
+  <polygon points="53.9,20.1 61,8.8 82.1,20.3" fill="#8a6ac0"/>
+  <polygon points="43.4,36.6 39.4,44 59.2,39.4" fill="#8a6ac0"/>
+  <polygon points="69.8,40.5 66.8,47.2 80.3,39.2" fill="#795da9"/>
+  <polygon points="112,30 101.4,24.2 85.6,19.3 69.8,17 53.9,18.6 39,21.9 24,26.1 24,30" fill="#58a898"/>
+  <polygon points="112,30 101.4,35.5 85.6,40.1 69.8,42 53.9,40.4 39,37.2 24,33.4 24,30" fill="#b78ad8"/>
+  <polygon points="39,21.9 53.9,18.6 69.8,17 85.6,19.3 85.6,30 69.8,30 53.9,30 39,30" fill="#73a0aa"/>
+  <polygon points="53.9,18.6 69.8,17 69.8,25.5" fill="#4a8d80"/>
+  <polygon points="85.6,19.3 101.4,24.2 112,30 101.4,30" fill="#6fb4a6"/>
+  <polygon points="53.9,40.4 69.8,42 85.6,40.1 85.6,31.6 53.9,31.6" fill="#cdade4"/>
+  <polygon points="52.9,19.8 60.3,18.9 60.3,40 52.9,39.2" fill="#7ae8c8" opacity="0.85"/>
+  <polygon points="65.2,18.5 72.6,18.4 72.6,40.6 65.2,40.5" fill="#7ae8c8" opacity="0.85"/>
+  <polygon points="77.5,19.1 84.9,20.2 84.9,39.2 77.5,40.1" fill="#7ae8c8" opacity="0.85"/>
+  <circle cx="80.1" cy="34.5" r="1.4" fill="#7ae8c8"/>
+  <circle cx="84.4" cy="25.9" r="1.6" fill="#7ae8c8"/>
+  <circle cx="62.8" cy="28.4" r="1.1" fill="#7ae8c8"/>
+  <circle cx="77.9" cy="35.8" r="1.7" fill="#7ae8c8"/>
+  <circle cx="59.8" cy="25.3" r="1.4" fill="#7ae8c8"/>
+  <polygon points="82.1,29.4 73.1,33.6 81.1,35.5" fill="#7c5fad"/>
+  <path d="M92.6 25.5 Q88.6 30 92.6 34.1" fill="none" stroke="#35655b" stroke-width="1.5"/>
+  <circle cx="103.2" cy="27.7" r="2.6" fill="#ffffff"/>
+  <circle cx="104" cy="27.7" r="1.3" fill="#0b0f14"/>
+</svg>

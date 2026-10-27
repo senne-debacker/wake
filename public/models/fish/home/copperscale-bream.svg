@@ -1,0 +1,31 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Copperscale Bream (Uncommon)</title>
+  <polygon points="29,30 6,13 15,30" fill="#7f4720"/>
+  <polygon points="29,30 15,30 6,47" fill="#6c3c1b"/>
+  <polygon points="51.2,13.8 52,-3.4 59.6,12.2" fill="#7f4720"/>
+  <polygon points="59.6,12.2 60.4,-4.4 68,11.7" fill="#7f4720"/>
+  <polygon points="68,11.7 68.8,-4.8 76.4,13.2" fill="#7f4720"/>
+  <polygon points="76.4,13.2 77.2,-3.7 84.8,15.4" fill="#7f4720"/>
+  <polygon points="44.5,44.1 40.5,54.2 59.6,47.5" fill="#7f4720"/>
+  <polygon points="69.7,47.5 66.7,56.6 79.8,45.6" fill="#703e1c"/>
+  <polygon points="110,30 99.9,21.5 84.8,13.9 69.7,10.1 54.6,11 40.3,16.7 26,24.7 26,30" fill="#b0622c"/>
+  <polygon points="110,30 99.9,39.5 84.8,46.2 69.7,49 54.6,49 40.3,44.3 26,35.7 26,30" fill="#e8b878"/>
+  <polygon points="40.3,16.7 54.6,11 69.7,10.1 84.8,13.9 84.8,30 69.7,30 54.6,30 40.3,30" fill="#c07a41"/>
+  <polygon points="54.6,11 69.7,10.1 69.7,23.4" fill="#945225"/>
+  <polygon points="84.8,13.9 99.9,21.5 110,30 99.9,30" fill="#bb784a"/>
+  <polygon points="54.6,49 69.7,49 84.8,46.2 84.8,32.3 54.6,32.3" fill="#efcda1"/>
+  <circle cx="64.5" cy="39.2" r="1.9" fill="#7a3d16"/>
+  <circle cx="64.2" cy="31.3" r="2" fill="#7a3d16"/>
+  <circle cx="79" cy="27.6" r="1.8" fill="#7a3d16"/>
+  <circle cx="84.3" cy="35.8" r="1.6" fill="#7a3d16"/>
+  <circle cx="55.7" cy="23.1" r="1.9" fill="#7a3d16"/>
+  <circle cx="52.7" cy="19.4" r="2.2" fill="#7a3d16"/>
+  <circle cx="50.7" cy="33.5" r="1.6" fill="#7a3d16"/>
+  <circle cx="67.3" cy="30.9" r="1.8" fill="#7a3d16"/>
+  <circle cx="78" cy="21.6" r="2.2" fill="#7a3d16"/>
+  <circle cx="58.3" cy="35.7" r="2.1" fill="#7a3d16"/>
+  <polygon points="81.4,29.1 72.4,35.3 80.4,38" fill="#72401d"/>
+  <path d="M91.5 21.2 Q87.5 30 91.5 39.2" fill="none" stroke="#6a3b1a" stroke-width="1.5"/>
+  <circle cx="101.6" cy="26.6" r="3.8" fill="#ffffff"/>
+  <circle cx="102.4" cy="26.6" r="1.9" fill="#0b0f14"/>
+</svg>

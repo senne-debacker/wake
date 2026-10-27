@@ -1,0 +1,21 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Hoarfrost Haddock (Common)</title>
+  <polygon points="27,30 10.8,18 16.7,30" fill="#4e5863"/>
+  <polygon points="27,30 16.7,30 10.8,42" fill="#424b54"/>
+  <polygon points="50.4,21.7 54.8,9.2 68,19.7" fill="#4e5863"/>
+  <polygon points="72.4,19.9 75.7,13 85.6,21.7" fill="#4e5863"/>
+  <polygon points="43.4,36 39.4,42.9 59.2,38.6" fill="#4e5863"/>
+  <polygon points="69.8,39.5 66.8,45.8 80.3,38.4" fill="#454d57"/>
+  <polygon points="112,30 101.4,24.6 85.6,20.2 69.8,18 53.9,19.4 39,22.6 24,26.4 24,30" fill="#6d7a8a"/>
+  <polygon points="112,30 101.4,35 85.6,39.4 69.8,41 53.9,39.6 39,36.6 24,33.1 24,30" fill="#e8eaee"/>
+  <polygon points="39,22.6 53.9,19.4 69.8,18 85.6,20.2 85.6,30 69.8,30 53.9,30 39,30" fill="#8f99a6"/>
+  <polygon points="53.9,19.4 69.8,18 69.8,25.8" fill="#5c6674"/>
+  <polygon points="85.6,20.2 101.4,24.6 112,30 101.4,30" fill="#818d9a"/>
+  <polygon points="53.9,39.6 69.8,41 85.6,39.4 85.6,31.4 53.9,31.4" fill="#eff0f3"/>
+  <circle cx="65" cy="32" r="1.5" fill="#2a323c"/>
+  <polygon points="82.1,29.4 73.1,33.4 81.1,35" fill="#464f59"/>
+  <path d="M92.6 26.1 Q88.6 30 92.6 33.4" fill="none" stroke="#414953" stroke-width="1.5"/>
+  <circle cx="103.2" cy="27.8" r="2.4" fill="#ffffff"/>
+  <circle cx="104" cy="27.8" r="1.2" fill="#0b0f14"/>
+  <path d="M108 32 Q116 38.4 108 43.2 M102 34 Q106 40.8 98 45" fill="none" stroke="#808183" stroke-width="1.8" stroke-linecap="round"/>
+</svg>

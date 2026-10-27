@@ -1,0 +1,13 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Brasscrown Sturgeon (Rare)</title>
+  <polygon points="16,29 2,8 10,28 4,44" fill="#7b5d1f"/>
+  <polygon points="113,35 98,22 62,16 32,22 14,29" fill="#a98530"/>
+  <polygon points="113,35 98,44 62,45 32,39 14,29" fill="#e2cb86"/>
+  <polygon points="98,22 62,16 66,32 106,35" fill="#c9a24a"/>
+  <polygon points="34,21 38,12 42,20 46,10 50,19 54,9 58,18 62,8 66,17 70,9 74,18 78,11 82,20" fill="#f2d676" stroke="#7b5d1f" stroke-width="1.2" stroke-linejoin="round"/>
+  <path d="M30 31 L96 34" fill="none" stroke="#7b5d1f" stroke-width="2" stroke-dasharray="1 5" stroke-linecap="round"/>
+  <polygon points="66,44 70,54 80,45" fill="#7b5d1f"/>
+  <path d="M110 38 Q112 46 106 51 M105 40 Q106 48 100 53" fill="none" stroke="#7b5d1f" stroke-width="1.8" stroke-linecap="round"/>
+  <circle cx="98" cy="29" r="3.2" fill="#fff"/>
+  <circle cx="99" cy="29" r="1.6" fill="#0b0f14"/>
+</svg>

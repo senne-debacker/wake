@@ -1,0 +1,25 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Tallow Burbot (Uncommon)</title>
+  <polygon points="13,27 1.2,23.6 -1,30" fill="#796b4c"/>
+  <polygon points="13,33 -1,30 1.2,36.4" fill="#675b41"/>
+  <polygon points="30.4,31.5 30.4,27.1 44.7,22.2 61,14.4 77.3,12 91.6,17.5 91.6,21.6" fill="#796b4c"/>
+  <polygon points="32.4,41.4 28.4,46.5 50.8,38.8" fill="#796b4c"/>
+  <polygon points="63,33.4 60,38.1 75.3,30.6" fill="#6a5e43"/>
+  <polygon points="112,34.1 99.8,23 81.4,15.5 63,18.9 44.7,27 27.3,30.1 10,26 10,30" fill="#a8946a"/>
+  <polygon points="112,34.1 99.8,34.2 81.4,30.7 63,34.9 44.7,43 27.3,42.9 10,34 10,30" fill="#e8dcb8"/>
+  <polygon points="27.3,30.1 44.7,27 63,18.9 81.4,15.5 81.4,23.1 63,26.9 44.7,35 27.3,36.5" fill="#baa880"/>
+  <polygon points="44.7,27 63,18.9 63,24.1" fill="#8d7c59"/>
+  <polygon points="81.4,15.5 99.8,23 112,34.1 99.8,28.6" fill="#b4a37f"/>
+  <polygon points="44.7,43 63,34.9 81.4,30.7 81.4,24 44.7,35.9" fill="#efe7cd"/>
+  <circle cx="41.6" cy="31.1" r="1.3" fill="#7a6a44"/>
+  <circle cx="69" cy="25.3" r="0.9" fill="#7a6a44"/>
+  <circle cx="77.9" cy="25.1" r="1" fill="#7a6a44"/>
+  <circle cx="38.5" cy="31.2" r="1.1" fill="#7a6a44"/>
+  <circle cx="74" cy="29.2" r="1.5" fill="#7a6a44"/>
+  <circle cx="52.8" cy="26.7" r="1" fill="#7a6a44"/>
+  <polygon points="77.3,22.7 68.3,25.3 76.3,26.4" fill="#6d6044"/>
+  <path d="M89.6 22.8 Q85.6 24.6 89.6 28.2" fill="none" stroke="#655940" stroke-width="1.5"/>
+  <circle cx="101.8" cy="28.1" r="2.2" fill="#ffffff"/>
+  <circle cx="102.6" cy="28.1" r="1.1" fill="#0b0f14"/>
+  <path d="M108 36.1 Q116 39.7 108 42.9 M102 38.1 Q106 41.3 98 44.1" fill="none" stroke="#807965" stroke-width="1.8" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,19 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Rimescale Sprat (Common)</title>
+  <polygon points="27,30 13,22 18,30" fill="#58738a"/>
+  <polygon points="27,30 18,30 13,38" fill="#4b6275"/>
+  <polygon points="53.9,24.5 61,17 82.1,24.6" fill="#58738a"/>
+  <polygon points="43.4,33.5 39.4,38.6 59.2,35.2" fill="#58738a"/>
+  <polygon points="69.8,35.9 66.8,40.6 80.3,35.1" fill="#4d6579"/>
+  <polygon points="112,30 101.4,26.4 85.6,23.4 69.8,22 53.9,23 39,25 24,27.6 24,30" fill="#7aa0c0"/>
+  <polygon points="112,30 101.4,33.4 85.6,36.2 69.8,37.4 53.9,36.4 39,34.4 24,32.1 24,30" fill="#eaf3fa"/>
+  <polygon points="39,25 53.9,23 69.8,22 85.6,23.4 85.6,30 69.8,30 53.9,30 39,30" fill="#99b7d0"/>
+  <polygon points="53.9,23 69.8,22 69.8,27.2" fill="#6686a1"/>
+  <polygon points="85.6,23.4 101.4,26.4 112,30 101.4,30" fill="#8dadc9"/>
+  <polygon points="53.9,36.4 69.8,37.4 85.6,36.2 85.6,31 53.9,31" fill="#f0f7fc"/>
+  <polygon points="57.8,23.7 80,23.9 80,35.6 57.8,35.6" fill="#bcd8ee" opacity="0.85"/>
+  <polygon points="82.1,29.6 73.1,32.2 81.1,33.4" fill="#4f687c"/>
+  <path d="M92.6 28.8 Q88.6 30 92.6 31" fill="none" stroke="#496073" stroke-width="1.5"/>
+  <circle cx="103.2" cy="28.6" r="2.2" fill="#ffffff"/>
+  <circle cx="104" cy="28.6" r="1.1" fill="#0b0f14"/>
+</svg>

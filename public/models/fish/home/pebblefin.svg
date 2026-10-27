@@ -1,0 +1,26 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Pebblefin (Common)</title>
+  <polygon points="29,27 13.7,18.8 10.6,30" fill="#506758"/>
+  <polygon points="29,33 10.6,30 13.7,41.2" fill="#44584b"/>
+  <polygon points="54.6,17.5 61.3,5.5 81.4,19" fill="#506758"/>
+  <polygon points="44.5,40 40.5,47.8 59.6,42.5" fill="#506758"/>
+  <polygon points="69.7,42.5 66.7,49.6 79.8,41.1" fill="#465b4d"/>
+  <polygon points="110,30 99.9,23.7 84.8,18.1 69.7,15.3 54.6,16 40.3,20.2 26,26.1 26,30" fill="#6f8f7a"/>
+  <polygon points="110,30 99.9,37 84.8,41.9 69.7,44 54.6,44 40.3,40.5 26,34.2 26,30" fill="#d8e0c8"/>
+  <polygon points="40.3,20.2 54.6,16 69.7,15.3 84.8,18.1 84.8,30 69.7,30 54.6,30 40.3,30" fill="#8ca690"/>
+  <polygon points="54.6,16 69.7,15.3 69.7,25.1" fill="#5d7866"/>
+  <polygon points="84.8,18.1 99.9,23.7 110,30 99.9,30" fill="#839f8d"/>
+  <polygon points="54.6,44 69.7,44 84.8,41.9 84.8,31.7 54.6,31.7" fill="#e4e9d9"/>
+  <circle cx="85.2" cy="30.4" r="1.7" fill="#3d5a4a"/>
+  <circle cx="71" cy="27.6" r="1" fill="#3d5a4a"/>
+  <circle cx="54.3" cy="38.1" r="1.4" fill="#3d5a4a"/>
+  <circle cx="52.8" cy="34.1" r="1.4" fill="#3d5a4a"/>
+  <circle cx="83.8" cy="24.2" r="1.5" fill="#3d5a4a"/>
+  <circle cx="80.8" cy="29.1" r="1.2" fill="#3d5a4a"/>
+  <circle cx="61.5" cy="24.8" r="1.6" fill="#3d5a4a"/>
+  <circle cx="85.2" cy="34.2" r="1.4" fill="#3d5a4a"/>
+  <polygon points="81.4,29.3 72.4,33.9 80.4,35.9" fill="#485d4f"/>
+  <path d="M91.5 24.6 Q87.5 30 91.5 35.7" fill="none" stroke="#435649" stroke-width="1.5"/>
+  <circle cx="101.6" cy="27.5" r="2.8" fill="#ffffff"/>
+  <circle cx="102.4" cy="27.5" r="1.4" fill="#0b0f14"/>
+</svg>

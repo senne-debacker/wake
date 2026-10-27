@@ -1,0 +1,20 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Siren Barbel (Rare)</title>
+  <polygon points="29,28 11.2,11.3 22.7,30" fill="#c85a78"/>
+  <polygon points="29,32 22.7,30 11.2,48.8" fill="#aa4d66"/>
+  <polygon points="49.5,18.6 53.5,-1.4 80.5,2.5 86.5,19.9" fill="#c85a78"/>
+  <polygon points="53.5,-1.4 68,11 80.5,2.5" fill="#d37b93"/>
+  <polygon points="44.5,40.9 40.5,49.1 59.6,43.5" fill="#c85a78"/>
+  <polygon points="69.7,43.5 66.7,51 79.8,42" fill="#b04f6a"/>
+  <polygon points="110,30 99.9,23.3 84.8,17.3 69.7,14.3 54.6,15 40.3,19.5 26,25.8 26,30" fill="#a03c5a"/>
+  <polygon points="110,30 99.9,37.5 84.8,42.8 69.7,45 54.6,45 40.3,41.3 26,34.5 26,30" fill="#f0b8c0"/>
+  <polygon points="40.3,19.5 54.6,15 69.7,14.3 84.8,17.3 84.8,30 69.7,30 54.6,30 40.3,30" fill="#b65f77"/>
+  <polygon points="54.6,15 69.7,14.3 69.7,24.8" fill="#86324c"/>
+  <polygon points="84.8,17.3 99.9,23.3 110,30 99.9,30" fill="#ad5771"/>
+  <polygon points="54.6,45 69.7,45 84.8,42.8 84.8,31.8 54.6,31.8" fill="#f5cdd3"/>
+  <polygon points="81.4,29.3 72.4,34.2 80.4,36.3" fill="#b4516c"/>
+  <path d="M91.5 23.9 Q87.5 30 91.5 36.4" fill="none" stroke="#602436" stroke-width="1.5"/>
+  <circle cx="101.6" cy="27.3" r="3" fill="#ffffff"/>
+  <circle cx="102.4" cy="27.3" r="1.5" fill="#0b0f14"/>
+  <path d="M106 32 Q114 40.5 106 46.5 M100 34 Q104 43.5 96 48.8" fill="none" stroke="#84656a" stroke-width="1.8" stroke-linecap="round"/>
+</svg>

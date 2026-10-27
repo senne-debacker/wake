@@ -1,0 +1,13 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Brine Mackerel (Common)</title>
+  <polygon points="26,30 3,10 12,30 3,50" fill="#1f4f4b"/>
+  <polygon points="115,30 92,21 60,17 34,25 24,30" fill="#2f7a73"/>
+  <polygon points="115,30 92,39 60,43 34,35 24,30" fill="#d4e6da"/>
+  <polygon points="92,21 60,17 68,30 98,30" fill="#3f9088"/>
+  <polygon points="68,18 77,6 87,20" fill="#1f4f4b"/>
+  <polygon points="34,24.5 36,19 39,23.5 41,18 44,22 44,26" fill="#1f4f4b"/>
+  <polygon points="34,35.5 36,41 39,36.5 41,42 44,38 44,34" fill="#1f4f4b"/>
+  <path d="M46 21 l7 8 M56 18 l8 9 M67 18 l8 9 M78 20 l7 8" fill="none" stroke="#143a36" stroke-width="2.4" stroke-linecap="round"/>
+  <circle cx="103" cy="27" r="3.4" fill="#fff"/>
+  <circle cx="104" cy="27" r="1.7" fill="#0b0f14"/>
+</svg>

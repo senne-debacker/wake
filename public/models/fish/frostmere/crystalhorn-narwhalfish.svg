@@ -1,0 +1,22 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Crystalhorn Narwhalfish (Epic)</title>
+  <polygon points="25,28 9.1,13.8 19.1,30" fill="#7a9cb8"/>
+  <polygon points="25,32 19.1,30 9.1,46.3" fill="#68859c"/>
+  <polygon points="53.3,22.7 60.6,11.4 82.7,22.7" fill="#7a9cb8"/>
+  <polygon points="42.2,35.5 38.2,42.8 58.8,36.7" fill="#7a9cb8"/>
+  <polygon points="69.8,37.1 66.8,43.8 80.9,36.6" fill="#6b89a2"/>
+  <polygon points="114,30 103,24.5 86.4,21.4 69.8,20.6 53.3,21.2 37.6,22.9 22,25.6 22,30" fill="#a9c6dc"/>
+  <polygon points="114,30 103,34.9 86.4,37.8 69.8,38.6 53.3,38.1 37.6,36.5 22,33.9 22,30" fill="#eef6fc"/>
+  <polygon points="37.6,22.9 53.3,21.2 69.8,20.6 86.4,21.4 86.4,30 69.8,30 53.3,30 37.6,30" fill="#bcd3e5"/>
+  <polygon points="53.3,21.2 69.8,20.6 69.8,25.5" fill="#8ea6b9"/>
+  <polygon points="86.4,21.4 103,24.5 114,30 103,30" fill="#b5cee1"/>
+  <polygon points="53.3,38.1 69.8,38.6 86.4,37.8 86.4,31.6 53.3,31.6" fill="#f3f9fd"/>
+  <polygon points="53.5,22.2 65.1,21.8 65.1,37.4 53.5,37.1" fill="#5aa0e0" opacity="0.85"/>
+  <polygon points="72.8,21.8 84.4,22.3 84.4,36.9 72.8,37.4" fill="#5aa0e0" opacity="0.85"/>
+  <polygon points="82.7,29.4 73.7,33.6 81.7,35.5" fill="#6e8ca6"/>
+  <path d="M93.8 26.8 Q89.8 30 93.8 32.5" fill="none" stroke="#657784" stroke-width="1.5"/>
+  <circle cx="104.8" cy="27.7" r="6" fill="#9fd0ff" opacity="0.3"/>
+  <circle cx="104.8" cy="27.7" r="2.6" fill="#ffffff"/>
+  <circle cx="105.6" cy="27.7" r="1.3" fill="#0b0f14"/>
+  <polygon points="112,28.5 119,27 112,31.5" fill="#9fd0ff"/>
+</svg>

@@ -1,0 +1,15 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Glasswing Skate (Uncommon)</title>
+  <polygon points="28,27 2,30 28,33" fill="#6aa7c4"/>
+  <polygon points="104,30 74,6 44,10 24,30 44,50 74,54" fill="#a8d4e6"/>
+  <polygon points="104,30 74,6 60,30" fill="#c6e6f2"/>
+  <polygon points="104,30 74,54 60,30" fill="#8fc2d9"/>
+  <polygon points="74,6 44,10 60,30" fill="#b6dcec"/>
+  <polygon points="74,54 44,50 60,30" fill="#9ccce0"/>
+  <polygon points="24,30 44,10 60,30 44,50" fill="#82b8d0"/>
+  <path d="M60 30 L100 30 M60 30 L50 14 M60 30 L50 46 M60 30 L34 30" fill="none" stroke="#5c9db8" stroke-width="1.2" opacity="0.7"/>
+  <polygon points="80,14 98,26 84,22" fill="#ffffff" opacity="0.4"/>
+  <circle cx="93" cy="24" r="2.6" fill="#0b0f14"/>
+  <circle cx="93" cy="36" r="2.6" fill="#0b0f14"/>
+  <path d="M100 28 Q104 30 100 32" fill="none" stroke="#3f7a96" stroke-width="1.4" stroke-linecap="round"/>
+</svg>

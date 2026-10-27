@@ -10,6 +10,7 @@ export const DEFAULT_WORLD = {
   name: 'Wake',
   description: 'The original world.',
   special: '',
+  fish: 'home', // its set of fish (fishing/fishDatabase.js)
   file: null, // (generated, not read from a file)
 }
 

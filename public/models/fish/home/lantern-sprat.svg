@@ -1,0 +1,15 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Lantern Sprat (Common)</title>
+  <polygon points="40,30 20,17 26,30 20,43" fill="#1f6f7c"/>
+  <polygon points="64,20 72,11 82,22" fill="#1f6f7c"/>
+  <polygon points="102,30 86,21 60,19 42,25 38,30" fill="#2f95a3"/>
+  <polygon points="102,30 86,39 60,41 42,35 38,30" fill="#9adadf"/>
+  <polygon points="86,21 60,19 66,30 90,30" fill="#46aebb"/>
+  <circle cx="66" cy="37" r="11" fill="#ffe58a" opacity="0.28"/>
+  <circle cx="66" cy="37" r="4.6" fill="#ffe58a"/>
+  <circle cx="66" cy="37" r="2" fill="#fff8d6"/>
+  <circle cx="52" cy="37" r="1.6" fill="#ffe58a"/>
+  <circle cx="78" cy="37" r="1.6" fill="#ffe58a"/>
+  <circle cx="92" cy="27" r="3.6" fill="#fff"/>
+  <circle cx="93" cy="27" r="1.8" fill="#0b0f14"/>
+</svg>

@@ -1,0 +1,16 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Rustback Flounder (Common)</title>
+  <polygon points="12,30 2,23 2,37" fill="#7d3f22"/>
+  <polygon points="110,30 90,9 50,4 18,15 10,30" fill="#a8532c"/>
+  <polygon points="110,30 90,51 50,56 18,45 10,30" fill="#c9743f"/>
+  <polygon points="90,9 50,4 56,30 96,30" fill="#bd6a38"/>
+  <path d="M10 30 L18 15 L50 4 L90 9 L110 30 L90 51 L50 56 L18 45 Z" fill="none" stroke="#7d3f22" stroke-width="2.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
+  <polygon points="40,16 48,20 40,25" fill="#7d3f22"/>
+  <polygon points="58,38 66,36 63,44" fill="#7d3f22"/>
+  <polygon points="30,32 38,30 36,38" fill="#7d3f22"/>
+  <circle cx="94" cy="22" r="3.8" fill="#fff"/>
+  <circle cx="95" cy="22" r="1.9" fill="#0b0f14"/>
+  <circle cx="99" cy="29" r="3.8" fill="#fff"/>
+  <circle cx="100" cy="29" r="1.9" fill="#0b0f14"/>
+  <path d="M110 30 Q105 36 100 36" fill="none" stroke="#5a2a14" stroke-width="1.6" stroke-linecap="round"/>
+</svg>

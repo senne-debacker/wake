@@ -1,0 +1,21 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Hollowhorn Unicornfish (Rare)</title>
+  <polygon points="27,28 10.1,12.5 20.9,30" fill="#586f84"/>
+  <polygon points="27,32 20.9,30 10.1,47.5" fill="#4b5e70"/>
+  <polygon points="53.9,19.2 61,7.2 82.1,19.5" fill="#586f84"/>
+  <polygon points="43.4,37.2 39.4,45 59.2,40.3" fill="#586f84"/>
+  <polygon points="69.8,41.4 66.8,48.5 80.3,40.1" fill="#4d6274"/>
+  <polygon points="112,30 101.4,23.7 85.6,18.5 69.8,16 53.9,17.7 39,21.3 24,25.8 24,30" fill="#7a9ab8"/>
+  <polygon points="112,30 101.4,35.9 85.6,40.9 69.8,42.9 53.9,41.2 39,37.7 24,33.6 24,30" fill="#dce8f2"/>
+  <polygon points="39,21.3 53.9,17.7 69.8,16 85.6,18.5 85.6,30 69.8,30 53.9,30 39,30" fill="#95b0c8"/>
+  <polygon points="53.9,17.7 69.8,16 69.8,25.1" fill="#66819b"/>
+  <polygon points="85.6,18.5 101.4,23.7 112,30 101.4,30" fill="#8da8c2"/>
+  <polygon points="53.9,41.2 69.8,42.9 85.6,40.9 85.6,31.7 53.9,31.7" fill="#e7eff6"/>
+  <polygon points="54.1,18.7 65.2,17.5 65.2,41.4 54.1,40.2" fill="#4a6a8a" opacity="0.85"/>
+  <polygon points="72.6,17.4 83.7,19.2 83.7,40.2 72.6,41.5" fill="#4a6a8a" opacity="0.85"/>
+  <polygon points="82.1,29.3 73.1,33.9 81.1,35.9" fill="#4f6477"/>
+  <path d="M92.6 24.8 Q88.6 30 92.6 34.7" fill="none" stroke="#495c6e" stroke-width="1.5"/>
+  <circle cx="103.2" cy="27.5" r="2.8" fill="#ffffff"/>
+  <circle cx="104" cy="27.5" r="1.4" fill="#0b0f14"/>
+  <polygon points="110,28.5 119,27 110,31.5" fill="#eef4f9"/>
+</svg>

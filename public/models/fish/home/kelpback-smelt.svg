@@ -1,0 +1,18 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Kelpback Smelt (Common)</title>
+  <polygon points="25,30 11,22 16,30" fill="#446735"/>
+  <polygon points="25,30 16,30 11,38" fill="#3a582d"/>
+  <polygon points="53.3,26.7 60.6,19.2 82.7,26.8" fill="#446735"/>
+  <polygon points="42.2,32.2 38.2,36.9 58.8,32.9" fill="#446735"/>
+  <polygon points="69.8,33.1 66.8,37.4 80.9,32.8" fill="#3c5b2f"/>
+  <polygon points="114,30 103,27.1 86.4,25.4 69.8,25 53.3,25.2 37.6,26.2 22,27.6 22,30" fill="#5f8f4a"/>
+  <polygon points="114,30 103,32.7 86.4,34.2 69.8,34.6 53.3,34.3 37.6,33.5 22,32.1 22,30" fill="#d6e6b8"/>
+  <polygon points="37.6,26.2 53.3,25.2 69.8,25 86.4,25.4 86.4,30 69.8,30 53.3,30 37.6,30" fill="#80a769"/>
+  <polygon points="53.3,25.2 69.8,25 69.8,27.6" fill="#50783e"/>
+  <polygon points="86.4,25.4 103,27.1 114,30 103,30" fill="#759f63"/>
+  <polygon points="53.3,34.3 69.8,34.6 86.4,34.2 86.4,30.8 53.3,30.8" fill="#e2eecd"/>
+  <polygon points="82.7,29.7 73.7,32 81.7,32.9" fill="#3d5d30"/>
+  <path d="M93.8 30.1 Q89.8 30 93.8 29.5" fill="none" stroke="#39562c" stroke-width="1.5"/>
+  <circle cx="104.8" cy="28.7" r="2.2" fill="#ffffff"/>
+  <circle cx="105.6" cy="28.7" r="1.1" fill="#0b0f14"/>
+</svg>

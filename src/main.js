@@ -34,7 +34,7 @@ import { createWorld } from './scene/world.js'
 import { createFishingSpots } from './scene/fishingSpots.js'
 import { createFishingMinigame } from './fishing/fishingMinigame.js'
 import { createLogbook } from './fishing/logbook.js'
-import { rollFish } from './fishing/fishDatabase.js'
+import { rollFish, fishSet as fishSetOf } from './fishing/fishDatabase.js'
 import { createBoatState, createBoatPose, computeBoatPose } from './physics/boat.js'
 import { createBoatDynamics, applyBoatWeight } from './physics/boatDynamics.js'
 import { stepBoat } from './physics/boatMotion.js'
@@ -107,6 +107,7 @@ async function main() {
   }
   const activeWorld = layout.imported ? wantedWorld : worlds[0]
   const dock = layout.harbour // where the harbour is: anchor next to it to trade
+  const fishSet = fishSetOf(activeWorld.fish) // the 32 fish that live in this world
   const world = createWorld(layout, waterEdge(QUALITY.waterDetail))
   const spots = createFishingSpots(layout.fishingSpots) // patches of bubbling water: drop the anchor on one to fish
   const sky = createSky()
@@ -151,7 +152,7 @@ async function main() {
   let fishingSpot = null // the spot being fished
   let fightOutcome = null // how the last fight ended: 'caught', 'snapped' or 'released'
   let logbookReturn = 'playing' // where the logbook goes back to: the game, or the pause screen it was opened from
-  const logbook = createLogbook({ onClose: () => state === 'logbook' && setState(logbookReturn) })
+  const logbook = createLogbook({ fishSet, onClose: () => state === 'logbook' && setState(logbookReturn) })
   const fishing = createFishingMinigame({
     logbook,
     onFrame: (fight) => audio.reel(fight),
@@ -179,7 +180,7 @@ async function main() {
     fishingSpot = spot
     audio.fishBite()
     setState('fishing')
-    fishing.open({ fish: fish ?? rollFish(Math.random, { hour: clock.timeOfDay * 24, ...weather.levels }) }) // some rare fish bite better in the right weather and hour (fishing/habitat.js)
+    fishing.open({ fish: fish ?? rollFish(Math.random, { hour: clock.timeOfDay * 24, ...weather.levels }, fishSet) }) // some rare fish bite better in the right weather and hour (fishing/habitat.js)
   }
 
   // --- The harbour: the anchor goes down next to the dock -> sell the catch, buy boats and charts ----------
@@ -295,7 +296,7 @@ async function main() {
     for (const point of uniforms.wakeTrail.array) point.w = 0
     rig.snap()
   }
-  const dev = createDevMode({ interaction, clock, atmosphere, boat, boats, economy, planet, worlds, activeWorld, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState: () => state }) // ?dev + code: weather, time, boat and fishing tools
+  const dev = createDevMode({ fishSet, interaction, clock, atmosphere, boat, boats, economy, planet, worlds, activeWorld, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState: () => state }) // ?dev + code: weather, time, boat and fishing tools
   // The boat the player is in (the economy's): shown now, unless the developer panel has chosen another for this tab.
   let devBoat = null
   try {

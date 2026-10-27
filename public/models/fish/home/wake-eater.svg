@@ -1,0 +1,22 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>The Wake-Eater (Legendary)</title>
+  <g fill="none" stroke="#7fd6e6" stroke-width="1.6" stroke-linecap="round" opacity="0.55">
+    <path d="M5 16 Q12 24 5 32"/>
+    <path d="M1 12 Q10 24 1 36"/>
+    <path d="M10 42 Q17 48 10 54"/>
+  </g>
+  <path d="M14 38 C30 56 42 14 62 32 S84 40 88 30" fill="none" stroke="#1b1530" stroke-width="16" stroke-linecap="round"/>
+  <path d="M14 36 C30 54 42 12 62 30 S84 38 88 28" fill="none" stroke="#2e2552" stroke-width="7" stroke-linecap="round"/>
+  <polygon points="28,44 30,34 38,42" fill="#3a2a5c"/>
+  <polygon points="44,18 50,8 54,20" fill="#3a2a5c"/>
+  <polygon points="56,26 62,14 68,26" fill="#3a2a5c"/>
+  <polygon points="72,36 78,48 84,38" fill="#3a2a5c"/>
+  <polygon points="82,31 80,17 98,9 117,25 112,28 96,26 90,31" fill="#1b1530"/>
+  <polygon points="82,31 90,33 112,34 100,47 84,44" fill="#2e2552"/>
+  <polygon points="90,31 96,26 112,28 112,34 90,33" fill="#7a1c2a"/>
+  <polygon points="100,27 102,33 104,27.4 106,34 108,28 110,34 112,28.5" fill="#f1ece0"/>
+  <polygon points="96,33 99,28 102,33.4 105,29 108,34" fill="#f1ece0"/>
+  <circle cx="94" cy="17" r="8" fill="#ff4a3a" opacity="0.3"/>
+  <circle cx="94" cy="17" r="3.8" fill="#ff4a3a"/>
+  <circle cx="94" cy="17" r="1.5" fill="#ffd0c8"/>
+</svg>

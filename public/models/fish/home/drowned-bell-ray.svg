@@ -1,0 +1,21 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Drowned Bell Ray (Epic)</title>
+  <polyline points="34,30 4,30" fill="none" stroke="#1d2c3f" stroke-width="2.4" stroke-linecap="round"/>
+  <polygon points="8,30 2,26 5,30 2,34" fill="#1d2c3f"/>
+  <polygon points="112,30 66,4 34,30" fill="#2a3f5a"/>
+  <polygon points="112,30 66,56 34,30" fill="#7a92b0"/>
+  <polygon points="66,4 66,30 34,30" fill="#425874"/>
+  <polygon points="66,56 66,30 34,30" fill="#a2b3c8"/>
+  <polygon points="112,30 88,20 88,30" fill="#506278"/>
+  <circle cx="69.3" cy="22.3" r="1.6" fill="#9fe8ff"/>
+  <circle cx="64.8" cy="30.1" r="1.4" fill="#9fe8ff"/>
+  <circle cx="81.4" cy="31.8" r="1.8" fill="#9fe8ff"/>
+  <circle cx="58.8" cy="35.6" r="2.1" fill="#9fe8ff"/>
+  <circle cx="50.9" cy="30" r="1.6" fill="#9fe8ff"/>
+  <circle cx="73.5" cy="23.2" r="2" fill="#9fe8ff"/>
+  <circle cx="98" cy="30" r="9" fill="#9fe8ff" opacity="0.28"/>
+  <circle cx="98" cy="24" r="3" fill="#fff"/>
+  <circle cx="99" cy="24" r="1.5" fill="#0b0f14"/>
+  <circle cx="98" cy="36" r="3" fill="#fff"/>
+  <circle cx="99" cy="36" r="1.5" fill="#0b0f14"/>
+</svg>

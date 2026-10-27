@@ -1,0 +1,30 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Abyss Anglerking (Epic)</title>
+  <polygon points="25,27 6,16.4 2,30" fill="#1e1a28"/>
+  <polygon points="25,33 2,30 6,43.6" fill="#1a1622"/>
+  <polygon points="48.4,18.2 49.3,-2.6 57.2,15.2" fill="#1e1a28"/>
+  <polygon points="57.2,15.2 58.1,-6 66,12.3" fill="#1e1a28"/>
+  <polygon points="66,12.3 66.9,-8.1 74.8,10.7" fill="#1e1a28"/>
+  <polygon points="74.8,10.7 75.7,-9.8 83.6,9.5" fill="#1e1a28"/>
+  <polygon points="41.4,38.5 37.4,49.9 57.2,42.6" fill="#1e1a28"/>
+  <polygon points="67.8,45.2 64.8,55.5 78.3,48" fill="#1a1723"/>
+  <polygon points="110,30 99.4,12.8 83.6,8 67.8,10.2 51.9,15.5 37,20.8 22,25.6 22,30" fill="#2a2438"/>
+  <polygon points="110,30 99.4,46.3 83.6,50.9 67.8,46.7 51.9,42.8 37,38.8 22,34.4 22,30" fill="#5a4a6a"/>
+  <polygon points="37,20.8 51.9,15.5 67.8,10.2 83.6,8 83.6,30 67.8,30 51.9,30 37,30" fill="#372f46"/>
+  <polygon points="51.9,15.5 67.8,10.2 67.8,22.3" fill="#231e2f"/>
+  <polygon points="83.6,8 99.4,12.8 110,30 99.4,30" fill="#484354"/>
+  <polygon points="51.9,42.8 67.8,46.7 83.6,50.9 83.6,32.6 51.9,32.6" fill="#8c8097"/>
+  <polygon points="80.1,28.9 71.1,36.2 79.1,39.2" fill="#1b1724"/>
+  <path d="M90.6 14.2 Q86.6 30 90.6 44.8" fill="none" stroke="#191622" stroke-width="1.5"/>
+  <circle cx="101.2" cy="26" r="4.2" fill="#ffffff"/>
+  <circle cx="102" cy="26" r="2.1" fill="#0b0f14"/>
+  <polygon points="107,31.4 105.8,35 104.4,31.6" fill="#f1ece0"/>
+  <polygon points="103.4,31.4 102.2,35 100.8,31.6" fill="#f1ece0"/>
+  <polygon points="99.8,31.4 98.6,35 97.2,31.6" fill="#f1ece0"/>
+  <polygon points="96.2,31.4 95,35 93.6,31.6" fill="#f1ece0"/>
+  <polygon points="92.6,31.4 91.4,35 90,31.6" fill="#f1ece0"/>
+  <path d="M93.9 12.8 Q95.9 -2.2 107.9 -0.2" fill="none" stroke="#1d1927" stroke-width="1.6" stroke-linecap="round"/>
+  <circle cx="107.9" cy="-0.2" r="7" fill="#7ae0ff" opacity="0.3"/>
+  <circle cx="107.9" cy="-0.2" r="3.4" fill="#7ae0ff"/>
+  <circle cx="107.9" cy="-0.2" r="1.4" fill="#ffffff"/>
+</svg>

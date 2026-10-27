@@ -1,4 +1,4 @@
-import { RARITIES, FISH_SPECIES, FISH_BY_ID, fishInRarity, formatWeight } from './fishDatabase.js'
+import { RARITIES, FISH_SETS, HOME, FISH_BY_ID, fishInRarity, formatWeight } from './fishDatabase.js'
 import { describeHabitat } from './habitat.js'
 
 // The fish logbook: which species you have caught, how many, and the heaviest of each. Saved in
@@ -62,10 +62,10 @@ export function createLogbookStore(storage = browserStorage()) {
   }
 }
 
-// The logbook screen: every species as a tile (a black silhouette until you have caught one), grouped
+// The logbook screen: every species of the world's fish set (`fishSet`, an array of species) as a tile (a black silhouette until you have caught one), grouped
 // by rarity, and a detail panel for the selected one. `onClose` is called when it has been closed.
 // Esc and B close it; they are stopped in the capture phase so the game does not see them.
-export function createLogbook({ onClose, storage } = {}) {
+export function createLogbook({ onClose, storage, fishSet = FISH_SETS[HOME] } = {}) {
   const store = createLogbookStore(storage)
   const $ = (id) => document.getElementById(id)
   const root = $('logbook')
@@ -73,7 +73,7 @@ export function createLogbook({ onClose, storage } = {}) {
   const closeButton = $('logbook-close')
   const detail = { image: $('detail-image'), name: $('detail-name'), rarity: $('detail-rarity'), stats: $('detail-stats'), text: $('detail-text'), habitat: $('detail-habitat') }
   const tiles = new Map() // species id -> its button
-  let selected = FISH_SPECIES[0].id
+  let selected = fishSet[0].id
   let open = false
   let openedAt = 0
   // The tap that opens the book (it opens on pointerdown) is still going on when the book appears, and
@@ -82,6 +82,7 @@ export function createLogbook({ onClose, storage } = {}) {
 
   // Built once; refresh() only changes classes and text afterwards.
   for (const [rarity, info] of Object.entries(RARITIES)) {
+    if (!fishInRarity(rarity, fishSet).length) continue
     const group = document.createElement('section')
     group.className = 'logbook-group'
     group.style.setProperty('--rarity', info.colour)
@@ -92,7 +93,7 @@ export function createLogbook({ onClose, storage } = {}) {
     heading.append(count)
     const list = document.createElement('div')
     list.className = 'logbook-tiles'
-    for (const fish of fishInRarity(rarity)) {
+    for (const fish of fishInRarity(rarity, fishSet)) {
       const tile = document.createElement('button')
       tile.type = 'button'
       tile.className = 'tile'
@@ -118,10 +119,10 @@ export function createLogbook({ onClose, storage } = {}) {
       tile.querySelector('.tile-name').textContent = entry ? FISH_BY_ID.get(id).name : '???'
     }
     for (const count of grid.querySelectorAll('small[data-rarity]')) {
-      const species = fishInRarity(count.dataset.rarity)
+      const species = fishInRarity(count.dataset.rarity, fishSet)
       count.textContent = `${species.filter((fish) => store.get(fish.id)).length} / ${species.length}`
     }
-    $('logbook-count').textContent = `${store.species()} / ${FISH_SPECIES.length} species`
+    $('logbook-count').textContent = `${fishSet.filter((fish) => store.get(fish.id)).length} / ${fishSet.length} species`
 
     const fish = FISH_BY_ID.get(selected)
     const entry = store.get(selected)

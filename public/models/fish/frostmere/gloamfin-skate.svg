@@ -1,0 +1,18 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Gloamfin Skate (Uncommon)</title>
+  <polyline points="34,30 4,30" fill="none" stroke="#4a556a" stroke-width="2.4" stroke-linecap="round"/>
+  <polygon points="8,30 2,26 5,30 2,34" fill="#4a556a"/>
+  <polygon points="112,30 66,4 34,30" fill="#6a7a98"/>
+  <polygon points="112,30 66,56 34,30" fill="#d8dff0"/>
+  <polygon points="66,4 66,30 34,30" fill="#8b98b2"/>
+  <polygon points="66,56 66,30 34,30" fill="#e4e9f5"/>
+  <polygon points="112,30 88,20 88,30" fill="#8592ab"/>
+  <circle cx="83.5" cy="36.9" r="2.1" fill="#2e3a52"/>
+  <circle cx="70.2" cy="30.4" r="2" fill="#2e3a52"/>
+  <circle cx="73.6" cy="28.8" r="1.4" fill="#2e3a52"/>
+  <circle cx="71.6" cy="20.6" r="2.3" fill="#2e3a52"/>
+  <circle cx="98" cy="24" r="3" fill="#fff"/>
+  <circle cx="99" cy="24" r="1.5" fill="#0b0f14"/>
+  <circle cx="98" cy="36" r="3" fill="#fff"/>
+  <circle cx="99" cy="36" r="1.5" fill="#0b0f14"/>
+</svg>

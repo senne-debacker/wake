@@ -1,0 +1,25 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Glacier Sturgeon (Rare)</title>
+  <polygon points="25,30 8.8,18 14.7,30" fill="#41586f"/>
+  <polygon points="25,30 14.7,30 8.8,42" fill="#374b5e"/>
+  <polygon points="53.3,23.3 60.6,12.8 82.7,23.4" fill="#41586f"/>
+  <polygon points="42.2,34.9 38.2,41.8 58.8,36.1" fill="#41586f"/>
+  <polygon points="69.8,36.4 66.8,42.7 80.9,35.9" fill="#394d62"/>
+  <polygon points="114,30 103,25 86.4,22.1 69.8,21.4 53.3,21.8 37.6,23.4 22,25.9 22,30" fill="#5a7a9a"/>
+  <polygon points="114,30 103,34.6 86.4,37.2 69.8,37.9 53.3,37.4 37.6,36 22,33.6 22,30" fill="#d0dcea"/>
+  <polygon points="37.6,23.4 53.3,21.8 69.8,21.4 86.4,22.1 86.4,30 69.8,30 53.3,30 37.6,30" fill="#7b95b0"/>
+  <polygon points="53.3,21.8 69.8,21.4 69.8,25.8" fill="#4c6681"/>
+  <polygon points="86.4,22.1 103,25 114,30 103,30" fill="#718da8"/>
+  <polygon points="53.3,37.4 69.8,37.9 86.4,37.2 86.4,31.4 53.3,31.4" fill="#dee7f0"/>
+  <polygon points="45.2,26.5 47.8,23.3 50.4,26.5 47.8,29.7" fill="#a8c4de"/>
+  <polygon points="54.4,26.2 57,23 59.6,26.2 57,29.4" fill="#a8c4de"/>
+  <polygon points="63.6,26 66.2,22.8 68.8,26 66.2,29.2" fill="#a8c4de"/>
+  <polygon points="72.8,26.1 75.4,22.9 78,26.1 75.4,29.3" fill="#a8c4de"/>
+  <polygon points="82,26.3 84.6,23.1 87.2,26.3 84.6,29.5" fill="#a8c4de"/>
+  <polygon points="91.2,26.9 93.8,23.7 96.4,26.9 93.8,30.1" fill="#a8c4de"/>
+  <polygon points="82.7,29.4 73.7,33.4 81.7,35" fill="#3b4f64"/>
+  <path d="M93.8 27.4 Q89.8 30 93.8 32" fill="none" stroke="#36495c" stroke-width="1.5"/>
+  <circle cx="104.8" cy="27.8" r="2.4" fill="#ffffff"/>
+  <circle cx="105.6" cy="27.8" r="1.2" fill="#0b0f14"/>
+  <path d="M110 32 Q118 38.4 110 43.2 M104 34 Q108 40.8 100 45" fill="none" stroke="#727981" stroke-width="1.8" stroke-linecap="round"/>
+</svg>

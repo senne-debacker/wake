@@ -1,4 +1,3 @@
-import { FISH_SPECIES } from './fishing/fishDatabase.js'
 import { applyBoatStats } from './boats.js'
 import { chooseWorld } from './worlds.js'
 import { setWaterDetail } from './scene/planet.js'
@@ -15,7 +14,7 @@ import { QUALITY } from './quality.js'
 const CODE = '1815'
 const STORAGE_KEY = 'wake.dev'
 
-export function createDevMode({ interaction, clock, atmosphere, boat, boats, economy, planet, worlds, activeWorld, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState }) {
+export function createDevMode({ fishSet, interaction, clock, atmosphere, boat, boats, economy, planet, worlds, activeWorld, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState }) {
   const $ = (id) => document.getElementById(id)
   const gate = $('dev-gate')
   const panel = $('dev')
@@ -236,16 +235,16 @@ export function createDevMode({ interaction, clock, atmosphere, boat, boats, eco
 
   // Fishing
   const species = $('dev-species')
-  for (const fish of FISH_SPECIES) species.append(new Option(`${fish.name} (${fish.rarity})`, fish.id))
+  for (const fish of fishSet) species.append(new Option(`${fish.name} (${fish.rarity})`, fish.id))
   $('dev-refill').addEventListener('click', () => spots.refill())
   $('dev-fight').addEventListener('click', () => {
     const spot = spots.nearest(boatState.dir, Infinity)?.spot ?? spots.spots.find((s) => !s.empty) ?? spots.spots[0]
     if (spot && getState() === 'playing') {
       panel.classList.remove('show')
-      startFishing(spot, FISH_SPECIES.find((fish) => fish.id === species.value) ?? null)
+      startFishing(spot, fishSet.find((fish) => fish.id === species.value) ?? null)
     }
   })
-  $('dev-fill').addEventListener('click', () => FISH_SPECIES.forEach((fish) => logbook.record({ id: fish.id, weight: (fish.weight[0] + fish.weight[1]) / 2 })))
+  $('dev-fill').addEventListener('click', () => fishSet.forEach((fish) => logbook.record({ id: fish.id, weight: (fish.weight[0] + fish.weight[1]) / 2 })))
   $('dev-clear').addEventListener('click', () => logbook.reset())
 
   // View: how finely the sea is cut into triangles (scene/planet.js). Remembered for the tab.

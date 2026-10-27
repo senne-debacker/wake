@@ -1,6 +1,6 @@
 import { LIGHTNING } from '../config.js'
 
-// Where and when a rare or legendary fish likes to bite. A species can have a `habitat` (see
+// Where and when a rare, epic or legendary fish likes to bite. A species can have a `habitat` (see
 // fishDatabase.js):
 //   weather  'thunderstorm' | 'rain' | 'rough' | 'calm' | 'clear'   (a key of WEATHER_KINDS), optional
 //   hours    [from, to]  game hours, from <= hour < to, may wrap past midnight ([22, 2]), optional

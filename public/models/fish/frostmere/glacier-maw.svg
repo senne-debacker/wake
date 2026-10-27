@@ -1,0 +1,27 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>The Glacier Maw (Legendary)</title>
+  <polygon points="22,30 3,10 9,30 3,50" fill="#35506e"/>
+  <polygon points="22,30 9,30 3,50" fill="#2a4260"/>
+  <polygon points="36,14 42,2 48,13" fill="#cfe8f6"/>
+  <polygon points="50,12 58,0 66,12" fill="#e8f6ff"/>
+  <polygon points="68,12 76,3 82,15" fill="#cfe8f6"/>
+  <polygon points="40,46 46,57 52,46" fill="#8fb6d2"/>
+  <polygon points="64,48 70,58 76,47" fill="#8fb6d2"/>
+  <polygon points="112,31 96,13 62,10 28,20 18,30" fill="#4a6d90"/>
+  <polygon points="112,31 96,48 62,50 28,40 18,30" fill="#a9c9e0"/>
+  <polygon points="96,13 62,10 70,30 100,30" fill="#6a8fb4"/>
+  <polygon points="62,10 28,20 44,30 70,30" fill="#3a5878"/>
+  <polygon points="48,22 56,16 60,26" fill="#d6ecf8"/>
+  <polygon points="72,18 80,14 82,24" fill="#d6ecf8"/>
+  <polygon points="34,30 44,30 38,38" fill="#c4ddee"/>
+  <polygon points="112,31 98,31 104,40 90,37 92,31" fill="#1a2a44"/>
+  <polygon points="108,31 106,36 104,31" fill="#f1ece0"/>
+  <polygon points="102,31 100,37 98,31" fill="#f1ece0"/>
+  <polygon points="96,31 94,36 92,31" fill="#f1ece0"/>
+  <polygon points="111,30 109,25 107,30" fill="#f1ece0"/>
+  <polygon points="104,30 102,25 100,30" fill="#f1ece0"/>
+  <path d="M84 20 Q80 30 84 40" fill="none" stroke="#26405c" stroke-width="1.8"/>
+  <circle cx="92" cy="22" r="9" fill="#7ae0ff" opacity="0.3"/>
+  <circle cx="92" cy="22" r="4" fill="#bff3ff"/>
+  <circle cx="93" cy="22" r="1.8" fill="#0b2a44"/>
+</svg>

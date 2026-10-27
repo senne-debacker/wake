@@ -1,0 +1,15 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Old Moonfin (Epic)</title>
+  <polygon points="46,8 30,18 11,7 25,1" fill="#8997ab"/>
+  <polygon points="46,52 30,42 11,53 25,59" fill="#8997ab"/>
+  <polygon points="23,24 12,26 15,30 12,34 23,36" fill="#7887a0"/>
+  <polygon points="98,30 90,14 70,6 46,8 30,18 22,30 30,42 46,52 70,54 90,46" fill="#b9c6d8"/>
+  <polygon points="98,30 90,46 70,54 46,52 30,42 22,30 60,30" fill="#e9eff7"/>
+  <polygon points="90,14 70,6 46,8 60,30" fill="#d4dded"/>
+  <path d="M64 14 A17 17 0 1 0 64 46 A12 15 0 1 1 64 14 Z" fill="#ffe39a"/>
+  <polygon points="98,30 103,27 103,33" fill="#8997ab"/>
+  <circle cx="89" cy="26" r="3.2" fill="#fff"/>
+  <circle cx="90" cy="26" r="1.6" fill="#0b0f14"/>
+  <path d="M110 12 l1.6 -4 1.6 4 4 1.6 -4 1.6 -1.6 4 -1.6 -4 -4 -1.6z" fill="#fff4c9"/>
+  <path d="M8 46 l1.2 -3 1.2 3 3 1.2 -3 1.2 -1.2 3 -1.2 -3 -3 -1.2z" fill="#fff4c9"/>
+</svg>

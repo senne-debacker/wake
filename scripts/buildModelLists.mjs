@@ -5,7 +5,8 @@
 // (and by hand: npm run models).
 //
 // Cards may also give the economy numbers (src/economy.js): a boat's `price` (coins) and `hold` (kg of fish it
-// carries), a world's `price` (the chart) and `requires` (the id of a boat you must own).
+// carries), a world's `price` (the chart), `requires` (the id of a boat you must own) and `fish` (its set of
+// 32 fish, see src/fishing/fishDatabase.js: `home` or `frostmere`; no line means the home waters).
 //
 // A card is "key: value" lines; a value may go on indented lines below its key (the "anything special" of
 // a world often does).
@@ -57,4 +58,4 @@ function build(kind, extra) {
 const pick = (value, allowed, fallback) => (allowed.includes(String(value).toLowerCase()) ? String(value).toLowerCase() : fallback)
 const number = (value) => (Number.isFinite(Number(value)) && String(value).trim() !== '' ? Number(value) : undefined) // (left out when the card has none: the game's defaults apply)
 build('boats', (card) => ({ speed: pick(card.speed, SPEED, 'medium'), handling: pick(card.handling, HANDLING, 'medium'), price: number(card.price), hold: number(card.hold) }))
-build('worlds', (card) => ({ price: number(card.price), requires: card.requires || undefined }))
+build('worlds', (card) => ({ price: number(card.price), requires: card.requires || undefined, fish: card.fish || undefined }))

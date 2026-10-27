@@ -1,10 +1,14 @@
-// Every fish that can be caught: 16 species in four rarities, with the drop rates that decide
+// Every fish that can be caught: 32 species per world in five rarities, with the drop rates that decide
 // which one comes up. Pure data and a few helpers, no DOM, so the Node checks can import it.
+//
+// A world has a fish set (its card says `fish: frostmere`; no line means the home waters). The home waters
+// are the 16 hand-drawn species below plus the 16 in species/home.js; Frostmere's 32 are in species/frostmere.js.
+// Each set has 10 common, 9 uncommon, 7 rare, 5 epic and exactly 1 legendary fish.
 //
 // Fields of a species:
 //   id           stable key (the logbook is saved under it, so never rename one)
 //   name         shown in the logbook and on the catch card
-//   rarity       'common' | 'uncommon' | 'rare' | 'legendary'  (a key of RARITIES)
+//   rarity       'common' | 'uncommon' | 'rare' | 'epic' | 'legendary'  (a key of RARITIES)
 //   weight       [min, max] in kilograms
 //   description  one or two lines of flavour
 //   imgUrl       the picture as inline <svg> markup (not a URL, despite the name: it is put into the
@@ -12,7 +16,8 @@
 //                like the game's low-poly look, and use no id= / url(#) so the same picture can be on
 //                the page several times. No scripts or external references.
 //
-//   habitat      (rare and legendary only, optional) when the species is likelier to bite, see
+//   set          'home' | 'frostmere' (added below: the fish set it belongs to)
+//   habitat      (rare, epic and legendary only, optional) when the species is likelier to bite, see
 //                fishing/habitat.js: { weather, hours, boost, hint }. The logbook shows the vague `hint`
 //                until you have caught one, then the whole rule
 //
@@ -20,20 +25,24 @@
 // ones you can catch.
 
 import { habitatActive } from './habitat.js'
+import { drawFish } from './fishArt.js'
+import { HOME_NEW } from './species/home.js'
+import { FROSTMERE } from './species/frostmere.js'
 
 // Order = display order of the logbook. `rate` is the chance that a catch is of this rarity
-// (the four add up to 1); `difficulty` scales the fight (see fishing/fishingMinigame.js);
+// (the five add up to 1); `difficulty` scales the fight (see fishing/fishingMinigame.js);
 // `colour` tints the cards in the interface; `price` is what the harbour pays per kilo (economy.js).
 export const RARITIES = {
-  common: { label: 'Common', rate: 0.6, difficulty: 0.85, colour: '#1f2b3a', price: 2 },
+  common: { label: 'Common', rate: 0.52, difficulty: 0.85, colour: '#1f2b3a', price: 2 },
   uncommon: { label: 'Uncommon', rate: 0.27, difficulty: 1, colour: '#3f5e4a', price: 6 },
-  rare: { label: 'Rare', rate: 0.1, difficulty: 1.25, colour: '#5b4b8a', price: 25 },
-  legendary: { label: 'Legendary', rate: 0.03, difficulty: 1.6, colour: '#7a4a12', price: 150 },
+  rare: { label: 'Rare', rate: 0.14, difficulty: 1.2, colour: '#5b4b8a', price: 25 },
+  epic: { label: 'Epic', rate: 0.055, difficulty: 1.4, colour: '#1f6670', price: 60 },
+  legendary: { label: 'Legendary', rate: 0.015, difficulty: 1.6, colour: '#7a4a12', price: 150 },
 }
 
 const SVG = 'xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60"'
 
-export const FISH_SPECIES = [
+const HOME_BASE = [
   // --- Common ---------------------------------------------------------------------------------
   {
     id: 'dusk-herring',
@@ -358,7 +367,7 @@ export const FISH_SPECIES = [
   {
     id: 'old-moonfin',
     name: 'Old Moonfin',
-    rarity: 'legendary',
+    rarity: 'epic',
     habitat: { weather: 'calm', hours: [22, 2], boost: 2, hint: 'Prefers still water and the dead of night.' },
     weight: [90, 240],
     description: 'A drifting disc of silver that surfaces on still nights. Sailors take their hats off when it passes.',
@@ -408,8 +417,19 @@ export const FISH_SPECIES = [
   },
 ]
 
+const finish = (list, set) => list.map((fish) => ({ ...fish, set, imgUrl: fish.imgUrl ?? drawFish(fish.art) }))
+
+export const HOME = 'home'
+export const FISH_SETS = {
+  home: finish([...HOME_BASE, ...HOME_NEW], 'home'),
+  frostmere: finish(FROSTMERE, 'frostmere'),
+}
+export const FISH_SPECIES = Object.values(FISH_SETS).flat() // every species in every world
 export const FISH_BY_ID = new Map(FISH_SPECIES.map((fish) => [fish.id, fish]))
-export const fishInRarity = (rarity) => FISH_SPECIES.filter((fish) => fish.rarity === rarity)
+
+// The species of a world's fish set (an unknown or missing set is the home waters).
+export const fishSet = (id) => FISH_SETS[id] ?? FISH_SETS[HOME]
+export const fishInRarity = (rarity, set = FISH_SETS[HOME]) => set.filter((fish) => fish.rarity === rarity)
 
 // A rarity at random, weighted by the drop rates. `random` is any () => [0, 1) (Math.random, or a
 // seeded one in the checks).
@@ -426,25 +446,25 @@ export function rollRarity(random = Math.random) {
 
 // The chance of each species, as weights: its rarity's drop rate shared out over the rarity, times its
 // habitat's boost while the weather and the hour suit it. They are not normalised: rollFish takes the sum.
-export function speciesWeights(conditions = null) {
-  return FISH_SPECIES.map((fish) => {
-    const base = RARITIES[fish.rarity].rate / fishInRarity(fish.rarity).length
+export function speciesWeights(conditions = null, set = FISH_SETS[HOME]) {
+  return set.map((fish) => {
+    const base = RARITIES[fish.rarity].rate / fishInRarity(fish.rarity, set).length
     return habitatActive(fish.habitat, conditions) ? base * fish.habitat.boost : base
   })
 }
 
-// A species at random. Without `conditions` it is the rarity first (by its drop rate), then any fish
+// A species of the fish set `set` at random. Without `conditions` it is the rarity first (by its drop rate), then any fish
 // of that rarity, all equally likely. `conditions` ({ hour, storm, cover, rain }) lets a rare or
-// legendary fish whose habitat is right come up `boost` times as often (a little less in the end,
+// epic or legendary fish whose habitat is right come up `boost` times as often (a little less in the end,
 // because the chances are shared out again: the odds of the others shrink to make room).
-export function rollFish(random = Math.random, conditions = null) {
-  const weights = speciesWeights(conditions)
+export function rollFish(random = Math.random, conditions = null, set = FISH_SETS[HOME]) {
+  const weights = speciesWeights(conditions, set)
   let roll = random() * weights.reduce((sum, w) => sum + w, 0)
   for (let i = 0; i < weights.length; i++) {
     roll -= weights[i]
-    if (roll < 0) return FISH_SPECIES[i]
+    if (roll < 0) return set[i]
   }
-  return FISH_SPECIES[FISH_SPECIES.length - 1] // only reached through rounding
+  return set[set.length - 1] // only reached through rounding
 }
 
 // The weight of one catch in kg, always inside the species' range. Squared-ish towards the light

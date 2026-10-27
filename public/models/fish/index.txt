@@ -1,0 +1,70 @@
+Wake: every fish, as an SVG (npm run export:fish writes these; they are made from src/fishing).
+The nose is on the right. The picture is 120 x 60, here shown at 480 x 240.
+
+home  (32 fish)
+  home/dusk-herring.svg   Dusk Herring, Common, 200 g to 800 g
+  home/mudgrubber.svg   Mudgrubber, Common, 600 g to 2.8 kg
+  home/rustback-flounder.svg   Rustback Flounder, Common, 800 g to 3.2 kg
+  home/lantern-sprat.svg   Lantern Sprat, Common, 50 g to 250 g
+  home/brine-mackerel.svg   Brine Mackerel, Common, 600 g to 2.2 kg
+  home/thornback-perch.svg   Thornback Perch, Common, 400 g to 1.6 kg
+  home/ember-eel.svg   Ember Eel, Uncommon, 1.2 kg to 4.5 kg
+  home/lamplit-angler.svg   Lamplit Angler, Uncommon, 2.0 kg to 9.0 kg
+  home/sourpuss-puffer.svg   Sourpuss Puffer, Uncommon, 800 g to 3.4 kg
+  home/mossback-gar.svg   Mossback Gar, Uncommon, 3.0 kg to 11.0 kg
+  home/glasswing-skate.svg   Glasswing Skate, Uncommon, 2.5 kg to 12.0 kg
+  home/bonewhistle.svg   Bonewhistle, Rare, 4.0 kg to 16.0 kg
+  home/brasscrown-sturgeon.svg   Brasscrown Sturgeon, Rare, 20.0 kg to 65.0 kg
+  home/argus-grouper.svg   Argus Grouper, Rare, 8.0 kg to 34.0 kg
+  home/old-moonfin.svg   Old Moonfin, Epic, 90.0 kg to 240.0 kg
+  home/wake-eater.svg   The Wake-Eater, Legendary, 150.0 kg to 420.0 kg
+  home/sandskipper.svg   Sandskipper, Common, 100 g to 500 g
+  home/pebblefin.svg   Pebblefin, Common, 300 g to 1.2 kg
+  home/kelpback-smelt.svg   Kelpback Smelt, Common, 80 g to 400 g
+  home/gullbait-minnow.svg   Gullbait Minnow, Common, 30 g to 200 g
+  home/copperscale-bream.svg   Copperscale Bream, Uncommon, 1.0 kg to 4.2 kg
+  home/reedtooth-pike.svg   Reedtooth Pike, Uncommon, 2.0 kg to 8.0 kg
+  home/lacewing-ray.svg   Lacewing Ray, Uncommon, 2.0 kg to 9.0 kg
+  home/candlefin-trout.svg   Candlefin Trout, Uncommon, 900 g to 3.6 kg
+  home/ghostlight-cod.svg   Ghostlight Cod, Rare, 6.0 kg to 22.0 kg
+  home/gilded-mullet.svg   Gilded Mullet, Rare, 3.0 kg to 12.0 kg
+  home/siren-barbel.svg   Siren Barbel, Rare, 5.0 kg to 18.0 kg
+  home/tempest-tuna.svg   Tempest Tuna, Rare, 18.0 kg to 60.0 kg
+  home/crimson-sunfish.svg   Crimson Sunfish, Epic, 60.0 kg to 190.0 kg
+  home/drowned-bell-ray.svg   Drowned Bell Ray, Epic, 40.0 kg to 140.0 kg
+  home/ironjaw-marlin.svg   Ironjaw Marlin, Epic, 70.0 kg to 210.0 kg
+  home/abyss-anglerking.svg   Abyss Anglerking, Epic, 50.0 kg to 160.0 kg
+
+frostmere  (32 fish)
+  frostmere/snowdrift-smelt.svg   Snowdrift Smelt, Common, 50 g to 300 g
+  frostmere/icefin-cod.svg   Icefin Cod, Common, 1.0 kg to 5.0 kg
+  frostmere/slushback-dab.svg   Slushback Dab, Common, 400 g to 1.8 kg
+  frostmere/rimescale-sprat.svg   Rimescale Sprat, Common, 40 g to 200 g
+  frostmere/hoarfrost-haddock.svg   Hoarfrost Haddock, Common, 800 g to 3.4 kg
+  frostmere/shiverfin-bleak.svg   Shiverfin Bleak, Common, 60 g to 300 g
+  frostmere/glaze-sculpin.svg   Glaze Sculpin, Common, 200 g to 900 g
+  frostmere/mittenfish.svg   Mittenfish, Common, 500 g to 2.0 kg
+  frostmere/drift-vendace.svg   Drift Vendace, Common, 100 g to 500 g
+  frostmere/slate-pollock.svg   Slate Pollock, Common, 1.0 kg to 4.5 kg
+  frostmere/floeback-char.svg   Floeback Char, Uncommon, 1.0 kg to 4.8 kg
+  frostmere/icepick-pike.svg   Icepick Pike, Uncommon, 2.0 kg to 9.0 kg
+  frostmere/aurora-trout.svg   Aurora Trout, Uncommon, 1.0 kg to 4.0 kg
+  frostmere/cairn-lumpsucker.svg   Cairn Lumpsucker, Uncommon, 1.5 kg to 6.0 kg
+  frostmere/whiteout-halibut.svg   Whiteout Halibut, Uncommon, 4.0 kg to 16.0 kg
+  frostmere/spruce-grayling.svg   Spruce Grayling, Uncommon, 800 g to 3.0 kg
+  frostmere/tallow-burbot.svg   Tallow Burbot, Uncommon, 1.5 kg to 6.0 kg
+  frostmere/crystalmouth-lamprey.svg   Crystalmouth Lamprey, Uncommon, 600 g to 2.4 kg
+  frostmere/gloamfin-skate.svg   Gloamfin Skate, Uncommon, 3.0 kg to 13.0 kg
+  frostmere/glacier-sturgeon.svg   Glacier Sturgeon, Rare, 25.0 kg to 80.0 kg
+  frostmere/wolfjaw-catfish.svg   Wolfjaw Catfish, Rare, 6.0 kg to 24.0 kg
+  frostmere/shardscale-salmon.svg   Shardscale Salmon, Rare, 5.0 kg to 18.0 kg
+  frostmere/halo-opah.svg   Halo Opah, Rare, 12.0 kg to 45.0 kg
+  frostmere/snowblind-ray.svg   Snowblind Ray, Rare, 10.0 kg to 36.0 kg
+  frostmere/winterbell-eelpout.svg   Winterbell Eelpout, Rare, 3.0 kg to 12.0 kg
+  frostmere/hollowhorn-unicornfish.svg   Hollowhorn Unicornfish, Rare, 8.0 kg to 28.0 kg
+  frostmere/crystalhorn-narwhalfish.svg   Crystalhorn Narwhalfish, Epic, 60.0 kg to 180.0 kg
+  frostmere/bergmaw-angler.svg   Bergmaw Angler, Epic, 60.0 kg to 200.0 kg
+  frostmere/blizzard-sturgeon.svg   Blizzard Sturgeon, Epic, 80.0 kg to 240.0 kg
+  frostmere/aurora-moonfish.svg   Aurora Moonfish, Epic, 70.0 kg to 220.0 kg
+  frostmere/ghostwhite-pike.svg   Ghostwhite Pike, Epic, 30.0 kg to 95.0 kg
+  frostmere/glacier-maw.svg   The Glacier Maw, Legendary, 180.0 kg to 520.0 kg
