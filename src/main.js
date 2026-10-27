@@ -108,6 +108,11 @@ async function main() {
   const activeWorld = layout.imported ? wantedWorld : worlds[0]
   const dock = layout.harbour // where the harbour is: anchor next to it to trade
   const fishSet = fishSetOf(activeWorld.fish) // the 32 fish that live in this world
+  const fishPages = [] // the logbook has a tab per world: { id: its fish set, name, set }
+  for (const entry of worlds) {
+    const id = entry.fish ?? 'home'
+    if (!fishPages.some((page) => page.id === id)) fishPages.push({ id, name: entry.name, set: fishSetOf(id) })
+  }
   const world = createWorld(layout, waterEdge(QUALITY.waterDetail))
   const spots = createFishingSpots(layout.fishingSpots) // patches of bubbling water: drop the anchor on one to fish
   const sky = createSky()
@@ -152,7 +157,7 @@ async function main() {
   let fishingSpot = null // the spot being fished
   let fightOutcome = null // how the last fight ended: 'caught', 'snapped' or 'released'
   let logbookReturn = 'playing' // where the logbook goes back to: the game, or the pause screen it was opened from
-  const logbook = createLogbook({ fishSet, onClose: () => state === 'logbook' && setState(logbookReturn) })
+  const logbook = createLogbook({ pages: fishPages, current: activeWorld.fish ?? 'home', onClose: () => state === 'logbook' && setState(logbookReturn) })
   const fishing = createFishingMinigame({
     logbook,
     onFrame: (fight) => audio.reel(fight),
