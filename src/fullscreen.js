@@ -11,7 +11,7 @@ export function setupFullscreen() {
     const on = current() !== null
     document.body.classList.toggle('is-fullscreen', on)
     for (const icon of document.querySelectorAll('[data-fullscreen-icon]')) icon.setAttribute('href', on ? '#i-shrink' : '#i-expand')
-    for (const label of document.querySelectorAll('[data-fullscreen-label]')) label.textContent = on ? 'Exit full screen' : 'Full screen'
+    for (const label of document.querySelectorAll('[data-fullscreen-label]')) label.textContent = on ? 'Exit full screen' : 'Go full screen'
   }
   document.addEventListener('fullscreenchange', sync)
   document.addEventListener('webkitfullscreenchange', sync)

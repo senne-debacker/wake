@@ -131,9 +131,24 @@ export function createLogbook({ onClose, storage } = {}) {
     detail.image.classList.toggle('locked', !entry)
     detail.name.textContent = entry ? fish.name : '???'
     detail.rarity.textContent = info.label
-    detail.stats.textContent = entry
-      ? `Caught ${entry.count} × · Best ${formatWeight(entry.best)} · Range ${formatWeight(fish.weight[0])} to ${formatWeight(fish.weight[1])}`
-      : 'Not caught yet'
+    // Caught / Best / Range as three cells (theme.css draws the lines between them).
+    const cell = (label, value) => {
+      const element = document.createElement('span')
+      const small = document.createElement('small')
+      small.textContent = label
+      const big = document.createElement('b')
+      big.textContent = value
+      element.append(small, big)
+      return element
+    }
+    const [low, high] = fish.weight.map(formatWeight)
+    const range = low.split(' ')[1] === high.split(' ')[1] ? `${low.split(' ')[0]}-${high}` : `${low}-${high}` // "200-800 g"
+    detail.stats.classList.toggle('empty', !entry)
+    detail.stats.replaceChildren(
+      ...(entry
+        ? [cell('Caught', `${entry.count}\u00d7`), cell('Best', formatWeight(entry.best)), cell('Range', range)]
+        : [cell('Caught', '\u2013'), cell('Best', '\u2013'), cell('Range', range)]),
+    )
     detail.text.textContent = entry ? fish.description : 'Catch one to learn what it is.'
     // Rare and legendary fish bite better in the right weather and hour: a hint at first, the whole rule once caught.
     detail.habitat.hidden = !fish.habitat

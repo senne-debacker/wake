@@ -1,7 +1,7 @@
-// Two overlays (markup in index.html, look in style.css):
-//   #start  the start screen: title, the "Set sail" button and a Settings button (which opens the Settings
-//           page below, and goes back to the start screen). Everything else is the 3D scene behind it, a
-//           close-up of the boat
+// Two overlays (markup in index.html, look in style.css and theme.css):
+//   #start  the start screen: a paper sheet with the title, the "Set sail" button and the rows Settings /
+//           Controls / About (which open those pages below, and go back to the start screen). Everything else
+//           is the 3D scene behind it, a close-up of the boat
 //   #menu   the pause screen: a short list (Resume, Controls, Tutorial, Settings, Logbook, About, Home screen).
 //           Controls, Settings, About and the "go home?" question are pages inside the same card: one .menu-view is shown at a time,
 //           Esc or "Back" returns to the list
@@ -18,10 +18,14 @@ export function createMenu({ audio, display, purse, onStart, onResume, onHome, o
   const music = $('volume-music')
   const effects = $('volume-sfx')
 
+  // The filled part of a slider's track is drawn from --fill (theme.css).
+  const fill = (input) => input.style.setProperty('--fill', `${(Number(input.value) - Number(input.min)) / (Number(input.max) - Number(input.min)) * 100}%`)
   music.value = audio.settings.music
   effects.value = audio.settings.sfx
-  music.addEventListener('input', () => audio.setMusicVolume(Number(music.value)))
-  effects.addEventListener('input', () => audio.setSfxVolume(Number(effects.value)))
+  fill(music)
+  fill(effects)
+  music.addEventListener('input', () => { audio.setMusicVolume(Number(music.value)); fill(music) })
+  effects.addEventListener('input', () => { audio.setSfxVolume(Number(effects.value)); fill(effects) })
 
   // The visual settings: a row of buttons per setting, the current value pressed.
   const segments = [...pause.querySelectorAll('.seg[data-setting]')]
@@ -54,7 +58,8 @@ export function createMenu({ audio, display, purse, onStart, onResume, onHome, o
     view = next
     card.dataset.view = next
     for (const element of pause.querySelectorAll('.menu-view')) element.hidden = element.id !== `view-${next}`
-    $('menu-state').textContent = next === 'main' && purse ? `${TITLES[next]}  ·  ${purse()}` : TITLES[next]
+    $('menu-tag').textContent = TITLES[next] // the title tag on the pages (the list has the stamp instead)
+    $('menu-purse').textContent = next === 'main' && purse ? purse() : ''
     pause.scrollTop = 0
     const first = pause.querySelector(`#view-${next} ${next === 'main' ? '#menu-action' : '[data-back]'}`)
     first?.focus({ preventScroll: true })
@@ -66,18 +71,20 @@ export function createMenu({ audio, display, purse, onStart, onResume, onHome, o
   $('menu-home').addEventListener('click', () => show('confirm')) // asks first
   $('menu-home-confirm').addEventListener('click', () => onHome())
 
-  const settingsButton = $('settings-button')
-  settingsButton.addEventListener('click', () => {
-    settingsButton.blur() // otherwise Space or Enter would press it again
-    openSettings()
-  })
+  // The rows of the start sheet open a page of the pause card over the start screen.
+  for (const button of start.querySelectorAll('[data-start-view]')) {
+    button.addEventListener('click', () => {
+      button.blur() // otherwise Space or Enter would press it again
+      openPage(button.dataset.startView)
+    })
+  }
 
-  function openSettings() {
+  function openPage(page) {
     fromStart = true
     showSettings()
     pause.classList.add('show')
     document.body.classList.add('overlay')
-    show('settings')
+    show(page)
   }
   // Esc or Back: up one level. Returns false when there is nowhere to go (the list of the pause screen).
   function back() {

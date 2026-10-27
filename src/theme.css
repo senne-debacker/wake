@@ -1,0 +1,2516 @@
+/* ---------------------------------------------------------------------------------------------
+   "Old paper and ink": the look of every screen. It is loaded after style.css and restyles what is
+   there (colours, borders, fonts, shapes); layout and the phone / landscape fitting stay in style.css.
+   Flat colours only: no glows, no drop shadows, no blur, no rounded corners; the only gradients are
+   the hard-edged two-tone facets (the folds of the paper).
+   --------------------------------------------------------------------------------------------- */
+
+:root {
+  --paper: #e8d9bc; /* main paper */
+  --paper-dim: #dccaa4; /* paper at night / under lamplight */
+  --paper-card: #f1e6cc; /* small cards on paper (logbook species) */
+  --keycap: #f3e9d2; /* keycap faces */
+  --ink: #1f2b3a; /* all text and lines on paper */
+  --ink-faded: #5a4a36; /* secondary text, labels, captions */
+  --red: #a63d3a; /* primary buttons, stamps, the current-time marker */
+  --red-dark: #943533;
+  --amber: #f2c46d; /* highlighter, active states, dusk */
+  --amber-paper: #f2d18a; /* paper that is switched on (lamp on) */
+  --pine: #3f5e4a; /* "Calm" sea state, uncommon rarity */
+  --rare: #5b4b8a;
+  --legendary: #7a4a12;
+  --day: #9cc3d0; /* day segment of the time dial */
+  --scrim: rgba(14, 20, 38, 0.55); /* darkens the world behind menus */
+  --rule: rgba(31, 43, 58, 0.35); /* thin row separators */
+
+  --font: 'Barlow Condensed', 'Avenir Next Condensed', 'DIN Condensed', 'Arial Narrow', sans-serif;
+  --body: 'Nunito', 'Avenir Next', system-ui, sans-serif;
+
+  /* the two-tone facets (the folds) */
+  --fold: linear-gradient(104deg, transparent 0 56.7%, rgba(90, 62, 30, 0.3) 56.7% 56.9%, rgba(110, 80, 40, 0.08) 56.9% 100%),
+    linear-gradient(176deg, rgba(255, 255, 255, 0.2) 0 44%, rgba(90, 62, 30, 0.22) 44% 44.3%, transparent 44.3% 100%);
+  --facet: linear-gradient(98deg, transparent 0 62%, rgba(110, 80, 40, 0.1) 62% 100%);
+  --sheet-clip: polygon(0.8% 1.2%, 48% 0, 99.2% 0.8%, 100% 50%, 98.8% 99%, 52% 100%, 0 99.4%, 1.2% 48%);
+  --tag-clip: polygon(2% 4%, 50% 0, 98% 3%, 100% 96%, 50% 100%, 0 97%);
+}
+
+html,
+body {
+  font-family: var(--font);
+}
+
+/* ---- shared pieces ---------------------------------------------------------------------------- */
+
+/* Paper sheet: the big panels. The paper is drawn by ::after (so that a title tag and key caps may
+   stick out past the uneven edge, and so that the card's own box is not clipped). */
+.paper {
+  position: relative;
+  isolation: isolate;
+  color: var(--ink);
+}
+
+.paper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--fold), var(--paper);
+  clip-path: var(--sheet-clip);
+}
+
+/* Paper tag: small labels and the HUD pieces. Same idea, one facet and a nearly rectangular edge. */
+.tag {
+  position: relative;
+  isolation: isolate;
+  color: var(--ink);
+}
+
+.tag::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--facet), var(--paper);
+  clip-path: var(--tag-clip);
+}
+
+/* The title tag pinned behind the top-left edge of a sheet. */
+.sheet-tag {
+  position: absolute;
+  z-index: -2;
+  left: 5.5%;
+  top: -48px;
+  min-width: 170px;
+  box-sizing: border-box;
+  padding: 10px 24px 22px;
+  font: 700 28px/1 var(--font);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--facet), var(--paper-dim);
+  clip-path: var(--tag-clip);
+  transform: rotate(-2.5deg);
+  transform-origin: 0 100%;
+  pointer-events: none;
+}
+
+/* Ink rule: a section divider with a tick near each end. */
+.rule {
+  position: relative;
+  height: 2px;
+  margin: 18px 0;
+  background: var(--ink);
+}
+
+.rule::before,
+.rule::after {
+  content: '';
+  position: absolute;
+  top: -6px;
+  width: 2px;
+  height: 14px;
+  background: var(--ink);
+}
+
+.rule::before {
+  left: 12px;
+}
+
+.rule::after {
+  right: 12px;
+}
+
+/* Keycap: every key hint. */
+.key,
+kbd {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  margin: 0;
+  padding: 0 6px;
+  box-sizing: border-box;
+  border: 2px solid var(--ink);
+  border-bottom-width: 4px;
+  border-radius: 0;
+  background: var(--keycap);
+  color: var(--ink);
+  font: 700 13px/1 var(--font);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.key.wide,
+kbd.wide {
+  padding: 0 10px;
+}
+
+/* Stamp: rarity, "Paused", "Made by Senne", "New". */
+.stamp {
+  display: inline-block;
+  padding: 3px 12px 2px;
+  border: 2.5px solid var(--red);
+  color: var(--red);
+  font: 700 18px/1.1 var(--font);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transform: rotate(-4deg);
+}
+
+/* Buttons. The primary one is red with a hard second tone and cut corners. */
+.big-button {
+  display: block;
+  margin: 24px auto 0;
+  padding: 12px 40px;
+  box-sizing: border-box;
+  border: 0;
+  background: linear-gradient(135deg, var(--red) 0 55%, var(--red-dark) 55% 100%);
+  clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
+  color: #f6f1e4;
+  font: 700 30px/1.1 var(--font);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: none;
+}
+
+.big-button:hover,
+.big-button:focus-visible {
+  outline: none;
+  background: linear-gradient(135deg, #b6463f 0 55%, var(--red) 55% 100%);
+  color: #fff;
+  box-shadow: none;
+}
+
+/* The secondary button: an ink outline; selected / pressed is filled with ink. */
+.seg button,
+.seg-button,
+.text-button {
+  min-height: 44px;
+  box-sizing: border-box;
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 700 16px/1 var(--font);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.seg button:hover:not([aria-pressed='true']),
+.seg-button:hover,
+.seg button:focus-visible,
+.seg-button:focus-visible {
+  outline: none;
+  border-color: var(--ink);
+  background: rgba(242, 196, 109, 0.45);
+}
+
+.seg button[aria-pressed='true'] {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* A menu row: a label on the left, an arrow or a keycap on the right, a thin rule below. */
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  min-height: 56px;
+  padding: 0 6px;
+  border: 0;
+  border-bottom: 1.5px solid var(--rule);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 700 26px/1 var(--font);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: left;
+  cursor: pointer;
+  transition: none;
+}
+
+.menu-item:hover,
+.menu-item:focus-visible {
+  outline: none;
+  background: rgba(242, 196, 109, 0.45);
+  border-color: var(--rule);
+}
+
+/* Close button: a red faceted gem (see closeGem in index.html). */
+.gem-button {
+  display: block;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.gem-button svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.gem-button:hover:not(:active) svg,
+.gem-button:focus-visible svg {
+  transform: rotate(-3deg);
+}
+
+.gem-button:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* Focus for everything else that can be pressed. */
+.menu-item:focus-visible,
+.text-button:focus-visible,
+.h-button:focus-visible,
+.tile:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -4px;
+}
+
+/* ---------------------------------------------------------------------------------------------
+   HUD (desktop first; the phone has its own rules at the end of this section)
+   --------------------------------------------------------------------------------------------- */
+
+#hud {
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+
+/* The time dial: a paper half-disc hanging from the top edge. The ring turns with the clock; the red
+   marker is "now", with the past to its right and the future coming in from its left. */
+#dial-ring {
+  left: -160px;
+  top: 0;
+  width: 320px;
+  height: 160px;
+}
+
+#dial-ring .dial-paper {
+  fill: var(--paper);
+}
+
+#dial-ring .dial-line {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+
+#dial-ring .dial-moon {
+  fill: var(--ink);
+}
+
+#dial-ring .dial-sun {
+  fill: var(--amber);
+}
+
+#dial-anchor {
+  left: -10px;
+  top: 90px;
+  width: 20px;
+  height: 24px;
+  filter: none;
+  transition: none;
+}
+
+#dial-anchor svg {
+  fill: var(--red);
+  stroke: none;
+}
+
+#dial-anchor.down {
+  filter: none;
+}
+
+#dial-anchor.down svg {
+  fill: var(--amber);
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+
+#dial-pill {
+  left: -90px;
+  top: 12px;
+  width: 180px;
+  height: 70px;
+  background: none;
+  clip-path: none;
+}
+
+#dial-day {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--ink);
+}
+
+#dial-time {
+  font-size: 46px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+
+/* A short message under the dial. */
+#toast {
+  top: 168px;
+  padding: 8px 24px;
+  background: none;
+  color: var(--ink);
+  font: 700 20px/1.1 var(--font);
+  letter-spacing: 0.1em;
+  isolation: isolate;
+}
+
+#toast::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--facet), var(--paper);
+  clip-path: var(--tag-clip);
+}
+
+/* Top left: speed and sea state on one paper tag, the logbook under it. */
+#left {
+  left: 28px;
+  top: 28px;
+}
+
+#stats {
+  position: relative;
+  isolation: isolate;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+#stats::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--facet), var(--paper);
+  clip-path: var(--tag-clip);
+}
+
+.stat {
+  min-width: 104px;
+  padding: 10px 14px 8px;
+  color: var(--ink);
+}
+
+.stat + .stat {
+  border-left: 2px solid var(--ink);
+}
+
+.stat .icon {
+  width: 22px;
+  height: 22px;
+  color: var(--ink-faded);
+}
+
+.stat b {
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+#stat-sea {
+  font-size: 34px;
+  line-height: 1.12;
+}
+
+.stat small {
+  margin: 2px 0 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  opacity: 1;
+  color: var(--ink-faded);
+}
+
+.good {
+  color: var(--pine);
+}
+.warn {
+  color: #8a5a10;
+}
+.bad {
+  color: var(--red);
+}
+
+#side {
+  margin-top: 24px;
+  padding-left: 0;
+  gap: 12px;
+}
+
+/* The tools: paper cards with the icon, a small label and the key overlapping the bottom edge. */
+.tool {
+  position: relative;
+  isolation: isolate;
+  width: 82px;
+  height: 88px;
+}
+
+.tool::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--facet), var(--paper);
+  clip-path: var(--tag-clip);
+}
+
+#dock .tool:nth-child(odd) {
+  transform: rotate(-2deg);
+}
+
+#dock .tool:nth-child(even) {
+  transform: rotate(2deg);
+}
+
+#dock .tool:nth-child(3) {
+  transform: rotate(-1deg);
+}
+
+.tool .diamond {
+  position: absolute;
+  inset: 12px 0 auto;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  transform: none;
+  transition: none;
+}
+
+.tool .diamond .icon {
+  width: 30px;
+  height: 30px;
+  transform: none;
+  color: var(--ink);
+}
+
+.tool-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 52px;
+  text-align: center;
+  font: 700 16px/1 var(--font);
+  letter-spacing: 0.06em;
+  color: var(--ink);
+}
+
+.tool .key {
+  right: auto;
+  left: 50%;
+  bottom: -14px;
+  transform: translateX(-50%);
+}
+
+.tool .key.wide {
+  min-width: 56px;
+}
+
+.tool.on::before,
+.tool.active::before {
+  background: var(--facet), var(--amber-paper);
+}
+
+.tool.on .diamond,
+.tool.active .diamond {
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.tool.on .icon,
+.tool.active .icon {
+  color: var(--ink);
+}
+
+.tool:hover .diamond,
+.strip[data-key]:hover {
+  filter: none;
+}
+
+.tool:hover::before,
+.strip[data-key]:hover::before {
+  background: var(--facet), #efe2c4;
+}
+
+.tool:active .diamond {
+  transform: none;
+}
+
+.tool:active {
+  transform: translateY(1px);
+}
+
+/* The logbook button: a plain square with the book, no label. */
+#tool-book {
+  width: 66px;
+  height: 66px;
+  transform: rotate(-1deg);
+}
+
+#tool-book .diamond {
+  inset: 18px 0 auto;
+}
+
+#tool-book .tool-label {
+  display: none;
+}
+
+#tool-book .key {
+  left: auto;
+  right: -10px;
+  bottom: -12px;
+  transform: none;
+}
+
+/* Bottom left: five cards in a row. */
+#dock {
+  left: 0;
+  bottom: 40px;
+  gap: 26px;
+  padding-left: 28px;
+}
+
+/* Tabs on the right: flush with the screen edge, stacked. */
+.strip {
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  margin-bottom: 8px;
+  color: var(--ink);
+  background: none;
+  font-size: 18px;
+  transition: none;
+}
+
+.strip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--facet), var(--paper);
+  clip-path: var(--tag-clip);
+}
+
+.strip .icon {
+  width: 24px;
+  height: 24px;
+  color: var(--ink);
+}
+
+.strip-label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--ink-faded);
+}
+
+.strip.off .icon {
+  opacity: 0.45;
+}
+
+.strip.active::before {
+  background: var(--facet), var(--amber-paper);
+}
+
+.strip.active {
+  background: none;
+  box-shadow: none;
+}
+
+.strip.active .strip-label {
+  color: var(--ink);
+}
+
+#right {
+  top: 28px;
+}
+
+.strip.right {
+  width: 108px;
+  height: 44px;
+  padding: 0 14px;
+}
+
+#strip-time {
+  margin-top: 6px;
+}
+
+/* ---- the phone: the same paper, the same layout as before ---------------------------------- */
+
+body.touch #left {
+  top: max(10px, env(safe-area-inset-top));
+  left: max(10px, env(safe-area-inset-left));
+}
+
+body.touch #right {
+  top: max(10px, env(safe-area-inset-top));
+  right: 0;
+}
+
+body.touch .tool {
+  width: 64px;
+  height: 64px;
+}
+
+body.touch .tool::before {
+  display: none; /* the diamonds are the shape here; each one is paper with an ink outline */
+}
+
+body.touch .tool-label {
+  display: none;
+}
+
+body.touch .tool .diamond {
+  position: absolute;
+  inset: 7px;
+  height: auto;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  border: 3px solid var(--ink);
+  background: var(--paper);
+  transform: rotate(45deg);
+}
+
+body.touch #dial {
+  top: 0;
+}
+
+body.touch .tool .diamond .icon {
+  width: 26px;
+  height: 26px;
+  transform: rotate(-45deg);
+  color: var(--ink);
+}
+
+body.touch .tool.on .diamond,
+body.touch .tool.active .diamond {
+  border: 3px solid var(--ink);
+  background: var(--amber-paper);
+}
+
+body.touch .tool:active .diamond {
+  transform: rotate(45deg) scale(0.94);
+}
+
+body.touch #dock .tool {
+  transform: none;
+}
+
+body.touch #tool-book {
+  transform: none;
+}
+
+body.touch #side .tool {
+  width: 56px;
+  height: 56px;
+}
+
+body.touch #side .diamond {
+  inset: 6px;
+}
+
+body.touch #side .diamond .icon {
+  width: 22px;
+  height: 22px;
+}
+
+body.touch #actions .diamond {
+  inset: calc(var(--s) * 0.11);
+}
+
+body.touch .strip.right {
+  height: 44px;
+  width: 64px;
+  padding: 0 10px;
+  justify-content: center;
+}
+
+body.touch .stat + .stat {
+  border-left: 2px solid var(--ink);
+}
+
+@media (orientation: portrait) {
+  body.touch .stat + .stat {
+    border-left: 0;
+    border-bottom: 2px solid var(--ink);
+  }
+}
+
+/* The joystick: paper with an ink outline, and a red diamond for a knob. */
+.stick-base {
+  background: var(--paper);
+  border: 3px solid var(--ink);
+}
+
+.stick-base .icon {
+  color: var(--ink-faded);
+}
+
+.stick-knob {
+  background: var(--red);
+  border: 3px solid var(--ink);
+  box-shadow: none;
+}
+
+#stick.active .stick-knob {
+  background: var(--amber);
+  border-color: var(--ink);
+  box-shadow: none;
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Panels: the pause screen and its pages, the start screen, and every other .menu-card
+   Sizes that the phone rules in style.css tune are only set here for body:not(.touch); on a phone
+   the colours and shapes change and the fitting stays as it was.
+   --------------------------------------------------------------------------------------------- */
+
+#menu,
+#harbour,
+#logbook {
+  background: var(--scrim);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+#menu.show .menu-card,
+#harbour.show .menu-card,
+#logbook.show .menu-card {
+  animation: sheet-in 0.25s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #menu.show .menu-card,
+  #harbour.show .menu-card,
+  #logbook.show .menu-card {
+    animation: none;
+  }
+}
+
+.menu-card {
+  isolation: isolate;
+  background: none;
+  border: 0;
+  box-shadow: none;
+  color: var(--ink);
+  font-family: var(--font);
+}
+
+.menu-card::before {
+  content: none;
+}
+
+.menu-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: auto;
+  height: auto;
+  border: 0;
+  background: var(--fold), var(--paper);
+  clip-path: var(--sheet-clip);
+  pointer-events: none;
+}
+
+body:not(.touch) .menu-card {
+  padding: 46px 52px 30px;
+}
+
+.menu-card h1 {
+  font-family: var(--font);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding-left: 0;
+  text-shadow: none;
+  color: var(--ink);
+}
+
+body:not(.touch) .menu-card h1 {
+  font-size: 78px;
+  line-height: 1;
+}
+
+.menu-card .menu-state {
+  font-family: var(--font);
+  color: var(--ink-faded);
+}
+
+#menu .menu-state.stamp {
+  margin: 16px auto 0;
+  color: var(--red);
+  letter-spacing: 0.2em;
+}
+
+.menu-purse {
+  margin: 12px 0 0;
+  text-align: center;
+  font: 600 15px/1.2 var(--font);
+  letter-spacing: 0.14em;
+  color: var(--ink-faded);
+}
+
+.menu-purse:empty {
+  display: none;
+}
+
+/* Widths: the list, the small pages, the wide Controls sheet. */
+body:not(.touch) #menu .menu-card {
+  width: min(520px, 92vw);
+}
+
+body:not(.touch) #menu .menu-card[data-view='settings'],
+body:not(.touch) #menu .menu-card[data-view='about'],
+body:not(.touch) #menu .menu-card[data-view='confirm'] {
+  width: min(640px, 92vw);
+}
+
+body:not(.touch) #menu .menu-card[data-view='controls'] {
+  width: min(1090px, 92vw);
+}
+
+/* On a page the title is on the tag, not in the header. */
+#menu .menu-card:not([data-view='main']) > header,
+#menu .menu-card[data-view='main'] > .sheet-tag {
+  display: none;
+}
+
+/* The list. */
+.menu-list {
+  gap: 0;
+}
+
+body:not(.touch) .menu-list {
+  margin-top: 22px;
+}
+
+.menu-list .big-button {
+  width: 100%;
+  margin: 0 0 12px;
+}
+
+body:not(.touch) .menu-list .big-button {
+  padding: 13px 20px;
+}
+
+.menu-item::after {
+  content: '\2192';
+  flex: none;
+  font: 700 26px/1 var(--font);
+  letter-spacing: 0;
+}
+
+#menu-logbook::after {
+  content: 'B';
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  box-sizing: border-box;
+  border: 2px solid var(--ink);
+  border-bottom-width: 4px;
+  background: var(--keycap);
+  font: 700 13px/1 var(--font);
+}
+
+body.touch #menu-logbook::after {
+  display: none;
+}
+
+#menu-home {
+  color: var(--ink-faded);
+}
+
+#menu-home::after {
+  content: '\21a9';
+}
+
+body.touch .menu-item {
+  min-height: 44px;
+  font-size: 20px;
+}
+
+.menu-foot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 0 0;
+  font: 700 16px/1 var(--body);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-faded);
+}
+
+.menu-foot kbd {
+  height: 24px;
+}
+
+/* Back at the foot of a page. */
+.text-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 14px auto 0;
+  padding: 0;
+  min-height: 44px;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: 700 22px/1 var(--font);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.text-button:hover,
+.text-button:focus-visible {
+  background: none;
+  color: var(--ink);
+  outline: none;
+}
+
+.text-button:hover span {
+  background: rgba(242, 196, 109, 0.75);
+}
+
+.text-button kbd {
+  margin: 0;
+  font-size: 13px;
+}
+
+.menu-view .rule {
+  margin: 16px 0;
+}
+
+/* Page headings (Controls). */
+.page-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.page-head h2 {
+  margin: 0;
+  font: 800 46px/1 var(--font);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.page-head p {
+  margin: 0;
+  font: italic 700 18px/1.3 var(--body);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-faded);
+}
+
+/* ---- Settings ------------------------------------------------------------------------------ */
+
+.setting-row {
+  border-top: 0;
+  border-bottom: 1.5px solid var(--rule);
+  color: var(--ink);
+  font-family: var(--font);
+}
+
+body:not(.touch) .setting-row {
+  min-height: 64px;
+  padding: 10px 0;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+
+body:not(.touch) #view-settings {
+  margin-top: 0;
+}
+
+body.touch .setting-row {
+  font-weight: 600;
+}
+
+.setting-fullscreen .seg-button,
+.setting-fullscreen .seg-button span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.seg button,
+.seg-button {
+  padding: 0 16px;
+  font-size: 16px;
+  letter-spacing: 0.14em;
+}
+
+body.touch .seg button,
+body.touch .seg-button {
+  min-height: 44px;
+}
+
+.setting-note {
+  margin: 18px 0 0;
+  padding: 12px 16px;
+  border: 2px dashed var(--ink-faded);
+  font: italic 700 15px/1.4 var(--body);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-faded);
+}
+
+/* Sliders: a 4px track (ink where filled), a red diamond for the thumb. */
+.setting-row input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 44px;
+  margin: 0;
+  background: transparent;
+  accent-color: var(--ink);
+  --fill: 50%;
+}
+
+body:not(.touch) .setting-row input[type='range'] {
+  max-width: 260px;
+}
+
+.setting-row input[type='range']::-webkit-slider-runnable-track {
+  height: 4px;
+  background: linear-gradient(90deg, var(--ink) var(--fill), rgba(31, 43, 58, 0.25) var(--fill));
+}
+
+.setting-row input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-top: -6px;
+  box-sizing: border-box;
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  background: var(--red);
+  transform: rotate(45deg);
+}
+
+.setting-row input[type='range']::-moz-range-track {
+  height: 4px;
+  background: rgba(31, 43, 58, 0.25);
+}
+
+.setting-row input[type='range']::-moz-range-progress {
+  height: 4px;
+  background: var(--ink);
+}
+
+.setting-row input[type='range']::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  box-sizing: border-box;
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  background: var(--red);
+  transform: rotate(45deg);
+}
+
+.setting-row input[type='range']:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* ---- About / go home ------------------------------------------------------------------------ */
+
+.about {
+  font-family: var(--body);
+  letter-spacing: 0;
+  text-align: left;
+  color: var(--ink);
+}
+
+.about p {
+  margin: 0 0 12px;
+}
+
+.about a {
+  color: var(--ink);
+  font-weight: 800;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.about a:hover,
+.about a:focus-visible {
+  outline: none;
+  background: rgba(242, 196, 109, 0.75);
+}
+
+.about-small {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--ink-faded);
+}
+
+body:not(.touch) .about {
+  margin-top: 4px;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+/* ---- Controls: the keys as big keycaps ------------------------------------------------------ */
+
+.cap {
+  background: var(--keycap);
+  border: 2px solid var(--ink);
+  border-bottom-width: 6px;
+  border-radius: 0;
+  box-shadow: none;
+  color: var(--ink);
+}
+
+.cap b {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.cap i {
+  font: 600 15px/1.1 var(--font);
+  letter-spacing: 0.06em;
+  color: var(--ink-faded);
+}
+
+body:not(.touch) .keymap {
+  grid-template-columns: auto auto auto 1fr;
+  gap: 18px 24px;
+  margin-top: 4px;
+}
+
+body:not(.touch) .cap {
+  gap: 4px;
+  width: 96px;
+  height: 88px;
+}
+
+body:not(.touch) .cap b {
+  font-size: 36px;
+}
+
+body:not(.touch) .km-cluster {
+  grid-template-columns: repeat(3, 96px);
+  gap: 10px;
+}
+
+body:not(.touch) .k-shift,
+body:not(.touch) .k-space {
+  width: 100%;
+}
+
+body:not(.touch) .km-tools {
+  gap: 10px;
+  justify-content: space-between;
+}
+
+body:not(.touch) .km-tools .cap {
+  width: 132px;
+}
+
+body:not(.touch) .k-shift b,
+body:not(.touch) .k-space b {
+  font-size: 34px;
+  letter-spacing: 0.06em;
+}
+
+.km-or {
+  font: italic 700 18px var(--body);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-faded);
+}
+
+.km-mouse {
+  position: relative;
+  gap: 18px;
+  padding-left: 26px;
+  font: 600 18px/1.9 var(--body);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-faded);
+}
+
+.km-mouse::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -26px;
+  bottom: -26px;
+  width: 2px;
+  background: var(--ink);
+}
+
+.km-mouse b {
+  font: 800 24px var(--font);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+/* The phone's own controls page */
+.tm-stick p,
+.tm-note,
+.mini-tool span {
+  color: var(--ink-faded);
+}
+
+.mini-tool .diamond {
+  border: 3px solid var(--ink);
+  background: var(--paper);
+  box-shadow: none;
+}
+
+.mini-tool .diamond .icon {
+  color: var(--ink);
+}
+
+.ctrl-label,
+.ctrl-note {
+  color: var(--ink-faded);
+  text-shadow: none;
+}
+
+body.touch #menu .ctrl-mode {
+  border-top: 1.5px solid var(--rule);
+}
+
+.ctrl-mode button {
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+}
+
+.ctrl-mode button[aria-pressed='true'] {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Start screen: one paper sheet on the left, the boat on the right
+   --------------------------------------------------------------------------------------------- */
+
+#start {
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: max(20px, 6.4vw);
+  text-align: left;
+  background: none;
+}
+
+.start-sheet {
+  container-type: inline-size;
+  width: min(440px, calc(100vw - 40px));
+  box-sizing: border-box;
+  padding: 46px 48px 34px;
+  transform: rotate(-1.5deg) scale(var(--menu-scale, 1));
+  transform-origin: 0 50%;
+  animation: sheet-in 0.25s ease-out;
+}
+
+.start-kicker {
+  margin: 0;
+  max-width: 14em;
+  font: 600 16px/1.5 var(--font);
+  letter-spacing: 0.3em;
+  padding-left: 0;
+  color: var(--ink-faded);
+  text-shadow: none;
+}
+
+#start h1 {
+  margin: 6px 0 0;
+  font: 800 38cqw/0.95 var(--font);
+  letter-spacing: 0;
+  padding-left: 0;
+  text-shadow: none;
+  color: var(--ink);
+}
+
+.start-sheet .rule {
+  margin: 14px 0 20px;
+}
+
+#start .big-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+  margin: 0 0 10px;
+  padding: 14px 20px;
+}
+
+#start .big-button .icon {
+  width: 28px;
+  height: 28px;
+  stroke-width: 2.2;
+}
+
+#start .menu-list {
+  margin-top: 0;
+}
+
+.start-foot-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.start-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font: italic 700 16px var(--body);
+  letter-spacing: 0;
+  text-shadow: none;
+  text-transform: none;
+  color: var(--ink);
+}
+
+.start-foot .icon {
+  width: 18px;
+  height: 18px;
+  color: var(--ink-faded);
+}
+
+#credit {
+  position: static;
+  display: inline-block;
+  flex: none;
+  padding: 3px 10px 2px;
+  border: 2.5px solid var(--red);
+  color: var(--red);
+  font: 700 15px/1.1 var(--font);
+  letter-spacing: 0.14em;
+  text-shadow: none;
+  text-decoration: none;
+  transform: rotate(-4deg);
+}
+
+#credit:hover,
+#credit:focus-visible {
+  outline: none;
+  background: rgba(242, 196, 109, 0.75);
+}
+
+/* The old corner button is not used any more. */
+#settings-button {
+  display: none !important;
+}
+
+/* ---- touch-ups after the first look ------------------------------------------------------- */
+
+/* The pause screen and the logbook are drawn alone on the world: no HUD behind them. */
+body:has(#menu.show) #hud,
+body:has(#logbook.show) #hud {
+  visibility: hidden;
+}
+
+.setting-row {
+  box-sizing: border-box;
+}
+
+#view-settings .rule {
+  display: none;
+}
+
+#view-settings .text-button {
+  margin-top: 16px;
+}
+
+.km-mouse svg {
+  width: 36px;
+  height: 54px;
+}
+
+#start h1 {
+  font-size: 49cqw;
+  line-height: 0.9;
+}
+
+#start {
+  padding-bottom: 9vh;
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Logbook: a book with a dark leather cover and two paper pages
+   --------------------------------------------------------------------------------------------- */
+
+.logbook-card {
+  padding: 16px;
+}
+
+body:not(.touch) .logbook-card {
+  width: min(1260px, calc(92vw / var(--menu-scale, 1)));
+  padding: 16px;
+}
+
+/* The cover: two-tone leather with cut corners. */
+.logbook-card::after {
+  background: linear-gradient(135deg, #4a3424 0 50%, #3e2b1d 50% 100%);
+  clip-path: polygon(22px 0, calc(100% - 22px) 0, 100% 22px, 100% calc(100% - 22px), calc(100% - 22px) 100%, 22px 100%, 0 calc(100% - 22px), 0 22px);
+}
+
+.logbook-card .sheet-tag {
+  left: 52px;
+  top: -44px;
+}
+
+.logbook-card .gem-button {
+  position: absolute;
+  z-index: 3;
+  top: -22px;
+  right: -22px;
+}
+
+.logbook-body {
+  gap: 0;
+  margin-top: 0;
+  min-height: 0;
+  background: var(--ink);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.58fr);
+  column-gap: 4px; /* the spine */
+}
+
+body:not(.touch) .logbook-body {
+  grid-template-columns: minmax(0, 1.72fr) minmax(0, 1fr);
+  height: min(758px, calc(92vh / var(--menu-scale, 1) - 36px));
+}
+
+.page {
+  position: relative;
+  box-sizing: border-box;
+  min-height: 0;
+  padding: 26px 34px 22px;
+  background: var(--fold), var(--paper);
+  overflow: hidden;
+}
+
+.page-left {
+  display: flex;
+  flex-direction: column;
+}
+
+/* the gutter of the left page */
+.page-left::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 52px;
+  background: rgba(90, 62, 30, 0.12);
+  pointer-events: none;
+}
+
+.page-right {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  padding-left: 40px;
+  border-left: 0;
+  text-align: center;
+}
+
+.page-left header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  text-align: left;
+}
+
+#logbook .logbook-card h1 {
+  margin: 0;
+  font-size: 50px;
+  line-height: 1;
+}
+
+#logbook-count {
+  margin: 0;
+  font: 700 24px/1 var(--font);
+  letter-spacing: 0.06em;
+  color: var(--ink);
+}
+
+body.touch #logbook .logbook-card h1 {
+  font-size: 34px;
+}
+
+body.touch #logbook-count {
+  font-size: 18px;
+}
+
+#logbook-grid {
+  flex: 1 1 auto;
+  margin-top: 8px;
+  padding-right: 4px;
+  scrollbar-color: var(--ink) transparent;
+}
+
+#logbook-grid::-webkit-scrollbar-thumb {
+  background: var(--ink);
+}
+
+.logbook-group h3 {
+  margin: 14px 0 10px;
+  padding-bottom: 8px;
+  border-bottom: 0;
+  font: 700 21px/1 var(--font);
+  letter-spacing: 0.3em;
+  color: var(--rarity);
+  background:
+    linear-gradient(var(--ink), var(--ink)) 0 100% / 100% 2px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) 12px 100% / 2px 8px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) calc(100% - 12px) 100% / 2px 8px no-repeat;
+}
+
+.logbook-group small {
+  font: 700 18px/1 var(--font);
+  letter-spacing: 0.12em;
+  opacity: 1;
+}
+
+body:not(.touch) .logbook-tiles {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.logbook-tiles {
+  gap: 10px;
+}
+
+.tile {
+  position: relative;
+  gap: 4px;
+  padding: 8px 4px 7px;
+  min-height: 44px;
+  border: 1.5px solid var(--ink);
+  border-radius: 0;
+  background: var(--paper-card);
+  color: var(--ink);
+  font: 700 13px/1.1 var(--font);
+  letter-spacing: 0.04em;
+  transition: none;
+}
+
+.tile:hover,
+.tile:focus-visible {
+  border-color: var(--ink);
+  background: #f6ebd2;
+}
+
+.tile.selected {
+  border: 3px solid var(--red);
+  box-shadow: none;
+  transform: rotate(-2deg);
+  z-index: 1;
+}
+
+.tile.locked {
+  border: 1.5px dashed var(--ink-faded);
+  background: #e2d2b2;
+}
+
+.tile.locked.selected {
+  border: 3px solid var(--red);
+}
+
+.tile.locked .tile-image svg,
+#detail-image.locked svg {
+  filter: brightness(0) opacity(0.74);
+}
+
+.tile.locked .tile-name {
+  color: var(--ink);
+}
+
+/* The right page. */
+#logbook-detail {
+  justify-content: flex-start;
+}
+
+#detail-image {
+  padding: 14px 20px;
+  border: 2px solid var(--ink);
+  background: var(--paper-card);
+}
+
+#detail-name {
+  margin: 16px 0 10px;
+  font: 700 50px/1 var(--font);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+body.touch #detail-name {
+  font-size: 34px;
+}
+
+#detail-rarity.stamp {
+  margin: 0 auto;
+  padding: 3px 14px 2px;
+  border-color: var(--rarity);
+  color: var(--rarity);
+  font-size: 20px;
+  letter-spacing: 0.22em;
+}
+
+#logbook-detail .rule {
+  margin: 18px 0;
+}
+
+#detail-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  letter-spacing: 0;
+  color: var(--ink);
+}
+
+#detail-stats span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0 4px;
+}
+
+#detail-stats span + span {
+  border-left: 2px solid var(--ink);
+}
+
+#detail-stats small {
+  font: 600 15px/1 var(--font);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+}
+
+#detail-stats b {
+  font: 700 28px/1.05 var(--font);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+#detail-stats.empty b {
+  color: var(--ink-faded);
+}
+
+#detail-text {
+  margin: 0;
+  font: italic 700 19px/1.45 var(--body);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+}
+
+#detail-habitat {
+  margin: 14px 0 0;
+  padding: 8px 12px;
+  border-left: 3px solid var(--rarity);
+  background: var(--paper-card);
+  font: 600 15px/1.4 var(--body);
+  letter-spacing: 0;
+  color: var(--ink);
+}
+
+#detail-habitat b {
+  font: 700 14px var(--font);
+  letter-spacing: 0.2em;
+  color: var(--rarity);
+}
+
+#logbook-detail .menu-foot {
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+body:not(.touch) #logbook-detail .menu-foot {
+  margin-bottom: 4px;
+}
+
+/* A phone: the pages stack, the whole screen scrolls, the gem stays in the corner. */
+body.touch .logbook-card {
+  width: min(900px, 96vw);
+  padding: 12px;
+}
+
+body.touch .logbook-body {
+  grid-template-columns: 1fr;
+  row-gap: 4px;
+}
+
+body.touch .page {
+  padding: 18px 16px 16px;
+}
+
+body.touch .page-right {
+  padding-left: 16px;
+}
+
+body.touch .page-left::after {
+  display: none;
+}
+
+body.touch #logbook .gem-button {
+  position: fixed;
+  top: max(8px, env(safe-area-inset-top));
+  right: max(8px, env(safe-area-inset-right));
+  width: 52px;
+  height: 52px;
+}
+
+@media (max-width: 760px) {
+  .logbook-body {
+    grid-template-columns: 1fr;
+  }
+
+  #logbook-detail {
+    padding: 18px 16px 16px;
+    border-top: 0;
+  }
+}
+
+/* the rarity label is a stamp (logbook and the catch card) */
+.rarity-chip {
+  display: inline-block;
+  margin: 0;
+  padding: 3px 12px 2px;
+  border: 2.5px solid var(--rarity, var(--ink));
+  background: none;
+  color: var(--rarity, var(--ink));
+  font: 700 18px/1.1 var(--font);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transform: rotate(-4deg);
+}
+
+#logbook-detail {
+  align-self: stretch;
+}
+
+/* ---------------------------------------------------------------------------------------------
+   The rest, in the same paper: fishing, harbour, tutorial, toasts, loading
+   --------------------------------------------------------------------------------------------- */
+
+/* Fishing */
+#fishing.result {
+  background: var(--scrim);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.fishing-card h2 {
+  font-family: var(--font);
+  font-weight: 800;
+  font-size: 32px;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+
+.fishing-kicker {
+  font: 600 15px var(--font);
+  letter-spacing: 0.3em;
+  color: var(--ink-faded);
+}
+
+#fishing-fish {
+  color: var(--ink);
+}
+
+.meter-label {
+  font: 700 18px var(--font);
+  letter-spacing: 0.16em;
+  color: var(--ink);
+}
+
+.meter-track {
+  height: 22px;
+  border: 2px solid var(--ink);
+  background: rgba(31, 43, 58, 0.12);
+}
+
+#meter-progress .meter-fill {
+  background: var(--pine);
+}
+
+#meter-tension .meter-fill {
+  background: var(--red);
+}
+
+.meter-danger {
+  border-left: 2px solid var(--ink);
+  background: repeating-linear-gradient(135deg, rgba(31, 43, 58, 0.28) 0 5px, transparent 5px 10px);
+}
+
+.meter.danger .meter-fill {
+  animation: none;
+  background: var(--red-dark);
+}
+
+.meter-value {
+  font: 700 22px var(--font);
+  color: var(--ink);
+}
+
+.big-button.reel.held {
+  background: linear-gradient(135deg, var(--red-dark) 0 55%, #7f2c2a 55% 100%);
+  color: #fff;
+  box-shadow: none;
+  transform: translateY(2px);
+}
+
+.reel kbd {
+  background: var(--keycap);
+  border-color: #f6f1e4;
+  color: var(--ink);
+}
+
+.fishing-hint {
+  font: italic 700 17px var(--body);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-faded);
+}
+
+.result-image {
+  filter: none;
+}
+
+#result-name {
+  font-family: var(--font);
+  font-weight: 800;
+  font-size: 44px;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+
+.result-meta b {
+  font: 700 28px var(--font);
+  color: var(--ink);
+}
+
+.result-text {
+  font: italic 700 18px/1.45 var(--body);
+  letter-spacing: 0;
+  color: var(--ink);
+}
+
+.result-badges span {
+  border: 2.5px solid var(--red);
+  color: var(--red);
+  font: 700 16px/1.1 var(--font);
+  letter-spacing: 0.2em;
+  transform: rotate(-3deg);
+}
+
+.result-snap {
+  font: italic 700 18px var(--body);
+  letter-spacing: 0;
+  color: var(--ink-faded);
+}
+
+#fishing-result.snapped h2 {
+  color: var(--red);
+}
+
+.result-value {
+  font: 700 20px var(--font);
+  color: var(--ink);
+}
+
+/* Harbour */
+.harbour-card h1 {
+  font-size: clamp(34px, 5vw, 56px);
+}
+
+.harbour-tabs button {
+  min-height: 44px;
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 700 16px var(--font);
+  letter-spacing: 0.16em;
+}
+
+.harbour-tabs button[aria-selected='true'] {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.h-row {
+  border: 0;
+  border-bottom: 1.5px solid var(--rule);
+  border-left: 4px solid var(--rarity, var(--ink));
+  background: var(--paper-card);
+  color: var(--ink);
+}
+
+.h-row.active {
+  border-color: var(--rule);
+  border-left-color: var(--red);
+  background: rgba(242, 196, 109, 0.45);
+  box-shadow: none;
+}
+
+.h-main b {
+  font: 700 22px var(--font);
+  letter-spacing: 0.06em;
+}
+
+.h-desc {
+  font: 600 15px/1.35 var(--body);
+  letter-spacing: 0;
+  color: var(--ink);
+}
+
+.h-sub {
+  font: 600 15px var(--font);
+  letter-spacing: 0.1em;
+  color: var(--ink-faded);
+}
+
+.h-sub.warn {
+  color: #8a5a10;
+}
+
+.h-price,
+.h-state {
+  font: 700 20px var(--font);
+  letter-spacing: 0.1em;
+  color: var(--ink);
+}
+
+.h-state {
+  color: var(--pine);
+}
+
+.h-button {
+  min-height: 44px;
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 700 16px var(--font);
+  letter-spacing: 0.14em;
+}
+
+.h-button.primary {
+  border-color: var(--red);
+  background: var(--red);
+  color: #f6f1e4;
+}
+
+.h-button:hover:not(:disabled),
+.h-button:focus-visible {
+  background: rgba(242, 196, 109, 0.75);
+  box-shadow: none;
+  color: var(--ink);
+}
+
+.h-button.primary:hover:not(:disabled) {
+  background: var(--red-dark);
+  color: #fff;
+}
+
+.h-button:disabled {
+  opacity: 0.45;
+  border-color: var(--ink-faded);
+}
+
+.h-empty {
+  font: italic 700 18px/1.5 var(--body);
+  letter-spacing: 0;
+  color: var(--ink-faded);
+}
+
+.harbour-note {
+  font: italic 700 16px var(--body);
+  letter-spacing: 0;
+  color: var(--pine);
+}
+
+/* Tutorial: a paper tag at the bottom (under the dial on a phone) */
+#tutorial {
+  isolation: isolate;
+  background: none;
+  border: 0;
+  box-shadow: none;
+  color: var(--ink);
+  font: 600 17px/1.4 var(--body);
+  letter-spacing: 0;
+  padding: 14px 22px 14px;
+  transition: none;
+}
+
+#tutorial::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--facet), var(--paper);
+  clip-path: var(--tag-clip);
+}
+
+#tutorial.ok::before {
+  background: var(--facet), var(--amber-paper);
+}
+
+.tut-head {
+  font: 700 14px var(--font);
+  letter-spacing: 0.2em;
+  color: var(--ink-faded);
+}
+
+#tutorial.ok .tut-count::after {
+  color: var(--pine);
+}
+
+.tut-skip {
+  color: var(--ink-faded);
+  font: 700 14px var(--font);
+}
+
+.tut-skip:hover {
+  color: var(--ink);
+  background: rgba(242, 196, 109, 0.75);
+}
+
+#tut-text {
+  color: var(--ink);
+}
+
+#tut-text b {
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.tut-dots i {
+  background: rgba(31, 43, 58, 0.25);
+}
+
+.tut-dots i.on {
+  background: var(--red);
+}
+
+.tut-next {
+  min-height: 44px;
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 700 15px var(--font);
+  letter-spacing: 0.14em;
+}
+
+.tut-next:hover {
+  background: rgba(242, 196, 109, 0.75);
+}
+
+/* Loading and errors: ink-blue paper-less screen, a flat amber bar */
+#loading,
+#error {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+#loading h1 {
+  font-family: var(--font);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding-left: 0;
+  text-shadow: none;
+}
+
+#loading-bar {
+  height: 6px;
+  background: rgba(232, 217, 188, 0.2);
+}
+
+#loading-fill {
+  background: var(--amber);
+  box-shadow: none;
+}
+
+#loading-fill::after {
+  display: none;
+}
+
+#loading-label {
+  font: 600 15px var(--font);
+  letter-spacing: 0.3em;
+  color: var(--paper-dim);
+}
+
+/* Developer gate: paper like the rest */
+.dev-card .menu-state {
+  color: var(--red);
+}
+
+/* the tutorial sits bottom right on a computer (the dock of cards fills the bottom left) */
+body:not(.touch) #tutorial {
+  left: auto;
+  right: 28px;
+  bottom: 40px;
+  transform: none;
+}
+
+body:has(#harbour.show) #hud {
+  visibility: hidden;
+}
+
+/* ---- touch-ups for the phone ---------------------------------------------------------------- */
+
+/* Logbook row of the pause list: an arrow on a phone (no key to show) */
+body.touch #menu-logbook::after {
+  content: '\2192';
+  display: block;
+  min-width: 0;
+  height: auto;
+  border: 0;
+  background: none;
+  font: 700 26px/1 var(--font);
+}
+
+body.touch .page-head {
+  flex-wrap: wrap;
+  gap: 4px 16px;
+}
+
+body.touch .page-head h2 {
+  font-size: 30px;
+}
+
+body.touch .page-head p {
+  font-size: 15px;
+}
+
+body.touch .page-left header {
+  padding-right: 56px; /* room for the gem in the corner */
+}
+
+/* A phone held upright: a short sheet at the top, the boat in the space below it */
+@media (orientation: portrait) {
+  body.touch #start {
+    justify-content: flex-start;
+    align-items: center;
+    padding: max(14px, env(safe-area-inset-top)) 0 0;
+  }
+
+  body.touch .start-sheet {
+    padding: 28px 26px 22px;
+    transform: rotate(-1.5deg);
+    transform-origin: 50% 0;
+  }
+
+  body.touch #start h1 {
+    font-size: 36cqw;
+  }
+
+  body.touch .start-kicker {
+    font-size: 13px;
+    max-width: none;
+  }
+
+  body.touch .start-sheet .rule {
+    margin: 10px 0 16px;
+  }
+
+  body.touch #start .big-button {
+    padding: 11px 16px;
+    font-size: 26px;
+  }
+
+  body.touch #start .menu-item {
+    min-height: 46px;
+    font-size: 20px;
+  }
+
+  body.touch .start-foot-row {
+    margin-top: 16px;
+  }
+}
+
+/* A phone held sideways: the sheet is compact and on the left */
+@media (orientation: landscape) and (max-height: 520px) {
+  body.touch #start {
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-bottom: 0;
+  }
+
+  body.touch .start-sheet {
+    width: min(330px, 46vw);
+    padding: 16px 22px 14px;
+  }
+
+  body.touch .start-kicker {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+  }
+
+  body.touch #start h1 {
+    font-size: 30cqw;
+  }
+
+  body.touch .start-sheet .rule {
+    margin: 6px 0 10px;
+  }
+
+  body.touch #start .big-button {
+    padding: 8px 12px;
+    font-size: 22px;
+  }
+
+  body.touch #start .menu-item {
+    min-height: 40px;
+    font-size: 17px;
+  }
+
+  body.touch .start-foot-row {
+    margin-top: 10px;
+  }
+
+  body.touch .start-foot {
+    font-size: 13px;
+  }
+
+  body.touch #credit {
+    font-size: 12px;
+  }
+}
+
+/* ---- phone: 44px touch targets, no Esc hints, a smaller tag on short screens ------------------- */
+
+body.touch .menu-foot,
+body.touch .text-button kbd {
+  display: none; /* a phone has no Esc key */
+}
+
+body.touch .page-head,
+body.touch .page-head + .rule {
+  display: none; /* the tag already says "Controls" */
+}
+
+body.touch .menu-view .rule {
+  margin: 8px 0;
+}
+
+body.touch #menu .seg button,
+body.touch #menu .seg-button,
+body.touch #menu .ctrl-mode button,
+body.touch #menu .menu-item,
+body.touch #menu .menu-list .big-button,
+body.touch #menu .text-button,
+body.touch #start .menu-item,
+body.touch #start .big-button {
+  min-height: 44px;
+}
+
+body.touch #menu .menu-item {
+  padding-block: 0;
+}
+
+body.touch #credit {
+  padding: 13px 10px 12px;
+}
+
+body.touch #menu {
+  box-sizing: border-box;
+  padding-top: 26px;
+}
+
+@media (max-height: 520px) {
+  body.touch .sheet-tag {
+    top: -26px;
+    min-width: 0;
+    padding: 4px 16px 14px;
+    font-size: 19px;
+  }
+
+  body.touch #menu .menu-card {
+    padding: 14px 24px 8px;
+  }
+
+  body.touch #menu .menu-card[data-view='main'] {
+    padding-top: 12px;
+  }
+
+  body.touch #menu .menu-card h1 {
+    font-size: 28px;
+  }
+
+  body.touch #menu .menu-state.stamp {
+    margin-top: 4px;
+    font-size: 13px;
+    padding: 1px 8px;
+  }
+
+  body.touch .menu-purse {
+    margin-top: 4px;
+    font-size: 12px;
+  }
+
+  body.touch #menu .setting-row {
+    min-height: 44px;
+  }
+}
+
+/* The logbook scrolls as a whole on a phone: leave room above for the tag */
+body.touch #logbook .logbook-card {
+  margin-top: 54px;
+}
+
+/* ---- the smallest phones ----------------------------------------------------------------------- */
+
+@media (orientation: portrait) and (max-height: 640px) {
+  body.touch #menu .menu-card {
+    padding: 22px 20px 10px;
+  }
+
+  body.touch #menu .setting-row {
+    min-height: 46px;
+    padding-block: 0;
+  }
+
+  body.touch #menu .menu-state.stamp {
+    margin-top: 6px;
+  }
+
+  body.touch .menu-purse {
+    margin-top: 6px;
+    font-size: 13px;
+  }
+
+  body.touch #menu .menu-list {
+    margin-top: 12px;
+  }
+
+  body.touch #menu .menu-list .big-button {
+    margin-bottom: 6px;
+  }
+
+  body.touch #menu .text-button {
+    margin-top: 6px;
+  }
+
+  body.touch #menu .ctrl-mode {
+    margin-top: 8px;
+    padding-top: 8px;
+  }
+}
+
+/* A phone held sideways: the title sheet has to fit the height */
+@media (orientation: landscape) and (max-height: 520px) {
+  body.touch .start-kicker,
+  body.touch .start-sheet .rule {
+    display: none;
+  }
+
+  body.touch .start-sheet {
+    padding: 12px 22px 10px;
+  }
+
+  body.touch #start h1 {
+    margin: 0 0 8px;
+    font-size: min(30cqw, 21vh);
+    line-height: 0.9;
+  }
+
+  body.touch .start-foot-row {
+    margin-top: 6px;
+  }
+
+  body.touch #credit {
+    padding: 10px 8px 9px;
+  }
+}
+
+/* A very short phone held sideways (320 to 360 high): the title and the coins line give way to the list */
+@media (orientation: landscape) and (max-height: 360px) {
+  body.touch #menu .menu-card h1,
+  body.touch .menu-purse,
+  body.touch #menu .tm-note,
+  body.touch #menu .ctrl-note:empty {
+    display: none;
+  }
+
+  body.touch #menu .menu-state.stamp {
+    margin: 0 auto;
+  }
+
+  body.touch #menu .menu-list {
+    gap: 0 12px;
+    margin-top: 8px;
+  }
+
+  body.touch #menu .menu-list .big-button {
+    margin-bottom: 4px;
+  }
+
+  body.touch #menu .setting-row {
+    padding: 0;
+    min-height: 46px;
+  }
+
+  body.touch #menu .menu-card {
+    padding-bottom: 4px;
+  }
+
+  body.touch #menu .text-button {
+    margin-top: 0;
+  }
+
+  body.touch #menu .touchmap {
+    margin-top: 4px;
+  }
+}

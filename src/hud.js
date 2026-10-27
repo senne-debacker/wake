@@ -2,10 +2,10 @@ import { Vector3 } from 'three/webgpu'
 import { DAY } from './config.js'
 import { isTouch } from './touch.js'
 
-// The in-game interface, modelled on Dredge's: a ring that turns with the time of day with the
-// anchor marker as "now", a pill with the day and the clock, a compass, diamond buttons for the
-// anchor / boost / horn / lamp / camera at the bottom left, the logbook under the stat box (speed and sea state) at the top left, the compass at the top right and a few key strips under it.
-// The markup is in index.html, the look in style.css. Everything here only touches the DOM when a
+// The in-game interface: a paper half-disc at the top with a ring that turns with the time of day (the
+// red marker is "now") and the day and the clock, paper cards for the anchor / boost / horn / lamp /
+// camera at the bottom left, the logbook under the stat box (speed and sea state) at the top left and a few
+// key tabs at the top right. The markup is in index.html, the look in style.css and theme.css. Everything here only touches the DOM when a
 // value actually changes.
 
 const north = new Vector3()
@@ -23,14 +23,14 @@ export function compassHeading(boatState) {
   return (Math.atan2(forward.dot(east), forward.dot(north)) * 180) / Math.PI
 }
 
-const RING = 92
+const RING = 134 // radius of the ring's middle, in the dial's own units (theme.css draws it 14 wide)
 const { dawn, day, dusk, night } = DAY.hours
 const PHASES = [ // [start, end] as a fraction of the day, and the colour; the hours come from DAY.hours
-  [0, dawn / 24, '#17233d'], // night
-  [dawn / 24, day / 24, '#e0855a'], // morning twilight
-  [day / 24, dusk / 24, '#cfe6ee'], // day
-  [dusk / 24, night / 24, '#d9764f'], // evening twilight
-  [night / 24, 1, '#17233d'], // night
+  [0, dawn / 24, '#1F2B3A'], // night (--ink)
+  [dawn / 24, day / 24, '#F2C46D'], // morning twilight (--amber)
+  [day / 24, dusk / 24, '#9CC3D0'], // day (--day)
+  [dusk / 24, night / 24, '#F2C46D'], // evening twilight
+  [night / 24, 1, '#1F2B3A'], // night
 ]
 const onRing = (t) => [RING * Math.sin(t * Math.PI * 2), -RING * Math.cos(t * Math.PI * 2)] // midnight at the top, noon at the bottom
 const arc = (t0, t1) => {
@@ -39,7 +39,6 @@ const arc = (t0, t1) => {
   return `M${x0.toFixed(2)} ${y0.toFixed(2)} A${RING} ${RING} 0 ${t1 - t0 > 0.5 ? 1 : 0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`
 }
 
-const COMPASS_LETTERS = [['compass-n', 0, -15], ['compass-e', 15, 0], ['compass-s', 0, 15], ['compass-w', -15, 0]] // id, centre of the letter on the card
 const seaState = (storm) => (storm < 0.2 ? ['Calm', 'good'] : storm < 0.5 ? ['Choppy', 'warn'] : storm < 0.8 ? ['Rough', 'bad'] : ['Stormy', 'bad'])
 
 export function createHud() {
@@ -59,7 +58,7 @@ export function createHud() {
     path.setAttribute('d', arc(from, to))
     path.setAttribute('fill', 'none')
     path.setAttribute('stroke', colour)
-    path.setAttribute('stroke-width', '7')
+    path.setAttribute('stroke-width', '14')
     phases.appendChild(path)
   }
 
@@ -71,7 +70,11 @@ export function createHud() {
     const root = document.documentElement.style
     const ui = (isTouch() ? Math.min(1, Math.max(0.6, Math.min(innerHeight / 640, innerWidth / 520))) : Math.min(1.4, Math.max(0.7, innerHeight / 900))) * sizeFactor
     root.setProperty('--ui', ui.toFixed(3))
-    root.setProperty('--menu-scale', isTouch() ? '1' : Math.min(1.15, Math.max(0.55, Math.min(innerHeight / 780, innerWidth / 820))).toFixed(3))
+    // The menu sheets follow the Interface size too, but never grow past what fits the window (the biggest sheet,
+    // the logbook, is about 1290 x 860). 1 at 1440 x 900: the sheets are drawn at their own size.
+    const fits = Math.min(innerHeight / 860, innerWidth / 1290)
+    const menu = Math.min(1.3, Math.max(0.5, Math.min(innerHeight / 900, innerWidth / 1300))) * sizeFactor
+    root.setProperty('--menu-scale', (isTouch() ? 1 : Math.max(0.5, Math.min(menu, fits))).toFixed(3))
   }
   rescale()
   addEventListener('resize', rescale)
@@ -101,13 +104,8 @@ export function createHud() {
 
     update(s) {
       change('time', s.time, (v) => ($('dial-time').textContent = v))
-      change('day', s.day, (v) => ($('dial-day').textContent = v))
+      change('day', s.day, (v) => ($('dial-day').textContent = v.replace(', ', ' \u00b7 '))) // "Monday, Day 1" -> "Monday · Day 1"
       change('ring', Math.round(s.timeOfDay * 720), (v) => phases.setAttribute('transform', `rotate(${(180 - v / 2).toFixed(1)})`)) // "now" at the bottom
-      change('compass', Math.round(-s.heading), (v) => {
-        // The card turns under the fixed boat; the letters turn back so that they always read upright.
-        $('compass-card').setAttribute('transform', `rotate(${v})`)
-        for (const [id, x, y] of COMPASS_LETTERS) $(id).setAttribute('transform', `rotate(${-v} ${x} ${y})`)
-      })
 
       change('anchor', s.anchored, (v) => {
         $('dial-anchor').classList.toggle('down', v)
@@ -116,6 +114,7 @@ export function createHud() {
       })
       change('lamp', s.lights, (v) => {
         $('tool-lamp').classList.toggle('on', v)
+        $('tool-lamp').querySelector('.tool-label').textContent = v ? 'Lamp on' : 'Lamp'
         $('t-lamp').classList.toggle('on', v)
       })
       change('boost', s.boost, (v) => {

@@ -14,6 +14,24 @@ import { createIntroCamera } from './introCamera.js'
 export function createCameraRig(camera, domElement, state) {
   const chase = createChaseCamera(camera)
   const intro = createIntroCamera(camera)
+
+  // The paper sheet of the start screen covers one side of the picture: slide the picture so that the boat is in
+  // the free part (right of the sheet on a wide screen, below it on a tall one). `amount` 1..0 eases it away
+  // during the swing to the chase view. The size of the shift is measured from the sheet while it is showing.
+  const sheetShift = { x: 0, y: 0 }
+  function shiftForSheet(amount) {
+    const box = document.querySelector('.start-sheet')?.getBoundingClientRect()
+    if (box && box.width > 0) {
+      const tall = box.right > innerWidth * 0.62
+      sheetShift.x = tall ? 0 : (box.right + innerWidth) / 2 - innerWidth / 2
+      sheetShift.y = tall ? box.bottom / 2 : 0
+    }
+    if (amount <= 0.001) {
+      if (camera.view?.enabled) camera.clearViewOffset()
+      return
+    }
+    camera.setViewOffset(innerWidth, innerHeight, -sheetShift.x * amount, -sheetShift.y * amount, innerWidth, innerHeight)
+  }
   const opening = { phase: 'title', t: 0, seconds: 1, onDone: null } // phase: title -> panning -> done
   let orbit = null
   const lastDir = new Vector3() // where the boat was last frame, to carry the planet view along
@@ -165,6 +183,7 @@ export function createCameraRig(camera, domElement, state) {
         if (opening.phase === 'panning') opening.t += delta / opening.seconds
         const finished = opening.t >= 1
         intro.update(state, finished ? 1 : opening.t, time)
+        shiftForSheet(finished ? 0 : opening.phase === 'title' ? 1 : 1 - opening.t * opening.t * (3 - 2 * opening.t))
         if (finished) {
           opening.phase = 'done'
           chase.snap(state) // hand over to the chase camera: it is at exactly this pose
