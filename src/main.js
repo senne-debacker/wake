@@ -16,6 +16,7 @@ import { createAtmosphere } from './world/atmosphere.js'
 import { createWeather } from './world/weather.js'
 import { createWind } from './world/wind.js'
 import { createDisplay } from './display.js'
+import { QUALITY } from './quality.js'
 import { loadBoats, applyBoatStats } from './boats.js'
 import { loadWorlds, chosenWorldId, clearWorldChoice } from './worlds.js'
 import { createEconomy, fishValue } from './economy.js'
@@ -112,7 +113,7 @@ async function main() {
   const clouds = createClouds()
   const rain = createRain()
   const fish = createFish(renderer, layout)
-  const planet = createPlanet(fish) // the water paints the fish's shadows
+  const planet = createPlanet(fish, QUALITY.waterDetail) // the water paints the fish's shadows
   scene.add(sky.mesh, planet, world.group, spots.mesh, clouds.group, rain.mesh, sun, moon, fill, boat.root)
 
   const clock = createClock()
@@ -294,7 +295,7 @@ async function main() {
     for (const point of uniforms.wakeTrail.array) point.w = 0
     rig.snap()
   }
-  const dev = createDevMode({ interaction, clock, atmosphere, boat, boats, economy, worlds, activeWorld, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState: () => state }) // ?dev + code: weather, time, boat and fishing tools
+  const dev = createDevMode({ interaction, clock, atmosphere, boat, boats, economy, planet, worlds, activeWorld, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState: () => state }) // ?dev + code: weather, time, boat and fishing tools
   // The boat the player is in (the economy's): shown now, unless the developer panel has chosen another for this tab.
   let devBoat = null
   try {
@@ -340,7 +341,7 @@ async function main() {
   }
   setState('menu')
 
-  if (import.meta.env.DEV) window.__game = { boatState, boatPose, input: interaction.input, uniforms, lights: { sun, moon, fill }, clock, atmosphere, weather, lightning, dolphins, boat, layout, world, spots, fishing, logbook, startFishing, scene, camera, audio, fish, economy, harbourScreen, getState: () => state } // for debugging in the console
+  if (import.meta.env.DEV) window.__game = { boatState, boatPose, input: interaction.input, uniforms, lights: { sun, moon, fill }, clock, atmosphere, weather, lightning, dolphins, boat, layout, world, spots, fishing, logbook, startFishing, scene, camera, audio, fish, economy, harbourScreen, planet, getState: () => state } // for debugging in the console
 
   // `?fish` checks the fish simulation on the GPU (see src/debug/fishTest.js).
   if (new URLSearchParams(location.search).has('fish')) {

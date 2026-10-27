@@ -2320,6 +2320,14 @@ body.dev #dev-tab {
   display: none;
 }
 
+.dev-slider.dev-select {
+  grid-template-columns: 74px 1fr;
+}
+
+.dev-slider.dev-select select {
+  margin: 0;
+}
+
 .dev-row + .dev-slider,
 .dev-row + .dev-check {
   margin-top: 10px;

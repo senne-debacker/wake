@@ -430,6 +430,10 @@ User asked for: effects in planet view (rain, ripples, fog, fishing particles), 
 - Prices so far (cards): dinghy 150 / 10 kg, sloop 900 / 30 kg, runabout 1,500 / 15 kg, yacht 4,000 / 60 kg, the fishing boat is free / 25 kg; Frostmere's chart 600. First guesses to play with
 - Checked in headless Chrome: a real catch into the hold, the dock hint, the harbour opening on the anchor, Sell all, a boat bought / used (stats and hold follow), a chart bought, the page reloading into Frostmere with the boat, coins and world kept, the dock there, Esc closing it. NOT done: the story (letters, the keeper, quests), fish that spoil, a harbour sound / shop animations, a way to sell back a boat
 
+### Step 49 — Finer water  *(done, on `dev`)*
+- [x] The sea's icosphere is cut finer: `QUALITY.waterDetail` (`quality.js`) is 64 on a computer (84,500 triangles, was 21,780 at `PLANET.detail` 32) and 40 on a phone (33,620). `createPlanet(fish, detail)` takes it and `setWaterDetail(mesh, detail)` (`scene/planet.js`) re-cuts the sea at run time. The wave height is still the same function (CPU twin included), so the boat floats exactly as before; only the facets are smaller and show the waves in more detail
+- [x] Developer panel > View > Water detail: Coarse 32 (the old look) / Fine 48 / Finer 64 / Smooth 96; kept for the tab (`wake.dev.water`), reset by "Lock developer mode". Measured in headless Chrome: 60 fps at every level up to 188,180 triangles on this GPU (the frame rate is capped, so the real cost is not visible here); 96 is nearly smooth and loses the faceted look, 48 to 64 keeps it. NOT measured on a phone
+
 ## Final requirements check (re-run before handing in)
 
 ```

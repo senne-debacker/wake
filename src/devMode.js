@@ -1,6 +1,8 @@
 import { FISH_SPECIES } from './fishing/fishDatabase.js'
 import { applyBoatStats } from './boats.js'
 import { chooseWorld } from './worlds.js'
+import { setWaterDetail } from './scene/planet.js'
+import { QUALITY } from './quality.js'
 
 // Developer mode. The normal game has no way to force the weather or to run the clock: those keys
 // (1 2 3 4, T) and everything else in here are locked. Open the page with `?dev`, type the code on the
@@ -13,7 +15,7 @@ import { chooseWorld } from './worlds.js'
 const CODE = '1815'
 const STORAGE_KEY = 'wake.dev'
 
-export function createDevMode({ interaction, clock, atmosphere, boat, boats, economy, worlds, activeWorld, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState }) {
+export function createDevMode({ interaction, clock, atmosphere, boat, boats, economy, planet, worlds, activeWorld, world, weather, wind, lightning, spots, logbook, boatState, layout, teleport, startFishing, getState }) {
   const $ = (id) => document.getElementById(id)
   const gate = $('dev-gate')
   const panel = $('dev')
@@ -246,7 +248,28 @@ export function createDevMode({ interaction, clock, atmosphere, boat, boats, eco
   $('dev-fill').addEventListener('click', () => FISH_SPECIES.forEach((fish) => logbook.record({ id: fish.id, weight: (fish.weight[0] + fish.weight[1]) / 2 })))
   $('dev-clear').addEventListener('click', () => logbook.reset())
 
-  // View
+  // View: how finely the sea is cut into triangles (scene/planet.js). Remembered for the tab.
+  const WATER_KEY = 'wake.dev.water'
+  const waterSelect = $('dev-water')
+  const nearest = (value) => [...waterSelect.options].map((o) => Number(o.value)).reduce((a, b) => (Math.abs(b - value) < Math.abs(a - value) ? b : a))
+  waterSelect.value = String(nearest(planet.userData.detail ?? QUALITY.waterDetail))
+  waterSelect.addEventListener('change', () => {
+    setWaterDetail(planet, Number(waterSelect.value))
+    try {
+      sessionStorage.setItem(WATER_KEY, waterSelect.value)
+    } catch {
+      // not remembered
+    }
+  })
+  try {
+    const savedWater = unlocked ? sessionStorage.getItem(WATER_KEY) : null
+    if (savedWater && [...waterSelect.options].some((o) => o.value === savedWater)) {
+      waterSelect.value = savedWater
+      setWaterDetail(planet, Number(savedWater))
+    }
+  } catch {
+    // nothing remembered
+  }
   const fpsBox = $('dev-fps')
   const fpsRead = $('dev-fps-read')
   const hideHud = $('dev-hidehud')
@@ -269,6 +292,13 @@ export function createDevMode({ interaction, clock, atmosphere, boat, boats, eco
     boat.setScale(1)
     world.setBuoyScale(1)
     api.ghost = false
+    setWaterDetail(planet, QUALITY.waterDetail)
+    waterSelect.value = String(nearest(QUALITY.waterDetail))
+    try {
+      sessionStorage.removeItem(WATER_KEY)
+    } catch {
+      // nothing to forget
+    }
     for (const box of [freeze, instant, ghostBox, fpsBox, hideHud]) box.checked = false
     windAuto.checked = true
     speedFactor = 1
