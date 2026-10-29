@@ -4,15 +4,20 @@
 // nose is on the right), flat polygons, nothing but <polygon>, <path>, <polyline> and <circle>. Each file is also
 // given a size (480 x 240), a <title> and its rarity. Run again after changing a fish; the files are not read
 // by the game.
-import { mkdirSync, writeFileSync, rmSync } from 'node:fs'
+import { mkdirSync, writeFileSync, readdirSync, rmSync, existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
 const { FISH_SETS, RARITIES, formatWeight } = await import('../src/fishing/fishDatabase.js')
 const root = fileURLToPath(new URL('../public/models/fish/', import.meta.url))
 const escape = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;')
 
-rmSync(root, { recursive: true, force: true })
-const index = ['Wake: every fish, as an SVG (npm run export:fish writes these; they are made from src/fishing).', 'The nose is on the right. The picture is 120 x 60, here shown at 480 x 240.', '']
+// Only the SVGs are replaced: the .glb models next to them (blender/FISH.md) are yours and stay.
+if (existsSync(root)) {
+  for (const world of readdirSync(root, { withFileTypes: true }).filter((entry) => entry.isDirectory())) {
+    for (const file of readdirSync(`${root}${world.name}`).filter((f) => f.endsWith('.svg'))) rmSync(`${root}${world.name}/${file}`)
+  }
+}
+const index = ['Wake: every fish, as an SVG (npm run export:fish writes these; they are made from src/fishing).', 'The nose is on the right. The picture is 120 x 60, here shown at 480 x 240. A fish with a <id>.glb next to its svg is shown as a 3D model in the logbook (blender/FISH.md).', '']
 for (const [world, list] of Object.entries(FISH_SETS)) {
   mkdirSync(`${root}${world}`, { recursive: true })
   index.push(`${world}  (${list.length} fish)`)
@@ -21,7 +26,8 @@ for (const [world, list] of Object.entries(FISH_SETS)) {
       .replace('<svg ', '<svg width="480" height="240" ')
       .replace(/(<svg [^>]*>)/, `$1\n  <title>${escape(fish.name)} (${RARITIES[fish.rarity].label})</title>`)
     writeFileSync(`${root}${world}/${fish.id}.svg`, svg + '\n')
-    index.push(`  ${world}/${fish.id}.svg   ${fish.name}, ${RARITIES[fish.rarity].label}, ${formatWeight(fish.weight[0])} to ${formatWeight(fish.weight[1])}`)
+    const solid = existsSync(`${root}${world}/${fish.id}.glb`) ? '  + 3D model' : ''
+    index.push(`  ${world}/${fish.id}.svg   ${fish.name}, ${RARITIES[fish.rarity].label}, ${formatWeight(fish.weight[0])} to ${formatWeight(fish.weight[1])}${solid}`)
   }
   index.push('')
 }

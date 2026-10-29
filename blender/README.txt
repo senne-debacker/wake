@@ -7,6 +7,9 @@ Blender files for Wake. This folder is your workshop: the game never reads it. T
             74 trees, 9 rocks, 6 buoys, the lighthouse, the start position and the 6 fishing spots), to start from.
             Export rules: WORLDS.md. Exported worlds go to public/models/worlds/<id>.glb + <id>.txt.
 
+  fish/     the starter 3D fish (fish-starter.glb) for making 3D models of the fish for the logbook.
+            Rules: FISH.md. Exported fish go next to their picture: public/models/fish/<world>/<id>.glb.
+
 In Blender use File > Import > glTF 2.0. (glTF is Y up; Blender's importer turns that into Z up by itself, so
 nothing needs rotating.)
 

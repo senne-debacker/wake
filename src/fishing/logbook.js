@@ -1,4 +1,5 @@
 import { RARITIES, FISH_SETS, HOME, FISH_BY_ID, fishInRarity, formatWeight } from './fishDatabase.js'
+import { createFishViewer, loadFishModels } from './fishViewer.js'
 import { describeHabitat } from './habitat.js'
 
 // The fish logbook: which species you have caught, how many, and the heaviest of each. Saved in
@@ -76,6 +77,11 @@ export function createLogbook({ onClose, storage, pages = [{ id: HOME, name: 'Wa
   const closeButton = $('logbook-close')
   const detail = { image: $('detail-image'), name: $('detail-name'), rarity: $('detail-rarity'), stats: $('detail-stats'), text: $('detail-text'), habitat: $('detail-habitat') }
   const tiles = new Map() // species id -> its button (the page showing)
+  // A fish with a model file (public/models/fish/<world>/<id>.glb, blender/FISH.md) is a small 3D scene in the picture
+  // frame once it has been caught, instead of its SVG.
+  const viewer = createFishViewer()
+  let models = new Set() // "<world>/<id>" of the fish that have a model
+  let viewing = null // the key of the model in the frame now
   let page = pages.find((entry) => entry.id === current) ?? pages[0]
   let fishSet = page.set
   let selected = fishSet[0].id
@@ -175,8 +181,25 @@ export function createLogbook({ onClose, storage, pages = [{ id: HOME, name: 'Wa
     const entry = store.get(selected)
     const info = RARITIES[fish.rarity]
     $('logbook-detail').style.setProperty('--rarity', info.colour)
-    detail.image.innerHTML = fish.imgUrl
+    const key = `${fish.set}/${fish.id}`
+    const solid = Boolean(entry) && models.has(key)
     detail.image.classList.toggle('locked', !entry)
+    detail.image.classList.toggle('model', solid)
+    if (solid && open) {
+      if (viewing !== key) {
+        viewing = key
+        detail.image.innerHTML = fish.imgUrl // (the picture shows until the model has loaded, or for good if it cannot)
+        viewer.show(key, detail.image).then((ok) => {
+          if (ok || viewing !== key) return
+          viewing = null
+          detail.image.classList.remove('model')
+        })
+      }
+    } else {
+      viewing = null
+      viewer.hide()
+      detail.image.innerHTML = fish.imgUrl
+    }
     detail.name.textContent = entry ? fish.name : '???'
     detail.rarity.textContent = info.label
     // Caught / Best / Range as three cells (theme.css draws the lines between them).
@@ -186,6 +209,7 @@ export function createLogbook({ onClose, storage, pages = [{ id: HOME, name: 'Wa
       small.textContent = label
       const big = document.createElement('b')
       big.textContent = value
+      if (value.length > 9) big.classList.add('long') // ("180.0-520.0 kg" has to fit its cell)
       element.append(small, big)
       return element
     }
@@ -215,6 +239,8 @@ export function createLogbook({ onClose, storage, pages = [{ id: HOME, name: 'Wa
     open = false
     removeEventListener('keydown', onKeyDown, true)
     root.classList.remove('show')
+    viewing = null
+    viewer.hide() // (no drawing while the book is shut)
     closeButton.blur()
     onClose?.()
   }
@@ -229,6 +255,10 @@ export function createLogbook({ onClose, storage, pages = [{ id: HOME, name: 'Wa
   closeButton.addEventListener('click', () => tapSettled() && close())
   root.addEventListener('pointerdown', (event) => event.target === root && tapSettled() && close()) // a click on the dim area
 
+  loadFishModels().then((list) => {
+    models = list
+    refresh()
+  })
   refresh()
 
   return {
