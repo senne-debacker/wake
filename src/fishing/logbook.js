@@ -263,6 +263,7 @@ export function createLogbook({ onClose, storage, pages = [{ id: HOME, name: 'Wa
 
   return {
     store,
+    viewer, // (the 3D fish: the checks read where it points)
     get isOpen() {
       return open
     },

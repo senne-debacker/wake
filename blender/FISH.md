@@ -1,7 +1,8 @@
 # 3D fish for Wake
 
 A fish with a 3D model is shown in the **logbook** as a small live 3D scene (it turns gently, and plays its
-swimming animation if the model has one) instead of its flat picture. The picture is still used for fish
+swimming animation if the model has one; **drag it with the mouse or a finger to turn it yourself**, and it eases
+back to swaying a moment after you let go) instead of its flat picture. The picture is still used for fish
 without a model, for fish you have not caught yet (the black silhouette), and if a model cannot be read.
 That is the only place the models are used: not in the water, not on the catch card.
 

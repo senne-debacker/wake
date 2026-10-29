@@ -3,7 +3,8 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 
 // The 3D fish of the logbook. A fish with a model file (public/models/fish/<world>/<id>.glb, see blender/FISH.md)
 // is shown in the logbook's picture frame as a small live 3D scene instead of its flat SVG: it turns gently back
-// and forth, and plays the animation that came with the model (swimming) when there is one. Without a file the
+// and forth (drag it with the mouse or a finger to turn it yourself: it eases back to the sway a moment after
+// you let go), and plays the animation that came with the model (swimming) when there is one. Without a file the
 // logbook keeps the SVG. The scene has its own small renderer (the game's renderer draws the world, and the
 // logbook is a layer of the page above it), made the first time a model is shown, and it only draws while the
 // logbook is open.
@@ -21,6 +22,10 @@ export async function loadFishModels() {
 
 const LENGTH = 2.0 // the length of the fish on screen, in the viewer's own units
 const SWAY = 0.55 // radians of turning to each side: enough to see that it is a solid thing
+const DRAG_YAW = 0.012 // radians of turning per pixel dragged sideways
+const DRAG_PITCH = 0.008 // ... and up and down (limited to PITCH_LIMIT)
+const PITCH_LIMIT = 0.7
+const RESUME_AFTER = 1.6 // seconds after letting go until it eases back to swaying
 
 export function createFishViewer() {
   const scene = new Scene()
@@ -43,6 +48,7 @@ export function createFishViewer() {
   let token = 0 // a newer show() makes older, slower ones give up
   const loaded = new Map() // "<world>/<id>" -> Promise of { root, clips }
   const size = { w: 0, h: 0 }
+  const user = { yaw: 0, pitch: 0, sway: 1, idle: 0, dragging: null } // what the hand did; `sway` (0..1) is how much of the gentle turning is back
 
   function start() {
     starting ??= (async () => {
@@ -50,8 +56,38 @@ export function createFishViewer() {
       await renderer.init()
       renderer.setClearColor(0x000000, 0)
       renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
+      listen(renderer.domElement)
     })()
     return starting
+  }
+
+  // Dragging turns the fish: sideways spins it round (as far as you like), up and down tips it a little.
+  function listen(canvas) {
+    canvas.style.touchAction = 'none' // (a finger drags the fish, it does not scroll the page)
+    canvas.style.cursor = 'grab'
+    canvas.addEventListener('pointerdown', (event) => {
+      user.dragging = { id: event.pointerId, x: event.clientX, y: event.clientY }
+      canvas.setPointerCapture(event.pointerId)
+      canvas.style.cursor = 'grabbing'
+      user.sway = 0
+    })
+    canvas.addEventListener('pointermove', (event) => {
+      const grab = user.dragging
+      if (!grab || grab.id !== event.pointerId) return
+      user.yaw += (event.clientX - grab.x) * DRAG_YAW
+      user.pitch = Math.max(-PITCH_LIMIT, Math.min(PITCH_LIMIT, user.pitch + (event.clientY - grab.y) * DRAG_PITCH))
+      grab.x = event.clientX
+      grab.y = event.clientY
+    })
+    const release = (event) => {
+      if (user.dragging?.id !== event.pointerId) return
+      user.dragging = null
+      user.idle = 0
+      user.yaw = Math.atan2(Math.sin(user.yaw), Math.cos(user.yaw)) // (the shortest way back, not all the turns again)
+      canvas.style.cursor = 'grab'
+    }
+    canvas.addEventListener('pointerup', release)
+    canvas.addEventListener('pointercancel', release)
   }
 
   // Loads the model once. The model is turned so that its nose (towards -Z in glTF, which is where Blender's +Y
@@ -104,7 +140,18 @@ export function createFishViewer() {
     resize()
     if (shown) {
       shown.mixer?.update(delta)
-      shown.pivot.rotation.y = Math.sin(time * 0.7) * SWAY
+      if (!user.dragging) {
+        user.idle += delta
+        if (user.idle > RESUME_AFTER) {
+          const ease = 1 - Math.exp(-delta * 2.5)
+          user.yaw -= user.yaw * ease // back to the middle of the sway, and the sway grows back in
+          user.pitch -= user.pitch * ease
+          user.sway += (1 - user.sway) * ease
+        }
+      }
+      shown.pivot.rotation.order = 'YXZ'
+      shown.pivot.rotation.y = user.yaw + Math.sin(time * 0.7) * SWAY * user.sway
+      shown.pivot.rotation.x = user.pitch
       shown.pivot.position.y = Math.sin(time * 1.3) * 0.03 // a little bob, like it is hanging in the water
     }
     renderer.render(scene, camera)
@@ -130,6 +177,7 @@ export function createFishViewer() {
         container.replaceChildren(renderer.domElement)
         size.w = size.h = 0
         time = 0
+        Object.assign(user, { yaw: 0, pitch: 0, sway: 1, idle: 0, dragging: null }) // (a new fish starts in the middle)
         if (!running) {
           running = true
           last = performance.now()
@@ -141,6 +189,10 @@ export function createFishViewer() {
         console.warn(`Fish model ${key} could not be shown:`, error)
         return false
       }
+    },
+    // Where the hand has turned the fish (radians), for the checks.
+    get angles() {
+      return { yaw: user.yaw, pitch: user.pitch, dragging: Boolean(user.dragging), sway: user.sway }
     },
     // The picture is an SVG again (another fish, or the logbook was closed).
     hide() {
