@@ -2591,29 +2591,6 @@ body.touch [data-setting='resolution'] [data-value='auto'] {
   display: none;
 }
 
-/* a 3D fish in the logbook: the frame keeps the shape of the picture (2 : 1) and the canvas fills it */
-#detail-image.model {
-  position: relative;
-  aspect-ratio: 2 / 1;
-  padding: 0;
-  overflow: hidden;
-}
-
-#detail-image.model canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-#detail-image.model svg {
-  position: absolute;
-  inset: 14px 20px;
-  width: calc(100% - 40px);
-  height: calc(100% - 28px);
-}
-
 #detail-stats b.long {
   font-size: 20px;
   white-space: nowrap;

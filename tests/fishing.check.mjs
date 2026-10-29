@@ -9,7 +9,7 @@
 //   4. spots     where the fishing spots are (open water with room to anchor, deterministic, the rest of
 //                the world untouched) and how they behave (nearest, empty until midnight after a catch)
 
-import { existsSync, readdirSync, readFileSync } from 'node:fs'
+import { existsSync } from 'node:fs'
 import { Vector3 } from 'three/webgpu'
 import { FISHING, PLANET } from '../src/config.js'
 import { createLayout } from '../src/world/layout.js'
@@ -68,15 +68,6 @@ const mulberry32 = (seed) => () => {
   }
   check('database: every picture is a clean, balanced 120 x 60 inline svg without ids, references or scripts', problems.length === 0, problems.join('; '))
   check('database: every species has a SVG file in public/models/fish (npm run export:fish)', FISH_SPECIES.every((f) => existsSync(new URL(`../public/models/fish/${f.set}/${f.id}.svg`, import.meta.url))), FISH_SPECIES.filter((f) => !existsSync(new URL(`../public/models/fish/${f.set}/${f.id}.svg`, import.meta.url))).map((f) => f.id).join())
-  {
-    // A model file (public/models/fish/<world>/<id>.glb, blender/FISH.md) must belong to a fish of that world, and the list the game reads must match the files.
-    const root = new URL('../public/models/fish/', import.meta.url)
-    const files = []
-    for (const world of readdirSync(root, { withFileTypes: true }).filter((entry) => entry.isDirectory())) for (const file of readdirSync(new URL(`${world.name}/`, root)).filter((f) => f.endsWith('.glb'))) files.push(`${world.name}/${file.replace(/\.glb$/, '')}`)
-    const unknown = files.filter((key) => !FISH_SPECIES.some((f) => `${f.set}/${f.id}` === key))
-    const listed = JSON.parse(readFileSync(new URL('fish3d.json', root), 'utf8'))
-    check('database: every fish model file belongs to a species of its world, and fish3d.json lists them (npm run models)', unknown.length === 0 && JSON.stringify(listed) === JSON.stringify(files.sort()), unknown.join() || `${files.length} models`)
-  }
   check('database: drop rates add up to 1 and difficulty rises with rarity', Math.abs(Object.values(RARITIES).reduce((sum, r) => sum + r.rate, 0) - 1) < 1e-9 && Object.values(RARITIES).every((r, i, all) => i === 0 || (r.difficulty > all[i - 1].difficulty && r.rate < all[i - 1].rate)))
 
   // Rolling: the observed shares match the rates, every species can come up, weights stay in range.

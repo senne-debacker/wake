@@ -59,17 +59,4 @@ const pick = (value, allowed, fallback) => (allowed.includes(String(value).toLow
 const number = (value) => (Number.isFinite(Number(value)) && String(value).trim() !== '' ? Number(value) : undefined) // (left out when the card has none: the game's defaults apply)
 build('boats', (card) => ({ speed: pick(card.speed, SPEED, 'medium'), handling: pick(card.handling, HANDLING, 'medium'), price: number(card.price), hold: number(card.hold), light: number(card.light) }))
 
-// The fish that have a 3D model: public/models/fish/<world>/<id>.glb (blender/FISH.md). The logbook shows those
-// as a small 3D scene instead of the SVG (src/fishing/fishViewer.js). The list is "<world>/<id>" per model.
-{
-  const dir = fileURLToPath(new URL('../public/models/fish/', import.meta.url))
-  const found = []
-  if (existsSync(dir)) {
-    for (const world of readdirSync(dir, { withFileTypes: true }).filter((entry) => entry.isDirectory())) {
-      for (const file of readdirSync(`${dir}${world.name}`).filter((f) => f.endsWith('.glb')).sort()) found.push(`${world.name}/${file.replace(/\.glb$/, '')}`)
-    }
-    writeFileSync(`${dir}fish3d.json`, JSON.stringify(found, null, 2) + '\n')
-  }
-  console.log(`[models] fish with a 3D model: ${found.join(', ') || '-'}`)
-}
 build('worlds', (card) => ({ price: number(card.price), requires: card.requires || undefined, fish: card.fish || undefined }))
