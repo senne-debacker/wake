@@ -54,8 +54,12 @@ What the game takes from the file (src/world/importWorld.js):
 - `Lighthouse`, `Buoys`: only the positions: the lighthouse (with its sweeping light) and the floating buoys are
   the game's own.
 - `Markers`: `Start` (the bow points along its -Z, +Y in Blender), up to **6** `FishingSpot_n`, `Open_Ocean`, and
-  optionally `Harbour`: where the dock goes (the shop where fish are sold). Without it the game puts the dock
-  near the start on clear water (away from land, buoys and fishing spots).
+  and the **selling point**: an empty named `Harbour` or `Dock_<name>` (e.g. `Dock_Wim`) at the water end of a dock
+  that you model yourself. Anchoring within 1.15 units of it opens the harbour (sell fish, buy boats and charts). The
+  dock is **solid** where it stands out of the water: put its parts in a group whose name starts with `Dock`, `Pier`
+  or `Jetty` (e.g. `Wim_Dock`; not under `Markers`): every mesh in it that rises above the sea (more than 0.02 above
+  radius 5) stops the boat like a small rock, and parts that are under the water (pilings) are left out. A world
+  without such a marker gets the game's small floating dock near the start on clear water instead.
 - The `Water` sphere in the file is ignored: the game draws its own sea (the same sphere, radius 5).
 - The shore foam goes round at most **32** bodies: every island, then the biggest rocks.
 - Not read yet: a mood for the world (sea colour, snow instead of rain, the sun). The card can describe it.

@@ -11,7 +11,8 @@ import { islandFrame, shorelineFromContour, CONTOUR_COUNT } from '../physics/isl
 //   Lighthouse                  an empty or group: where the (generated) lighthouse stands
 //   Buoys > Buoy_nn             where the (generated, floating) buoys are
 //   Markers > Start             the boat's start; its -Z is the bow. FishingSpot_n, Open_Ocean (extras: radius), and
-//                               optionally Harbour: where the dock goes (else near the start on clear water)
+//                               optionally Harbour (or any empty named Dock...): the world's own selling point, at the water end of a
+//                               dock that the file draws itself (else the game's small floating dock goes near the start on clear water)
 // The coastline of every island is measured from its mesh (rays down onto the land, outwards from the
 // island's centre), so the collisions follow what you see.
 //
@@ -75,8 +76,9 @@ export function layoutFromScene(scene) {
   }
   const trees = (find(scene, 'Trees')?.children ?? []).filter((mesh) => mesh.isMesh)
 
-  // ---- the harbour: a `Harbour` marker, else near the start where nothing stands --------------------------
-  const harbourNode = find(scene, 'Harbour')
+  // ---- the harbour: a `Harbour` (or `Dock...`) marker, else the game's own dock near the start where nothing stands ----
+  let harbourNode = find(scene, 'Harbour')
+  if (!harbourNode) scene.traverse((node) => { if (!harbourNode && !node.isMesh && /^dock/i.test(node.name) && node.parent?.name === 'Markers') harbourNode = node })
   const arc = (a, b) => Math.acos(Math.min(1, Math.max(-1, a.dot(b)))) * R
   const clearOfLand = (dir) =>
     [...islands.map((i) => [i.dir, i.shape.maxShoreline]), ...rocks.map((r) => [r.dir, r.radius])].every(([centre, extent]) => arc(dir, centre) > extent + WORLD.harbour.radius + BOAT.shoreMargin + 0.5) &&
@@ -96,13 +98,35 @@ export function layoutFromScene(scene) {
     }
     harbourDir ??= fromStart(start, WORLD.harbour.bearing, WORLD.harbour.distance)
   }
-  const harbour = { dir: harbourDir, heading: new Vector3(1, 0, 0) }
+  const harbour = { dir: harbourDir, heading: new Vector3(1, 0, 0), own: Boolean(harbourNode) } // own: the file draws the dock, so the game adds none (and no solid circle)
+
+  // The file's own dock is solid where it stands out of the water: every mesh inside a node named Dock... / Pier... /
+  // Jetty... (not the marker) that rises above the sea becomes a small circle, like a rock but without shore foam.
+  const dockSolids = []
+  if (harbour.own) {
+    const seen = new Set()
+    const corner = new Vector3()
+    scene.traverse((group) => {
+      if (group.isMesh || group.parent?.name === 'Markers' || !/^(.*[_-])?(dock|pier|jetty)/i.test(group.name)) return
+      group.traverse((mesh) => {
+        if (!mesh.isMesh || seen.has(mesh)) return
+        seen.add(mesh)
+        box.setFromObject(mesh)
+        let top = 0
+        for (const x of [box.min.x, box.max.x]) for (const y of [box.min.y, box.max.y]) for (const z of [box.min.z, box.max.z]) top = Math.max(top, corner.set(x, y, z).length())
+        if (top < R + 0.02) return // under water: a piling, not something the hull meets
+        box.getSize(size)
+        dockSolids.push({ dir: box.getCenter(corner).normalize().clone(), radius: Math.max(size.x, size.y, size.z) / 2 })
+      })
+    })
+  }
 
   // ---- what the rest of the game reads (as in world/layout.js) -------------------------------------------
   const colliders = [
     ...islands.map((island) => ({ kind: 'island', dir: island.dir, shape: island.shape, reach: island.shape.maxShoreline + BOAT.shoreMargin * 2 })),
     ...rocks.map((rock) => ({ kind: 'circle', dir: rock.dir, radius: rock.radius + BOAT.shoreMargin, reach: rock.radius + BOAT.shoreMargin * 2 })),
-    { kind: 'circle', dir: harbour.dir, radius: WORLD.harbour.radius + BOAT.shoreMargin, reach: WORLD.harbour.radius + BOAT.shoreMargin * 2 }, // the dock
+    ...dockSolids.map((part) => ({ kind: 'circle', dir: part.dir, radius: part.radius + BOAT.shoreMargin, reach: part.radius + BOAT.shoreMargin * 2 })), // the file's dock
+    ...(harbour.own ? [] : [{ kind: 'circle', dir: harbour.dir, radius: WORLD.harbour.radius + BOAT.shoreMargin, reach: WORLD.harbour.radius + BOAT.shoreMargin * 2 }]), // the game's dock (last)
   ]
   // The water shader draws shore foam round at most WORLD.maxBodies bodies: every island, then the biggest rocks.
   const bodies = [

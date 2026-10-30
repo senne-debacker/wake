@@ -165,8 +165,9 @@ function createImportedWorld(layout) {
 
   const buoys = createBuoys(layout.buoys)
   group.add(buoys.group)
-  const harbour = createHarbour(layout.harbour.dir, layout.harbour.heading)
-  group.add(harbour.root)
+  // The game's small floating dock, unless the world file has a dock of its own (its Harbour / Dock... marker is the selling point).
+  const harbour = layout.harbour.own ? null : createHarbour(layout.harbour.dir, layout.harbour.heading)
+  if (harbour) group.add(harbour.root)
 
   return {
     group,
@@ -175,7 +176,7 @@ function createImportedWorld(layout) {
     setBuoyScale: buoys.setScale, // dev panel
     update(elapsed, storm, darkness, boat, delta) {
       lighthouse?.update(elapsed, darkness)
-      harbour.update(elapsed, storm, darkness)
+      harbour?.update(elapsed, storm, darkness)
       return buoys.update(elapsed, storm, darkness, boat, delta)
     },
   }

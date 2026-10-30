@@ -85,7 +85,22 @@ for (const file of readdirSync('public/models/worlds').filter((f) => f.endsWith(
     if (away < limit + BOAT.shoreMargin) problems.push(`the start is inside ${c.kind} collider`)
   }
   // The dock: on clear water, and its own circle stops a boat.
-  {
+  if (layout.harbour.own) {
+    // The file has a dock of its own (a Harbour / Dock... marker): no solid circle is added, and a boat must be able to
+    // anchor next to the marker (clear water within the distance at which the harbour opens).
+    const clear = (dir) => layout.colliders.every((c) => arc(dir, c.dir) > (c.kind === 'island' ? c.shape.maxShoreline : c.radius) + BOAT.shoreMargin || (c.kind === 'island' && arc(dir, c.dir) > c.shape.shorelineAt(Math.atan2(dir.dot(islandFrame(c.dir).t2), dir.dot(islandFrame(c.dir).t1))) + BOAT.shoreMargin))
+    const { t1, t2 } = islandFrame(layout.harbour.dir)
+    let reachable = 0
+    for (let k = 0; k < 72; k++) {
+      const theta = (k / 72) * Math.PI * 2
+      const angle = (WORLD.harbour.triggerRadius * 0.8) / R
+      const dir = layout.harbour.dir.clone().multiplyScalar(Math.cos(angle)).addScaledVector(t1, Math.cos(theta) * Math.sin(angle)).addScaledVector(t2, Math.sin(theta) * Math.sin(angle))
+      if (clear(dir)) reachable++
+    }
+    if (reachable === 0) problems.push('no clear water within reach of the dock marker: a boat cannot anchor next to it')
+    if (layout.colliders.some((c) => c.kind === 'circle' && arc(c.dir, layout.harbour.dir) < 0.01)) problems.push('the world has its own dock, but the game still added a solid dock circle')
+    if (arc(layout.harbour.dir, layout.start.dir) > 8) problems.push('the dock is far from the start')
+  } else {
     const dock = layout.colliders.at(-1)
     const others = layout.colliders.slice(0, -1)
     const clearance = Math.min(...others.map((c) => arc(layout.harbour.dir, c.dir) - (c.kind === 'island' ? c.shape.maxShoreline : c.radius)))
