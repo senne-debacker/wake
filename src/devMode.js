@@ -184,6 +184,7 @@ export function createDevMode({ fishSet, interaction, clock, atmosphere, boat, b
   const boatInfo = $('dev-boat-info')
   for (const entry of boats) boatSelect.append(new Option(entry.name, entry.id))
   let currentBoat = { entry: boats.find((candidate) => candidate.id === BUILT_IN_BOAT_ID) ?? boats[0], hull: null } // (the boat built into the scene)
+  boatSelect.value = currentBoat.entry.id // (the picker shows the boat that is in the scene, not the first of the list)
   let speedFactor = 1
   const BOAT_KEY = 'wake.dev.boat'
   // The boat in the scene is `entry` (the harbour changed it, or the picker): its hull and handling, and the panel.
@@ -318,7 +319,7 @@ export function createDevMode({ fishSet, interaction, clock, atmosphere, boat, b
   if (unlocked) {
     try {
       const saved = sessionStorage.getItem(BOAT_KEY) // the boat of this tab's last visit
-      if (saved && saved !== boats[0].id) selectBoat(saved)
+      if (saved && saved !== currentBoat.entry.id) selectBoat(saved) // (the standard boat is not the one built into the scene: it has to be swapped in too)
     } catch {
       // nothing remembered
     }
