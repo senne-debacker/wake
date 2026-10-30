@@ -5,7 +5,8 @@
 // (and by hand: npm run models).
 //
 // Cards may also give the economy numbers (src/economy.js): a boat's `price` (coins) and `hold` (kg of fish it
-// carries), `light` (how brightly its lamp shines, 1 = the starter boat; 0.8 = a little softer), a world's `price` (the chart), `requires` (the id of a boat you must own) and `fish` (its set of
+// carries), `light` (how brightly its lamp shines, 1 = the starter boat; 0.8 = a little softer), `size` (the model's
+// scale, 0.8 = a fifth smaller than modelled), `standard: yes` (the boat or world the player starts with), a world's `price` (the chart), `requires` (the id of a boat you must own) and `fish` (its set of
 // 32 fish, see src/fishing/fishDatabase.js: `home` or `frostmere`; no line means the home waters).
 //
 // A card is "key: value" lines; a value may go on indented lines below its key (the "anything special" of
@@ -55,8 +56,9 @@ function build(kind, extra) {
   console.log(`[models] ${kind}: ${list.map((entry) => entry.id).join(', ') || '-'}`)
 }
 
+const standard = (card) => (String(card.standard ?? '').toLowerCase() === 'yes' ? true : undefined) // `standard: yes` = owned and used from the start
 const pick = (value, allowed, fallback) => (allowed.includes(String(value).toLowerCase()) ? String(value).toLowerCase() : fallback)
 const number = (value) => (Number.isFinite(Number(value)) && String(value).trim() !== '' ? Number(value) : undefined) // (left out when the card has none: the game's defaults apply)
-build('boats', (card) => ({ speed: pick(card.speed, SPEED, 'medium'), handling: pick(card.handling, HANDLING, 'medium'), price: number(card.price), hold: number(card.hold), light: number(card.light) }))
+build('boats', (card) => ({ speed: pick(card.speed, SPEED, 'medium'), handling: pick(card.handling, HANDLING, 'medium'), price: number(card.price), hold: number(card.hold), light: number(card.light), size: number(card.size), standard: standard(card) }))
 
-build('worlds', (card) => ({ price: number(card.price), requires: card.requires || undefined, fish: card.fish || undefined }))
+build('worlds', (card) => ({ price: number(card.price), requires: card.requires || undefined, fish: card.fish || undefined, standard: standard(card) }))

@@ -19,7 +19,7 @@ import { createWeather } from './world/weather.js'
 import { createWind } from './world/wind.js'
 import { createDisplay } from './display.js'
 import { QUALITY } from './quality.js'
-import { loadBoats, applyBoatStats } from './boats.js'
+import { loadBoats, applyBoatStats, BUILT_IN_BOAT_ID } from './boats.js'
 import { loadWorlds, chosenWorldId, clearWorldChoice } from './worlds.js'
 import { createEconomy, fishValue } from './economy.js'
 import { createHarbourScreen } from './harbourScreen.js'
@@ -116,7 +116,7 @@ async function main() {
     console.error(`World "${wantedWorld?.id}" could not be read:`, error)
     layout = createLayout()
   }
-  const activeWorld = layout.imported ? wantedWorld : worlds[0]
+  const activeWorld = layout.imported ? wantedWorld : worlds.find((entry) => !entry.file) ?? worlds[0] // (the game's own world: also when the file could not be read)
   const dock = layout.harbour // where the harbour is: anchor next to it to trade
   const fishSet = fishSetOf(activeWorld.fish) // the 32 fish that live in this world
   const fishPages = [] // the logbook has a tab per world: { id: its fish set, name, set }
@@ -323,10 +323,9 @@ async function main() {
   } catch {
     // no storage
   }
-  if (!devBoat && economy.boat.id !== boats[0].id) {
+  if (!devBoat && economy.boat.id !== BUILT_IN_BOAT_ID) {
     const result = await boat.setBoat(economy.boat)
-    if (result) dev.setCurrentBoat(economy.boat, result.hull)
-    else economy.equipBoat(boats[0].id) // (its model is gone: back to the game's own)
+    dev.setCurrentBoat(economy.boat, result ? result.hull : null) // (no model: the built-in boat with its card's speed and handling)
   }
   const cursor = createCursorHider()
   // The clickable HUD: every button triggers the same action as its key; buttons marked data-hold

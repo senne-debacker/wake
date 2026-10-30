@@ -1,4 +1,4 @@
-import { applyBoatStats } from './boats.js'
+import { applyBoatStats, BUILT_IN_BOAT_ID } from './boats.js'
 import { chooseWorld } from './worlds.js'
 import { setWaterDetail } from './scene/planet.js'
 import { QUALITY } from './quality.js'
@@ -183,7 +183,7 @@ export function createDevMode({ fishSet, interaction, clock, atmosphere, boat, b
   const boatSelect = $('dev-boat')
   const boatInfo = $('dev-boat-info')
   for (const entry of boats) boatSelect.append(new Option(entry.name, entry.id))
-  let currentBoat = { entry: boats[0], hull: null }
+  let currentBoat = { entry: boats.find((candidate) => candidate.id === BUILT_IN_BOAT_ID) ?? boats[0], hull: null } // (the boat built into the scene)
   let speedFactor = 1
   const BOAT_KEY = 'wake.dev.boat'
   // The boat in the scene is `entry` (the harbour changed it, or the picker): its hull and handling, and the panel.
@@ -301,8 +301,8 @@ export function createDevMode({ fishSet, interaction, clock, atmosphere, boat, b
     for (const box of [freeze, instant, ghostBox, fpsBox, hideHud]) box.checked = false
     windAuto.checked = true
     speedFactor = 1
-    selectBoat(boats[0].id) // back to the game's own boat
-    if (activeWorld.id !== worlds[0].id) chooseWorld(worlds[0].id) // ... and the game's own world (the page reloads)
+    selectBoat(boats[0].id) // back to the standard boat
+    if (activeWorld.id !== worlds[0].id) chooseWorld(worlds[0].id) // ... and the standard world (the page reloads)
     fpsRead.hidden = true
     document.body.classList.remove('dev-nohud')
     for (const id of ['dev-speed', 'dev-clock-speed', 'dev-fog', 'dev-boat-size', 'dev-buoy-size']) $(id).value = 1

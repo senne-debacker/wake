@@ -212,7 +212,7 @@ export function createBoat() {
     async setBoat(entry) {
       let variant = variants.get(entry.id)
       if (!variant) {
-        const loaded = await loadBoatModel(entry.file, entry.fitLength ?? false)
+        const loaded = await loadBoatModel(entry.file, entry.fitLength ?? false, entry.size ?? 1)
         if (!loaded) return null
         variant = variantOf(loaded)
         variants.set(entry.id, variant)
@@ -256,7 +256,7 @@ export function createBoat() {
 //   materials named "Window..." and "Lamp..."  glow when the lamp is on (their emissive colour is
 //                                             used; without one the base colour / a warm white is)
 // Returns null when there is no file.
-async function loadBoatModel(file, fitLength) {
+async function loadBoatModel(file, fitLength, size = 1) {
   let gltf
   try {
     gltf = await new GLTFLoader().loadAsync(new URL(file, document.baseURI).href)
@@ -271,6 +271,8 @@ async function loadBoatModel(file, fitLength) {
     const length = box.max.z - box.min.z
     if (length > 0) root.scale.multiplyScalar(BOAT.length / length)
   }
+
+  if (size !== 1) root.scale.multiplyScalar(size) // the card's `size`: 0.8 = a fifth smaller than modelled (the hull, the lamp and the chimney follow)
 
   // The hull (the node named "Hull", else the whole model) and the lamp, in the model's own space.
   root.updateMatrixWorld(true)

@@ -1,6 +1,7 @@
 import { BOAT } from './config.js'
+import { standardFirst } from './standard.js'
 
-// The boats. The first one is the game's own fishing boat (the built-in model, or public/models/boat.glb);
+// The boats. The game's own fishing boat is the built-in model (or public/models/boat.glb);
 // the others come from public/models/boats/boats.json (made from the boat cards by scripts/buildModelLists.mjs).
 // A boat changes three things: its look (the model), how big its hull is (measured from the model) and how
 // it handles (the card's speed and handling words, as factors on the BOAT numbers in config.js).
@@ -24,8 +25,11 @@ const BASE = {
 const SPEED = { slow: 0.7, medium: 1, fast: 1.4 } // factors on the top speeds
 const HANDLING = { heavy: 0.75, medium: 1, nimble: 1.3 } // factors on how fast it turns
 
+export const BUILT_IN_BOAT_ID = 'fishing-boat' // the boat that is built into the scene at start-up (the others are swapped in)
+const OLD_BOAT_PRICE = 200 // what the old fishing boat costs once another boat is the standard one
+
 export const DEFAULT_BOAT = {
-  id: 'fishing-boat',
+  id: BUILT_IN_BOAT_ID,
   name: 'Fishing Boat',
   description: 'The old red fishing boat.',
   speed: 'medium',
@@ -37,13 +41,15 @@ export const DEFAULT_BOAT = {
   fitLength: BOAT.model.fitLength, // the other boats keep the size they were modelled in
 }
 
-// The default boat first, then the ones on the list. Without the list there is just the default.
+// The standard boat first (a card with `standard: yes`, else the game's own fishing boat), then the rest. Without the
+// list there is just the game's own.
 export async function loadBoats() {
   try {
     const response = await fetch(new URL('models/boats/boats.json', document.baseURI).href)
     if (!response.ok) throw new Error(response.statusText)
     const list = await response.json()
-    return [DEFAULT_BOAT, ...list.map((entry) => ({ fitLength: false, ...entry }))]
+    const all = standardFirst([DEFAULT_BOAT, ...list.map((entry) => ({ fitLength: false, ...entry }))])
+    return all[0] === DEFAULT_BOAT ? all : all.map((entry) => (entry === DEFAULT_BOAT ? { ...entry, price: OLD_BOAT_PRICE } : entry)) // (a boat that is not the standard one is bought)
   } catch {
     return [DEFAULT_BOAT]
   }

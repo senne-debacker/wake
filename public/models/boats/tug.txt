@@ -3,7 +3,9 @@ name:         Little Tug
 description:  A stubby red harbour tug with a cream wheelhouse, round portholes and a striped funnel.
 speed:        medium
 handling:     heavy
-price:        700
+price:        0
+standard:     yes
+size:         0.8
 hold:         25
 light:        0.8
-anything special: a bit longer and broader than the starter boat (hull 1.05 long, 0.43 wide); its wheelhouse windows and portholes glow warm when the lamp is on, and a teal pennant flies from the mast
+anything special: the standard boat: a stubby harbour tug drawn at 0.8 of the size it was modelled (hull about 0.84 long and 0.34 wide); its wheelhouse windows and portholes glow warm when the lamp is on, a teal pennant flies from the mast and its funnel smokes

@@ -3,10 +3,11 @@
     "id": "harbour",
     "name": "Harbour",
     "description": "The home waters with a sheltered bay: rocky arms close in round the lighthouse.",
-    "special": "A new version of the original world: the same start, buoy route, open ocean, six fishing spots, rocks and seven islands (lighthouse, pines, autumn and four more), plus eight new rock islands: bay-arm-1 to bay-arm-7 and wims-ledge, and a Lighthouse_Bay object round the lighthouse. It fishes the same 32 fish as the home waters (fish: home).",
+    "special": "A new version of the original world: the same start, buoy route, open ocean, six fishing spots, rocks and seven islands (lighthouse, pines, autumn and four more), plus eight new rock islands: bay-arm-1 to bay-arm-7 and wims-ledge, and a Lighthouse_Bay object round the lighthouse. The standard world: owned and used from the start (the game's own generated world, \"Wake\", is a chart now). It fishes the same 32 fish as the home waters (fish: home).",
     "file": "models/worlds/harbour.glb",
-    "price": 300,
-    "fish": "home"
+    "price": 0,
+    "fish": "home",
+    "standard": true
   },
   {
     "id": "snow",

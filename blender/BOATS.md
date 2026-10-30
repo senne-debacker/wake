@@ -53,6 +53,8 @@ as `wake-boat.glb` next to it.
     price:        900                            (coins in the harbour shop; default 600)
     hold:         30                             (kg of fish it carries; default 20)
     light:        0.8                            (how brightly its lamp shines on the sea and the beam; default 1)
+    size:         0.8                            (draw the model at this scale, 1 = as you modelled it; the hull is measured after it)
+    standard:     yes                            (the boat the player starts with: free and owned; one boat only)
     anything special: e.g. "carries a bigger crate", "louder horn", "starts at night"
 
 ## What I do with it

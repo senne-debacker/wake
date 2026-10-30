@@ -1,6 +1,8 @@
 // Economy checks: money, the hold, selling, buying boats and charts, and the save.
 import { createEconomy, fishValue, priceOfBoat, holdOfBoat, priceOfWorld, DEFAULTS } from '../src/economy.js'
 import { FISH_BY_ID, RARITIES } from '../src/fishing/fishDatabase.js'
+import { standardFirst } from '../src/standard.js'
+import { readFileSync } from 'node:fs'
 
 let failed = 0
 const check = (name, ok, detail = '') => {
@@ -75,6 +77,20 @@ check('defaults: a card without numbers gets the default price and hold', priceO
   storage.setItem('wake.save', JSON.stringify({ version: 1, coins: 5, hold: [{ id: 'no-such-fish', weight: 1 }, { id: 'dusk-herring', weight: -2 }, { id: 'dusk-herring', weight: 0.3 }], boats: ['ghost'], boat: 'ghost', worlds: [], world: 'nowhere' }))
   const f = createEconomy({ boats, worlds, storage })
   check('save: unknown fish and bad numbers are dropped, an unknown boat or world falls back', f.coins === 5 && f.hold.length === 1 && f.boat.id === 'fishing-boat' && f.world.id === 'wake')
+}
+
+// ---- the standard boat and world ---------------------------------------------------------------------------
+{
+  const own = { id: 'fishing-boat' }
+  const list = [own, { id: 'dinghy' }, { id: 'tug', standard: true }, { id: 'yacht' }]
+  check('standard: the entry marked standard goes to the front, the rest keep their order', standardFirst(list).map((b) => b.id).join() === 'tug,fishing-boat,dinghy,yacht')
+  check('standard: without one (or when it is first already) the list is left alone', standardFirst([own, { id: 'dinghy' }]).map((b) => b.id).join() === 'fishing-boat,dinghy' && standardFirst([{ id: 'a', standard: true }, { id: 'b' }]).map((b) => b.id).join() === 'a,b')
+  const e = createEconomy({ boats: standardFirst(list), worlds: standardFirst([{ id: 'wake' }, { id: 'harbour', standard: true }]), storage: memory() })
+  check('standard: a fresh player starts in the standard boat and world, and owns only those', e.boat.id === 'tug' && e.world.id === 'harbour' && e.ownsBoat('tug') && !e.ownsBoat('fishing-boat') && e.ownsWorld('harbour') && !e.ownsWorld('wake'))
+  // The cards of the real game: the Little Tug and Harbour are the standard ones (boats.json / worlds.json are made from them).
+  const boats = JSON.parse(readFileSync(new URL('../public/models/boats/boats.json', import.meta.url), 'utf8'))
+  const worlds = JSON.parse(readFileSync(new URL('../public/models/worlds/worlds.json', import.meta.url), 'utf8'))
+  check('standard: exactly one boat card and one world card say `standard: yes`: the Little Tug and Harbour', boats.filter((b) => b.standard).map((b) => b.id).join() === 'tug' && worlds.filter((w) => w.standard).map((w) => w.id).join() === 'harbour' && boats.find((b) => b.id === 'tug').size === 0.8)
 }
 
 console.log(failed ? `\n${failed} economy check(s) FAILED` : '\nall economy checks passed')
