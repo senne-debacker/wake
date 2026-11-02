@@ -1,7 +1,7 @@
 // The fish of The Sunken Ruins (Planet 4): 16 species designed from the brief (6 common, 5 uncommon, 3 rare,
 // 2 legendary). NOT in the game yet: the game's worlds have 32 fish each (10 / 9 / 7 / 5 / 1, see
 // fishDatabase.js), so this set is design material until it is extended and put behind a world card (`fish:`).
-// `npm run export:ruins-fish` draws every fish and writes blender/fish/sunken-ruins/ (an SVG and a silhouette
+// `npm run export:ruins-fish` draws every fish and writes blender/fish/w_003-sunken-ruins/ (an SVG and a silhouette
 // SVG per fish, a JSON file with all the data and an overview page).
 //
 // Fields: name, rarity (as in the brief), gameRarity (what it would be with the game's five rarities: the game
@@ -103,5 +103,14 @@ export const SUNKEN_RUINS = [
   },
 ]
 
-// "Moss Perch" -> "MossPerch": the file names (as in the brief's example FrostCod.svg)
-export const fileName = (fish) => fish.name.replace(/[^A-Za-z0-9]+/g, '')
+// The id of every fish: f_<world number>-<rarity rank><rarity letter><number in that rarity>-<name> (blender/NAMING.md). The
+// world is 003 (The Sunken Ruins); the rarity is the one the fish has in the game (`gameRarity`: Temple Arowana is epic, so
+// it is 4e01); the number counts the fish of that rarity in the order of this list, so never reorder or delete: add at the end.
+const RANK = { common: '1c', uncommon: '2u', rare: '3r', epic: '4e', legendary: '5l' }
+const counters = {}
+for (const fish of SUNKEN_RUINS) {
+  counters[fish.gameRarity] = (counters[fish.gameRarity] ?? 0) + 1
+  const slug = fish.name.replace(/^The\s+/i, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') // "The Drowned King" -> "drowned-king"
+  fish.id = `f_003-${RANK[fish.gameRarity]}${String(counters[fish.gameRarity]).padStart(2, '0')}-${slug}`
+}
+export const fileName = (fish) => fish.id // (the files are named after the id)

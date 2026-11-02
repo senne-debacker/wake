@@ -1,6 +1,6 @@
 # The world file
 
-`wake-world.glb` is what the game builds, exported by `npm run export:world` (scripts/exportWorld.mjs).
+`wake.glb` (in `blender/worlds/`) is what the game builds, exported by `npm run export:world` (scripts/exportWorld.mjs).
 Import it with File > Import > glTF 2.0. The collections are:
 
 | Node | What it is |
@@ -41,7 +41,7 @@ Export it as glTF Binary the same way as the boats (+Y Up, Apply Modifiers) and 
 `public/models/worlds/<id>.glb`, with a card `<id>.txt` next to it (`id`, `name`, `description`, and an
 `anything special:` that may go on indented lines below). Optional numbers: `price:` (what the chart of this world
 costs in the harbour; default 500) and `requires:` (the id of a boat the player must own first, e.g. `sloop`). `standard: yes` marks the world the player starts in (free and owned: one world only; the others are charts). `fish:` is the world's set of 32 fish
-(`home` or `frostmere`; no line = `home`): a world with its own fish needs a set in `src/fishing/species/`, see
+(the id of a world: `w_001-harbour`; no line = the fish of `w_001-harbour`): a world with its own fish needs a set in `src/fishing/species/`, see
 `src/fishing/fishDatabase.js` (10 common, 9 uncommon, 7 rare, 5 epic and exactly 1 legendary). Restart the dev server and pick it in the developer
 panel under **World**: the page reloads into that world (the choice is kept for the tab; "Lock developer
 mode" goes back to the original).

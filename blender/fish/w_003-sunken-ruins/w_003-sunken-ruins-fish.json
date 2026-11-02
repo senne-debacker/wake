@@ -24,6 +24,7 @@
   },
   "fish": [
     {
+      "id": "f_003-1c01-moss-perch",
       "name": "Moss Perch",
       "rarity": "common",
       "gameRarity": "common",
@@ -37,11 +38,12 @@
       "weight": "300 g to 1.2 kg",
       "valueCoins": 18,
       "logbookLine": "Wears the swamp like a sweater.",
-      "illustration": "MossPerch.svg",
-      "silhouette": "MossPerch_silhouette.svg",
+      "illustration": "f_003-1c01-moss-perch.svg",
+      "silhouette": "f_003-1c01-moss-perch-silhouette.svg",
       "shapes": 24
     },
     {
+      "id": "f_003-1c02-brickfish",
       "name": "Brickfish",
       "rarity": "common",
       "gameRarity": "common",
@@ -55,11 +57,12 @@
       "weight": "500 g to 2 kg",
       "valueCoins": 22,
       "logbookLine": "Square, sturdy, and slightly confused about whether it's a fish or a wall.",
-      "illustration": "Brickfish.svg",
-      "silhouette": "Brickfish_silhouette.svg",
+      "illustration": "f_003-1c02-brickfish.svg",
+      "silhouette": "f_003-1c02-brickfish-silhouette.svg",
       "shapes": 30
     },
     {
+      "id": "f_003-1c03-bog-bream",
       "name": "Bog Bream",
       "rarity": "common",
       "gameRarity": "common",
@@ -73,11 +76,12 @@
       "weight": "400 g to 1.5 kg",
       "valueCoins": 16,
       "logbookLine": "Unremarkable, and perfectly happy that way.",
-      "illustration": "BogBream.svg",
-      "silhouette": "BogBream_silhouette.svg",
+      "illustration": "f_003-1c03-bog-bream.svg",
+      "silhouette": "f_003-1c03-bog-bream-silhouette.svg",
       "shapes": 19
     },
     {
+      "id": "f_003-1c04-silt-loach",
       "name": "Silt Loach",
       "rarity": "common",
       "gameRarity": "common",
@@ -91,11 +95,12 @@
       "weight": "50 g to 250 g",
       "valueCoins": 14,
       "logbookLine": "Wriggles through the silt between old cobbles.",
-      "illustration": "SiltLoach.svg",
-      "silhouette": "SiltLoach_silhouette.svg",
+      "illustration": "f_003-1c04-silt-loach.svg",
+      "silhouette": "f_003-1c04-silt-loach-silhouette.svg",
       "shapes": 25
     },
     {
+      "id": "f_003-1c05-lily-gourami",
       "name": "Lily Gourami",
       "rarity": "common",
       "gameRarity": "common",
@@ -109,11 +114,12 @@
       "weight": "100 g to 400 g",
       "valueCoins": 26,
       "logbookLine": "Drifts between the lily pads like it has nowhere to be.",
-      "illustration": "LilyGourami.svg",
-      "silhouette": "LilyGourami_silhouette.svg",
+      "illustration": "f_003-1c05-lily-gourami.svg",
+      "silhouette": "f_003-1c05-lily-gourami-silhouette.svg",
       "shapes": 20
     },
     {
+      "id": "f_003-1c06-cobble-carp",
       "name": "Cobble Carp",
       "rarity": "common",
       "gameRarity": "common",
@@ -127,11 +133,12 @@
       "weight": "1 kg to 3 kg",
       "valueCoins": 30,
       "logbookLine": "Grazes the old streets as if it still pays rent.",
-      "illustration": "CobbleCarp.svg",
-      "silhouette": "CobbleCarp_silhouette.svg",
+      "illustration": "f_003-1c06-cobble-carp.svg",
+      "silhouette": "f_003-1c06-cobble-carp-silhouette.svg",
       "shapes": 37
     },
     {
+      "id": "f_003-2u01-gargoyle-goby",
       "name": "Gargoyle Goby",
       "rarity": "uncommon",
       "gameRarity": "uncommon",
@@ -145,11 +152,12 @@
       "weight": "300 g to 1 kg",
       "valueCoins": 65,
       "logbookLine": "Sits on ledges pulling faces. Harmless.",
-      "illustration": "GargoyleGoby.svg",
-      "silhouette": "GargoyleGoby_silhouette.svg",
+      "illustration": "f_003-2u01-gargoyle-goby.svg",
+      "silhouette": "f_003-2u01-gargoyle-goby-silhouette.svg",
       "shapes": 18
     },
     {
+      "id": "f_003-2u02-bronzescale",
       "name": "Bronzescale",
       "rarity": "uncommon",
       "gameRarity": "uncommon",
@@ -163,11 +171,12 @@
       "weight": "1 kg to 3 kg",
       "valueCoins": 80,
       "logbookLine": "Looks like it swam off a fountain and never went back.",
-      "illustration": "Bronzescale.svg",
-      "silhouette": "Bronzescale_silhouette.svg",
+      "illustration": "f_003-2u02-bronzescale.svg",
+      "silhouette": "f_003-2u02-bronzescale-silhouette.svg",
       "shapes": 36
     },
     {
+      "id": "f_003-2u03-swamp-snakehead",
       "name": "Swamp Snakehead",
       "rarity": "uncommon",
       "gameRarity": "uncommon",
@@ -181,11 +190,12 @@
       "weight": "2 kg to 5 kg",
       "valueCoins": 95,
       "logbookLine": "Hunts at night between the roots. Polite enough by day.",
-      "illustration": "SwampSnakehead.svg",
-      "silhouette": "SwampSnakehead_silhouette.svg",
+      "illustration": "f_003-2u03-swamp-snakehead.svg",
+      "silhouette": "f_003-2u03-swamp-snakehead-silhouette.svg",
       "shapes": 22
     },
     {
+      "id": "f_003-2u04-wisp-ghostfish",
       "name": "Wisp Ghostfish",
       "rarity": "uncommon",
       "gameRarity": "uncommon",
@@ -199,11 +209,12 @@
       "weight": "300 g to 1 kg",
       "valueCoins": 100,
       "logbookLine": "The swamp’s little lantern. Follows your lamp like it wants to talk.",
-      "illustration": "WispGhostfish.svg",
-      "silhouette": "WispGhostfish_silhouette.svg",
+      "illustration": "f_003-2u04-wisp-ghostfish.svg",
+      "silhouette": "f_003-2u04-wisp-ghostfish-silhouette.svg",
       "shapes": 16
     },
     {
+      "id": "f_003-2u05-mosaic-ray",
       "name": "Mosaic Ray",
       "rarity": "uncommon",
       "gameRarity": "uncommon",
@@ -217,11 +228,12 @@
       "weight": "2 kg to 6 kg",
       "valueCoins": 75,
       "logbookLine": "Its back is a mosaic. Nobody knows who laid it.",
-      "illustration": "MosaicRay.svg",
-      "silhouette": "MosaicRay_silhouette.svg",
+      "illustration": "f_003-2u05-mosaic-ray.svg",
+      "silhouette": "f_003-2u05-mosaic-ray-silhouette.svg",
       "shapes": 30
     },
     {
+      "id": "f_003-3r01-statue-grouper",
       "name": "Statue Grouper",
       "rarity": "rare",
       "gameRarity": "rare",
@@ -235,11 +247,12 @@
       "weight": "6 kg to 14 kg",
       "valueCoins": 300,
       "logbookLine": "Stays so still by the fallen statue that people have tried to read the inscription on it.",
-      "illustration": "StatueGrouper.svg",
-      "silhouette": "StatueGrouper_silhouette.svg",
+      "illustration": "f_003-3r01-statue-grouper.svg",
+      "silhouette": "f_003-3r01-statue-grouper-silhouette.svg",
       "shapes": 25
     },
     {
+      "id": "f_003-3r02-bellringer",
       "name": "Bellringer",
       "rarity": "rare",
       "gameRarity": "rare",
@@ -253,11 +266,12 @@
       "weight": "4 kg to 9 kg",
       "valueCoins": 340,
       "logbookLine": "Comes up when something rings. Even a boat horn will do.",
-      "illustration": "Bellringer.svg",
-      "silhouette": "Bellringer_silhouette.svg",
+      "illustration": "f_003-3r02-bellringer.svg",
+      "silhouette": "f_003-3r02-bellringer-silhouette.svg",
       "shapes": 15
     },
     {
+      "id": "f_003-3r03-keelback",
       "name": "Keelback",
       "rarity": "rare",
       "gameRarity": "rare",
@@ -271,11 +285,12 @@
       "weight": "5 kg to 10 kg",
       "valueCoins": 280,
       "logbookLine": "Lives inside the old hulls. Treats them like a house.",
-      "illustration": "Keelback.svg",
-      "silhouette": "Keelback_silhouette.svg",
+      "illustration": "f_003-3r03-keelback.svg",
+      "silhouette": "f_003-3r03-keelback-silhouette.svg",
       "shapes": 22
     },
     {
+      "id": "f_003-5l01-drowned-king",
       "name": "The Drowned King",
       "rarity": "legendary",
       "gameRarity": "legendary",
@@ -289,11 +304,12 @@
       "weight": "18 kg to 25 kg",
       "valueCoins": 1200,
       "logbookLine": "The city’s last ruler, some say. It still sits in the middle of the room.",
-      "illustration": "TheDrownedKing.svg",
-      "silhouette": "TheDrownedKing_silhouette.svg",
+      "illustration": "f_003-5l01-drowned-king.svg",
+      "silhouette": "f_003-5l01-drowned-king-silhouette.svg",
       "shapes": 38
     },
     {
+      "id": "f_003-4e01-temple-arowana",
       "name": "Temple Arowana",
       "rarity": "legendary",
       "gameRarity": "epic",
@@ -307,8 +323,8 @@
       "weight": "12 kg to 20 kg",
       "valueCoins": 1000,
       "logbookLine": "Swims up the temple steps at sunrise, as if it’s late for something.",
-      "illustration": "TempleArowana.svg",
-      "silhouette": "TempleArowana_silhouette.svg",
+      "illustration": "f_003-4e01-temple-arowana.svg",
+      "silhouette": "f_003-4e01-temple-arowana-silhouette.svg",
       "shapes": 31
     }
   ]

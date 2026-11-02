@@ -1,4 +1,4 @@
-// The 32 species of Frostmere (the snow world, public/models/worlds/snow.txt says `fish: frostmere`): 10 common,
+// The 32 species of Frostmere (w_002-frostmere, whose card says `fish: w_002-frostmere`): 10 common,
 // 9 uncommon, 7 rare, 5 epic and 1 legendary. All new: none of them lives in the home waters. Same fields as
 // fishDatabase.js, with the picture as an `art` description that fishArt.js draws; the legendary one is drawn by
 // hand because nothing in the generator is big enough for it.
@@ -8,7 +8,7 @@ const SVG = 'xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60"'
 export const FROSTMERE = [
   // --- Common -----------------------------------------------------------------------------------
   {
-    id: 'snowdrift-smelt',
+    id: 'f_002-1c01-snowdrift-smelt',
     name: 'Snowdrift Smelt',
     rarity: 'common',
     weight: [0.05, 0.3],
@@ -16,7 +16,7 @@ export const FROSTMERE = [
     art: { body: 'long', h: 7, back: '#7a9cb4', belly: '#e4eef6', accent: '#4a6a84', tail: 'fork', dorsal: 'tri', dorsalHeight: 6 },
   },
   {
-    id: 'icefin-cod',
+    id: 'f_002-1c02-icefin-cod',
     name: 'Icefin Cod',
     rarity: 'common',
     weight: [1, 5],
@@ -24,7 +24,7 @@ export const FROSTMERE = [
     art: { body: 'blunt', h: 16, back: '#8a9aa0', belly: '#e6ecee', accent: '#5f6e74', tail: 'round', dorsal: 'two', barbels: true, spots: 6, seed: 11 },
   },
   {
-    id: 'slushback-dab',
+    id: 'f_002-1c03-slushback-dab',
     name: 'Slushback Dab',
     rarity: 'common',
     weight: [0.4, 1.8],
@@ -32,7 +32,7 @@ export const FROSTMERE = [
     art: { body: 'deep', h: 15, back: '#a89f90', belly: '#e2dccf', accent: '#6f685a', tail: 'round', dorsal: 'long', spots: 6, seed: 12 },
   },
   {
-    id: 'rimescale-sprat',
+    id: 'f_002-1c04-rimescale-sprat',
     name: 'Rimescale Sprat',
     rarity: 'common',
     weight: [0.04, 0.2],
@@ -40,7 +40,7 @@ export const FROSTMERE = [
     art: { body: 'torpedo', h: 8, back: '#7aa0c0', belly: '#eaf3fa', accent: '#bcd8ee', tail: 'fork', dorsal: 'tri', stripes: 1 },
   },
   {
-    id: 'hoarfrost-haddock',
+    id: 'f_002-1c05-hoarfrost-haddock',
     name: 'Hoarfrost Haddock',
     rarity: 'common',
     weight: [0.8, 3.4],
@@ -48,7 +48,7 @@ export const FROSTMERE = [
     art: { body: 'torpedo', h: 12, back: '#6d7a8a', belly: '#e8eaee', accent: '#2a323c', tail: 'fork', dorsal: 'two', barbels: true, spots: 1, seed: 14 },
   },
   {
-    id: 'shiverfin-bleak',
+    id: 'f_002-1c06-shiverfin-bleak',
     name: 'Shiverfin Bleak',
     rarity: 'common',
     weight: [0.06, 0.3],
@@ -56,7 +56,7 @@ export const FROSTMERE = [
     art: { body: 'long', h: 7, back: '#4a9aa0', belly: '#cfe8e8', fin: '#7cc0c4', tail: 'fork', dorsal: 'tri' },
   },
   {
-    id: 'glaze-sculpin',
+    id: 'f_002-1c07-glaze-sculpin',
     name: 'Glaze Sculpin',
     rarity: 'common',
     weight: [0.2, 0.9],
@@ -64,7 +64,7 @@ export const FROSTMERE = [
     art: { body: 'blunt', h: 18, back: '#5c6a58', belly: '#a8b09a', accent: '#3a4636', tail: 'round', dorsal: 'spiny', spikes: true, spots: 5, seed: 15 },
   },
   {
-    id: 'mittenfish',
+    id: 'f_002-1c08-mittenfish',
     name: 'Mittenfish',
     rarity: 'common',
     weight: [0.5, 2],
@@ -72,7 +72,7 @@ export const FROSTMERE = [
     art: { body: 'round', h: 19, back: '#b0abc8', belly: '#e8e6f2', accent: '#7a74a0', fin: '#8a86aa', tail: 'round', dorsal: 'tri', dorsalHeight: 7, spots: 3, seed: 16 },
   },
   {
-    id: 'drift-vendace',
+    id: 'f_002-1c09-drift-vendace',
     name: 'Drift Vendace',
     rarity: 'common',
     weight: [0.1, 0.5],
@@ -80,7 +80,7 @@ export const FROSTMERE = [
     art: { body: 'torpedo', h: 10, back: '#b8c8d4', belly: '#f8fafc', accent: '#7894a8', tail: 'fork', dorsal: 'tri', stripes: 1 },
   },
   {
-    id: 'slate-pollock',
+    id: 'f_002-1c10-slate-pollock',
     name: 'Slate Pollock',
     rarity: 'common',
     weight: [1, 4.5],
@@ -90,7 +90,7 @@ export const FROSTMERE = [
 
   // --- Uncommon ---------------------------------------------------------------------------------
   {
-    id: 'floeback-char',
+    id: 'f_002-2u01-floeback-char',
     name: 'Floeback Char',
     rarity: 'uncommon',
     weight: [1, 4.8],
@@ -98,7 +98,7 @@ export const FROSTMERE = [
     art: { body: 'torpedo', h: 13, back: '#3f6f6a', belly: '#e8845a', fin: '#e8845a', accent: '#f4e6c8', tail: 'fork', dorsal: 'tri', spots: 11, seed: 17 },
   },
   {
-    id: 'icepick-pike',
+    id: 'f_002-2u02-icepick-pike',
     name: 'Icepick Pike',
     rarity: 'uncommon',
     weight: [2, 9],
@@ -106,7 +106,7 @@ export const FROSTMERE = [
     art: { body: 'long', h: 9, back: '#5a7f86', belly: '#d8e8e8', accent: '#3a5a62', tail: 'fork', dorsal: 'tri', stripes: 6, teeth: true },
   },
   {
-    id: 'aurora-trout',
+    id: 'f_002-2u03-aurora-trout',
     name: 'Aurora Trout',
     rarity: 'uncommon',
     weight: [1, 4],
@@ -114,7 +114,7 @@ export const FROSTMERE = [
     art: { body: 'torpedo', h: 13, back: '#58a898', belly: '#b78ad8', accent: '#7ae8c8', fin: '#8a6ac0', tail: 'fork', dorsal: 'tri', stripes: 3, spots: 5, seed: 18 },
   },
   {
-    id: 'cairn-lumpsucker',
+    id: 'f_002-2u04-cairn-lumpsucker',
     name: 'Cairn Lumpsucker',
     rarity: 'uncommon',
     weight: [1.5, 6],
@@ -122,7 +122,7 @@ export const FROSTMERE = [
     art: { body: 'round', h: 19, back: '#7a6f66', belly: '#b8a998', accent: '#a79888', tail: 'round', dorsal: 'tri', dorsalHeight: 9, spikes: true, spots: 8, seed: 19 },
   },
   {
-    id: 'whiteout-halibut',
+    id: 'f_002-2u05-whiteout-halibut',
     name: 'Whiteout Halibut',
     rarity: 'uncommon',
     weight: [4, 16],
@@ -130,7 +130,7 @@ export const FROSTMERE = [
     art: { body: 'deep', h: 16, back: '#bcc6d0', belly: '#eef2f5', accent: '#8a96a2', tail: 'fan', dorsal: 'long', spots: 4, seed: 20 },
   },
   {
-    id: 'spruce-grayling',
+    id: 'f_002-2u06-spruce-grayling',
     name: 'Spruce Grayling',
     rarity: 'uncommon',
     weight: [0.8, 3],
@@ -138,7 +138,7 @@ export const FROSTMERE = [
     art: { body: 'torpedo', h: 12, back: '#5a7a5a', belly: '#c8d4b8', accent: '#2f4a2f', tail: 'fork', dorsal: 'sail', spots: 5, seed: 21 },
   },
   {
-    id: 'tallow-burbot',
+    id: 'f_002-2u07-tallow-burbot',
     name: 'Tallow Burbot',
     rarity: 'uncommon',
     weight: [1.5, 6],
@@ -146,7 +146,7 @@ export const FROSTMERE = [
     art: { body: 'eel', h: 8, back: '#a8946a', belly: '#e8dcb8', accent: '#7a6a44', tail: 'round', dorsal: 'long', barbels: true, spots: 6, seed: 22 },
   },
   {
-    id: 'crystalmouth-lamprey',
+    id: 'f_002-2u08-crystalmouth-lamprey',
     name: 'Crystalmouth Lamprey',
     rarity: 'uncommon',
     weight: [0.6, 2.4],
@@ -154,7 +154,7 @@ export const FROSTMERE = [
     art: { body: 'eel', h: 5, back: '#5a6a8a', belly: '#c0cadf', accent: '#9fe8ff', tail: 'round', dorsal: 'none', teeth: true },
   },
   {
-    id: 'gloamfin-skate',
+    id: 'f_002-2u09-gloamfin-skate',
     name: 'Gloamfin Skate',
     rarity: 'uncommon',
     weight: [3, 13],
@@ -164,7 +164,7 @@ export const FROSTMERE = [
 
   // --- Rare -------------------------------------------------------------------------------------
   {
-    id: 'glacier-sturgeon',
+    id: 'f_002-3r01-glacier-sturgeon',
     name: 'Glacier Sturgeon',
     rarity: 'rare',
     habitat: { weather: 'clear', hours: [10, 15], boost: 2, hint: 'Prefers clear skies and the light of noon.' },
@@ -173,7 +173,7 @@ export const FROSTMERE = [
     art: { body: 'long', h: 12, back: '#5a7a9a', belly: '#d0dcea', accent: '#a8c4de', tail: 'fork', dorsal: 'tri', plates: 6, barbels: true },
   },
   {
-    id: 'wolfjaw-catfish',
+    id: 'f_002-3r02-wolfjaw-catfish',
     name: 'Wolfjaw Catfish',
     rarity: 'rare',
     habitat: { weather: 'rough', boost: 2, hint: 'Prefers wind and rough water.' },
@@ -182,7 +182,7 @@ export const FROSTMERE = [
     art: { body: 'blunt', h: 18, back: '#4a5a66', belly: '#aab4bc', accent: '#26323c', tail: 'round', dorsal: 'long', stripes: 4, teeth: true },
   },
   {
-    id: 'shardscale-salmon',
+    id: 'f_002-3r03-shardscale-salmon',
     name: 'Shardscale Salmon',
     rarity: 'rare',
     habitat: { weather: 'rain', hours: [4, 8], boost: 2, hint: 'Prefers rain at dawn.' },
@@ -191,7 +191,7 @@ export const FROSTMERE = [
     art: { body: 'torpedo', h: 15, back: '#a8c4d8', belly: '#f0b8a0', accent: '#e0f0fa', tail: 'fork', dorsal: 'tri', spikes: true, spots: 5, seed: 24 },
   },
   {
-    id: 'halo-opah',
+    id: 'f_002-3r04-halo-opah',
     name: 'Halo Opah',
     rarity: 'rare',
     habitat: { weather: 'calm', hours: [11, 14], boost: 2, hint: 'Prefers still water and the middle of the day.' },
@@ -200,7 +200,7 @@ export const FROSTMERE = [
     art: { body: 'round', h: 22, back: '#4a7aa8', belly: '#e88a7a', accent: '#f4f8fb', fin: '#e8506a', tail: 'lunate', dorsal: 'tri', dorsalHeight: 12, spots: 12, seed: 25 },
   },
   {
-    id: 'snowblind-ray',
+    id: 'f_002-3r05-snowblind-ray',
     name: 'Snowblind Ray',
     rarity: 'rare',
     habitat: { weather: 'clear', hours: [22, 3], boost: 2, hint: 'Prefers clear skies and the small hours.' },
@@ -209,7 +209,7 @@ export const FROSTMERE = [
     art: { body: 'ray', back: '#c0d0e0', belly: '#eef3f8', accent: '#7f9ab6', spots: 5, seed: 26 },
   },
   {
-    id: 'winterbell-eelpout',
+    id: 'f_002-3r06-winterbell-eelpout',
     name: 'Winterbell Eelpout',
     rarity: 'rare',
     habitat: { weather: 'rain', hours: [18, 24], boost: 2, hint: 'Prefers rain in the evening.' },
@@ -218,7 +218,7 @@ export const FROSTMERE = [
     art: { body: 'eel', h: 9, back: '#8a5a8a', belly: '#d8b8d0', accent: '#5a3a5a', tail: 'round', dorsal: 'long', spots: 6, seed: 27 },
   },
   {
-    id: 'hollowhorn-unicornfish',
+    id: 'f_002-3r07-hollowhorn-unicornfish',
     name: 'Hollowhorn Unicornfish',
     rarity: 'rare',
     habitat: { weather: 'rough', hours: [8, 12], boost: 2, hint: 'Prefers rough water in the morning.' },
@@ -229,7 +229,7 @@ export const FROSTMERE = [
 
   // --- Epic -------------------------------------------------------------------------------------
   {
-    id: 'crystalhorn-narwhalfish',
+    id: 'f_002-4e01-crystalhorn-narwhalfish',
     name: 'Crystalhorn Narwhalfish',
     rarity: 'epic',
     habitat: { weather: 'clear', hours: [3, 6], boost: 2, hint: 'Prefers clear skies before dawn.' },
@@ -238,7 +238,7 @@ export const FROSTMERE = [
     art: { body: 'long', h: 13, back: '#a9c6dc', belly: '#eef6fc', accent: '#5aa0e0', fin: '#7a9cb8', tail: 'lunate', dorsal: 'tri', tusk: true, tuskColour: '#9fd0ff', glow: '#9fd0ff', stripes: 2 },
   },
   {
-    id: 'bergmaw-angler',
+    id: 'f_002-4e02-bergmaw-angler',
     name: 'Bergmaw Angler',
     rarity: 'epic',
     habitat: { weather: 'rain', hours: [0, 6], boost: 2, hint: 'Prefers rain in the small hours.' },
@@ -247,7 +247,7 @@ export const FROSTMERE = [
     art: { body: 'blunt', h: 22, back: '#2a3a52', belly: '#6a86a8', accent: '#e8f4ff', tail: 'round', dorsal: 'spiny', teeth: true, lure: true, glow: '#aef0ff' },
   },
   {
-    id: 'blizzard-sturgeon',
+    id: 'f_002-4e03-blizzard-sturgeon',
     name: 'Blizzard Sturgeon',
     rarity: 'epic',
     habitat: { weather: 'rough', hours: [20, 24], boost: 2, hint: 'Prefers rough water at night.' },
@@ -256,7 +256,7 @@ export const FROSTMERE = [
     art: { body: 'long', h: 16, back: '#c4d6e6', belly: '#9ab6cc', accent: '#5a7a9a', fin: '#7a9cb8', tail: 'fork', dorsal: 'sail', plates: 7, barbels: true },
   },
   {
-    id: 'aurora-moonfish',
+    id: 'f_002-4e04-aurora-moonfish',
     name: 'Aurora Moonfish',
     rarity: 'epic',
     habitat: { weather: 'calm', hours: [22, 3], boost: 2, hint: 'Prefers still water and the dead of night.' },
@@ -265,7 +265,7 @@ export const FROSTMERE = [
     art: { body: 'round', h: 24, back: '#78e0c8', belly: '#b88af0', accent: '#ffffff', fin: '#8ac0e0', tail: 'fan', dorsal: 'tri', dorsalHeight: 12, glow: '#78e0c8', spots: 12, seed: 28 },
   },
   {
-    id: 'ghostwhite-pike',
+    id: 'f_002-4e05-ghostwhite-pike',
     name: 'Ghostwhite Pike',
     rarity: 'epic',
     habitat: { weather: 'calm', hours: [12, 16], boost: 2, hint: 'Prefers still water and the pale afternoon.' },
@@ -276,7 +276,7 @@ export const FROSTMERE = [
 
   // --- Legendary --------------------------------------------------------------------------------
   {
-    id: 'glacier-maw',
+    id: 'f_002-5l01-glacier-maw',
     name: 'The Glacier Maw',
     rarity: 'legendary',
     habitat: { weather: 'thunderstorm', hours: [22, 2], boost: 2, hint: 'Prefers storm and the dead of night.' },

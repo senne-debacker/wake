@@ -1,16 +1,17 @@
-// Draws the fish of The Sunken Ruins (src/fishing/species/sunkenRuins.js) and writes them to blender/fish/sunken-ruins/:
-//   <FishName>.svg              the logbook illustration (120 x 60, the nose on the right, a transparent background)
-//   <FishName>_silhouette.svg   the same shape in one dark colour, for a fish that has not been caught yet
-//   sunken-ruins-fish.json      the data of every fish
+// Draws the fish of The Sunken Ruins (src/fishing/species/sunkenRuins.js) and writes them to blender/fish/w_003-sunken-ruins/:
+//   <fish-id>.svg               the logbook illustration (120 x 60, the nose on the right, a transparent background)
+//   <fish-id>-silhouette.svg    the same shape in one dark colour, for a fish that has not been caught yet
+//   w_003-sunken-ruins-fish.json      the data of every fish
 //   index.html                  an overview of all of them on paper, both versions
 //   npm run export:ruins-fish
-import { mkdirSync, writeFileSync } from 'node:fs'
+import { mkdirSync, writeFileSync, readdirSync, rmSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
 const { SUNKEN_RUINS, AREAS, fileName } = await import('../src/fishing/species/sunkenRuins.js')
 const { drawFish } = await import('../src/fishing/fishArt.js')
-const dir = fileURLToPath(new URL('../blender/fish/sunken-ruins/', import.meta.url))
+const dir = fileURLToPath(new URL('../blender/fish/w_003-sunken-ruins/', import.meta.url))
 mkdirSync(dir, { recursive: true })
+for (const old of readdirSync(dir).filter((f) => f.endsWith('.svg'))) rmSync(`${dir}${old}`) // (so a renamed fish leaves no old file behind)
 
 const escape = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;')
 const finish = (markup, title) => markup.replace('<svg ', '<svg width="480" height="240" ').replace(/(<svg [^>]*>)/, `$1\n  <title>${escape(title)}</title>`)
@@ -22,9 +23,10 @@ for (const fish of SUNKEN_RUINS) {
   const picture = finish(drawFish(fish.art), fish.name)
   const silhouette = finish(drawFish({ ...fish.art, silhouette: true }), `${fish.name} (silhouette)`)
   writeFileSync(`${dir}${name}.svg`, picture + '\n')
-  writeFileSync(`${dir}${name}_silhouette.svg`, silhouette + '\n')
+  writeFileSync(`${dir}${name}-silhouette.svg`, silhouette + '\n')
   const shapes = (picture.match(/<(polygon|circle|ellipse|path|polyline)/g) ?? []).length
   rows.push({
+    id: fish.id,
     name: fish.name,
     rarity: fish.rarity,
     gameRarity: fish.gameRarity,
@@ -36,7 +38,7 @@ for (const fish of SUNKEN_RUINS) {
     valueCoins: fish.value,
     logbookLine: fish.logbook,
     illustration: `${name}.svg`,
-    silhouette: `${name}_silhouette.svg`,
+    silhouette: `${name}-silhouette.svg`,
     shapes,
   })
 }
@@ -53,7 +55,7 @@ const json = {
   priceRanges: { common: '14-30', uncommon: '60-100', rare: '260-340', legendary: '900-1,200' },
   fish: rows,
 }
-writeFileSync(`${dir}sunken-ruins-fish.json`, JSON.stringify(json, null, 2) + '\n')
+writeFileSync(`${dir}w_003-sunken-ruins-fish.json`, JSON.stringify(json, null, 2) + '\n')
 
 const cards = rows
   .map((r) => {
@@ -65,5 +67,5 @@ writeFileSync(
   `${dir}index.html`,
   `<!doctype html><meta charset="utf-8"><title>The Sunken Ruins: fish</title><style>body{margin:0;padding:20px;background:#e8d9bc;font:15px/1.35 'Nunito',system-ui,sans-serif;color:#1f2b3a}h1{font:800 40px 'Barlow Condensed',sans-serif;letter-spacing:.04em;margin:0 0 14px}main{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px}.c{background:#f1e6cc;border:2px solid #1f2b3a;padding:10px}.c.rare{border-color:#5b4b8a}.c.legendary{border-color:#7a4a12}.c.uncommon{border-color:#3f5e4a}.pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}img{width:100%;height:auto;display:block}b{display:block;font:700 22px 'Barlow Condensed',sans-serif;letter-spacing:.05em;text-transform:uppercase;margin-top:6px}i{display:block;color:#5a4a36}small{display:block;color:#5a4a36;margin:2px 0 6px}p{margin:0;font-style:italic}</style><h1>The Sunken Ruins</h1><main>${cards}</main>`,
 )
-console.log(`[ruins] ${rows.length} fish (illustration + silhouette each), the data and the overview written to blender/fish/sunken-ruins/`)
+console.log(`[ruins] ${rows.length} fish (illustration + silhouette each), the data and the overview written to blender/fish/w_003-sunken-ruins/`)
 console.log(rows.map((r) => `${r.name} ${r.shapes}`).join(', '))

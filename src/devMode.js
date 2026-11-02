@@ -1,4 +1,4 @@
-import { applyBoatStats, BUILT_IN_BOAT_ID } from './boats.js'
+import { applyBoatStats, DEFAULT_BOAT } from './boats.js'
 import { chooseWorld } from './worlds.js'
 import { setWaterDetail } from './scene/planet.js'
 import { QUALITY } from './quality.js'
@@ -183,7 +183,7 @@ export function createDevMode({ fishSet, interaction, clock, atmosphere, boat, b
   const boatSelect = $('dev-boat')
   const boatInfo = $('dev-boat-info')
   for (const entry of boats) boatSelect.append(new Option(entry.name, entry.id))
-  let currentBoat = { entry: boats.find((candidate) => candidate.id === BUILT_IN_BOAT_ID) ?? boats[0], hull: null } // (the boat built into the scene)
+  let currentBoat = { entry: DEFAULT_BOAT, hull: null } // (the boat built into the scene: not in the list once there is a standard boat)
   boatSelect.value = currentBoat.entry.id // (the picker shows the boat that is in the scene, not the first of the list)
   let speedFactor = 1
   const BOAT_KEY = 'wake.dev.boat'

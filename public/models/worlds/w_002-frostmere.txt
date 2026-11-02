@@ -1,0 +1,20 @@
+id:           w_002-frostmere
+name:         Frostmere
+description:  A cold, quiet sea of steep snowy cliffs, a winding fjord, a blue glacier and drifting ice.
+price:        600
+fish:         w_002-frostmere
+anything special:
+  - Made from blender/worlds/w_002-frostmere.blend. Tall white ridges
+    (peaks up to 2.0) form the Long Fjord, a winding channel about 1.3 wide that ends at Ezra's
+    Inlet, where Ezra the cartographer lives in a hut on stilts. A wider way leaves the inlet
+    to the north-east.
+  - Ezra's dock is the selling point (Dock_Ezra) and is solid (the Ezra_Dock group).
+  - Waterfall Cove, under the tallest cliffs, has a sea cave you can sail into (the cave roof is
+    a prop, Cave_Roof).
+  - A blocky glacier with broken ice chunks, the Icefield of drifting floes and small bergs, the
+    Black Skerries, five low pine holms and three outer crags near the fjord; on the far side a ring of
+    eight snowy islands (most with pines) round the Cold Deep, the open water at the south pole.
+  - Seven orange survey flags, and markers the game does not read yet: Area_*, Quest_CompassPiece_1-4
+    and Resident_Ezra.
+  - Suggested mood if the game ever reads one: colder sea colour, snow instead of rain, a pale low sun,
+    the aurora at night.

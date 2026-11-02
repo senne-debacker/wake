@@ -15,8 +15,9 @@ import { FISHING, PLANET } from '../src/config.js'
 import { createLayout } from '../src/world/layout.js'
 import { createFishingSpots } from '../src/scene/fishingSpots.js'
 import {
-  FISH_SPECIES, FISH_SETS, FISH_BY_ID, RARITIES, fishSet, fishInRarity, rollRarity, rollFish, rollWeight, formatWeight, speciesWeights,
+  FISH_SPECIES, FISH_SETS, HOME, FISH_BY_ID, RARITIES, fishSet, fishInRarity, rollRarity, rollFish, rollWeight, formatWeight, speciesWeights,
 } from '../src/fishing/fishDatabase.js'
+import { LEGACY_FISH } from '../src/fishing/legacyIds.js'
 import { createFight, stepFight } from '../src/fishing/fishingMinigame.js'
 import { createLogbookStore } from '../src/fishing/logbook.js'
 import { habitatActive, describeHabitat, inHours, WEATHER_KINDS } from '../src/fishing/habitat.js'
@@ -35,17 +36,30 @@ const mulberry32 = (seed) => () => {
 
 // ---- 1. database -----------------------------------------------------------------------------------
 {
-  check('database: 32 species in each world, 64 in all', Object.values(FISH_SETS).every((set) => set.length === 32) && FISH_SPECIES.length === 64 && Object.keys(FISH_SETS).join() === 'home,frostmere', `${FISH_SPECIES.length}`)
+  check('database: 32 species in each world, 64 in all', Object.values(FISH_SETS).every((set) => set.length === 32) && FISH_SPECIES.length === 64 && Object.keys(FISH_SETS).join() === 'w_001-harbour,w_002-frostmere', `${FISH_SPECIES.length}`)
   for (const [name, set] of Object.entries(FISH_SETS)) {
     const counts = Object.keys(RARITIES).map((rarity) => fishInRarity(rarity, set).length)
     check(`database: ${name} has 10 common, 9 uncommon, 7 rare, 5 epic and exactly 1 legendary`, counts.join() === '10,9,7,5,1', counts.join(' / '))
   }
-  check('database: the Wake-Eater is the home waters\u2019 only legendary fish', fishInRarity('legendary', FISH_SETS.home).map((f) => f.id).join() === 'wake-eater')
-  check('database: every species knows its set, and no species is in two', FISH_SPECIES.every((f) => FISH_SETS[f.set].includes(f)) && FISH_SETS.home.every((f) => f.set === 'home') && FISH_SETS.frostmere.every((f) => f.set === 'frostmere'))
-  check('database: a missing or unknown fish set is the home waters', fishSet(undefined) === FISH_SETS.home && fishSet('nowhere') === FISH_SETS.home && fishSet('frostmere') === FISH_SETS.frostmere)
+  check('database: the Wake-Eater is the home waters\u2019 only legendary fish', fishInRarity('legendary', FISH_SETS[HOME]).map((f) => f.id).join() === 'f_001-5l01-wake-eater')
+  check('database: every species knows its set, and no species is in two', FISH_SPECIES.every((f) => FISH_SETS[f.set].includes(f)) && FISH_SETS[HOME].every((f) => f.set === HOME) && FISH_SETS['w_002-frostmere'].every((f) => f.set === 'w_002-frostmere'))
+  check('database: a missing or unknown fish set is the home waters', fishSet(undefined) === FISH_SETS[HOME] && fishSet('nowhere') === FISH_SETS[HOME] && fishSet('w_002-frostmere') === FISH_SETS['w_002-frostmere'])
   check('database: every species has a known rarity', FISH_SPECIES.every((fish) => fish.rarity in RARITIES))
   check('database: ids and names are unique', new Set(FISH_SPECIES.map((f) => f.id)).size === 64 && new Set(FISH_SPECIES.map((f) => f.name)).size === 64 && FISH_BY_ID.size === 64)
-  check('database: ids are plain slugs (the logbook is saved under them)', FISH_SPECIES.every((f) => /^[a-z]+(-[a-z]+)*$/.test(f.id)))
+  {
+    // The ids (blender/NAMING.md): f_<world number>-<rarity rank><rarity letter><number>-<name>, e.g. f_001-1c01-dusk-herring.
+    const RANK = { common: '1c', uncommon: '2u', rare: '3r', epic: '4e', legendary: '5l' }
+    const bad = FISH_SPECIES.filter((f) => {
+      const m = f.id.match(/^f_(\d{3})-([1-5][culre])(\d{2})-([a-z0-9]+(?:-[a-z0-9]+)*)$/)
+      return !m || m[1] !== f.set.slice(2, 5) || m[2] !== RANK[f.rarity]
+    })
+    check('database: every fish id says its world and its rarity (f_001-1c01-dusk-herring)', bad.length === 0, bad.map((f) => `${f.id} (${f.set}, ${f.rarity})`).join('; '))
+    const numbers = FISH_SPECIES.map((f) => f.id.match(/^f_\d{3}-\d[a-z](\d{2})/)?.[1])
+    const gaps = Object.values(FISH_SETS).flatMap((set) => Object.keys(RANK).filter((r) => fishInRarity(r, set).length).filter((r) => fishInRarity(r, set).map((f) => f.id.match(/^f_\d{3}-\d[a-z](\d{2})-/)?.[1]).sort().join() !== fishInRarity(r, set).map((_, i) => String(i + 1).padStart(2, '0')).join()))
+    check('database: the numbers of a world\u2019s fish of one rarity are 01, 02, 03... with none missing or twice', gaps.length === 0 && numbers.every(Boolean), gaps.join())
+    check('database: the sets are named after their worlds (w_001-harbour)', Object.keys(FISH_SETS).every((id) => /^w_\d{3}-[a-z0-9]+(-[a-z0-9]+)*$/.test(id)))
+    check('database: every first fish id (saves from before the new ids) maps to a fish that exists', Object.values(LEGACY_FISH).every((id) => FISH_BY_ID.has(id)) && Object.keys(LEGACY_FISH).length === 64 && Object.keys(LEGACY_FISH).every((old) => !FISH_BY_ID.has(old)))
+  }
   check('database: weight ranges are sane (0 < min < max)', FISH_SPECIES.every((f) => f.weight.length === 2 && f.weight[0] > 0 && f.weight[0] < f.weight[1]))
   check('database: rarer fish can be heavier', Object.values(FISH_SETS).every((set) => Math.max(...fishInRarity('legendary', set).map((f) => f.weight[1])) > Math.max(...fishInRarity('common', set).map((f) => f.weight[1])) * 20))
   check('database: every species has a description', FISH_SPECIES.every((f) => typeof f.description === 'string' && f.description.length > 20))
@@ -73,7 +87,7 @@ const mulberry32 = (seed) => () => {
   // Rolling: the observed shares match the rates, every species can come up, weights stay in range.
   const random = mulberry32(7)
   const draws = 300000
-  const seen = new Map(FISH_SETS.home.map((f) => [f.id, 0]))
+  const seen = new Map(FISH_SETS[HOME].map((f) => [f.id, 0]))
   const byRarity = Object.fromEntries(Object.keys(RARITIES).map((name) => [name, 0]))
   for (let i = 0; i < draws; i++) {
     const fish = rollFish(random)
@@ -85,22 +99,22 @@ const mulberry32 = (seed) => () => {
   check('rolling: every species comes up', [...seen.values()].every((n) => n > 0), `rarest seen ${Math.min(...seen.values())} times`)
   {
     // The other world rolls its own fish only, with the same odds.
-    const frost = new Map(FISH_SETS.frostmere.map((f) => [f.id, 0]))
+    const frost = new Map(FISH_SETS['w_002-frostmere'].map((f) => [f.id, 0]))
     const r = mulberry32(21)
     let foreign = 0
     for (let i = 0; i < 200000; i++) {
-      const fish = rollFish(r, null, FISH_SETS.frostmere)
+      const fish = rollFish(r, null, FISH_SETS['w_002-frostmere'])
       if (!frost.has(fish.id)) foreign++
       else frost.set(fish.id, frost.get(fish.id) + 1)
     }
-    const glacier = frost.get('glacier-maw') / 200000
+    const glacier = frost.get('f_002-5l01-glacier-maw') / 200000
     check('rolling: Frostmere rolls only Frostmere\u2019s fish, every one of them, the legendary at its rate', foreign === 0 && [...frost.values()].every((n) => n > 0) && Math.abs(glacier - RARITIES.legendary.rate) < 0.003, `legendary ${(glacier * 100).toFixed(2)}%`)
   }
   const share = (rarity) => fishInRarity(rarity).map((f) => seen.get(f.id) / byRarity[rarity])
   check('rolling: within a rarity every species is about equally likely', Object.keys(RARITIES).every((rarity) => share(rarity).every((s) => Math.abs(s - 1 / fishInRarity(rarity).length) < 0.02)))
   check('rolling: rollRarity never returns an unknown name, even at the extremes', [0, 0.5199, 0.52, 0.7899, 0.79, 0.9299, 0.93, 0.9849, 0.985, 0.999999].every((x) => rollRarity(() => x) in RARITIES) && rollRarity(() => 0) === 'common' && rollRarity(() => 0.999999) === 'legendary')
   let outside = 0, sum = 0
-  const heavy = FISH_BY_ID.get('wake-eater')
+  const heavy = FISH_BY_ID.get('f_001-5l01-wake-eater')
   for (let i = 0; i < 20000; i++) {
     const w = rollWeight(heavy, random)
     sum += w
@@ -114,17 +128,17 @@ const mulberry32 = (seed) => () => {
   const withHabitat = FISH_SPECIES.filter((f) => f.habitat)
   check('habitat: only rare, epic and legendary species have one, each with a hint and a boost above 1', withHabitat.length > 0 && withHabitat.every((f) => (f.rarity === 'rare' || f.rarity === 'epic' || f.rarity === 'legendary') && f.habitat.hint && f.habitat.boost > 1 && (f.habitat.weather || f.habitat.hours) && (!f.habitat.weather || f.habitat.weather in WEATHER_KINDS)))
   check('habitat: the wake-eater wants a thunderstorm between 02:00 and 04:00', (() => {
-    const h = FISH_BY_ID.get('wake-eater').habitat
+    const h = FISH_BY_ID.get('f_001-5l01-wake-eater').habitat
     const storm = { storm: 1, cover: 1, rain: 1 }
     return habitatActive(h, { ...storm, hour: 3 }) && !habitatActive(h, { ...storm, hour: 4 }) && !habitatActive(h, { ...storm, hour: 1.9 }) && !habitatActive(h, { storm: 1, cover: 1, rain: 0, hour: 3 }) && !habitatActive(h, { storm: 0, cover: 0.1, rain: 0, hour: 3 }) && !habitatActive(h, null)
   })())
   check('habitat: hours wrap past midnight', inHours(23, [22, 2]) && inHours(1.5, [22, 2]) && !inHours(2, [22, 2]) && !inHours(12, [22, 2]) && inHours(12, [10, 14]) && !inHours(14, [10, 14]))
-  check('habitat: the text spells the rule out', describeHabitat(FISH_BY_ID.get('wake-eater').habitat) === 'Twice as likely to bite during a thunderstorm, between 02:00 and 04:00.' && describeHabitat(FISH_BY_ID.get('bonewhistle').habitat) === 'Twice as likely to bite in rough weather.', describeHabitat(FISH_BY_ID.get('old-moonfin').habitat))
+  check('habitat: the text spells the rule out', describeHabitat(FISH_BY_ID.get('f_001-5l01-wake-eater').habitat) === 'Twice as likely to bite during a thunderstorm, between 02:00 and 04:00.' && describeHabitat(FISH_BY_ID.get('f_001-3r01-bonewhistle').habitat) === 'Twice as likely to bite in rough weather.', describeHabitat(FISH_BY_ID.get('f_001-4e01-old-moonfin').habitat))
   check('habitat: weights add up to 1 without conditions and every boost shows when its habitat is right', (() => {
     const sum = (w) => w.reduce((a, b) => a + b, 0)
     if (Math.abs(sum(speciesWeights()) - 1) > 1e-9) return false
     const storm = speciesWeights({ hour: 3, storm: 1, cover: 1, rain: 1 })
-    const i = FISH_SPECIES.findIndex((f) => f.id === 'wake-eater')
+    const i = FISH_SPECIES.findIndex((f) => f.id === 'f_001-5l01-wake-eater')
     return Math.abs(storm[i] / speciesWeights()[i] - 2) < 1e-9
   })())
   const rollShare = (id, conditions) => {
@@ -134,9 +148,9 @@ const mulberry32 = (seed) => () => {
     return n / 400000
   }
   const night = { hour: 3, storm: 1, cover: 1, rain: 1 }
-  const ratio = rollShare('wake-eater', night) / rollShare('wake-eater', { hour: 12, storm: 0, cover: 0.1, rain: 0 })
+  const ratio = rollShare('f_001-5l01-wake-eater', night) / rollShare('f_001-5l01-wake-eater', { hour: 12, storm: 0, cover: 0.1, rain: 0 })
   check('habitat: the wake-eater is about twice as likely in a thunderstorm at 03:00', ratio > 1.85 && ratio < 2.1, `${ratio.toFixed(2)} times`)
-  check('habitat: a boost in the wrong hour or weather changes nothing', Math.abs(rollShare('wake-eater', { hour: 3, storm: 0, cover: 0.1, rain: 0 }) - rollShare('wake-eater', null)) < 0.002)
+  check('habitat: a boost in the wrong hour or weather changes nothing', Math.abs(rollShare('f_001-5l01-wake-eater', { hour: 3, storm: 0, cover: 0.1, rain: 0 }) - rollShare('f_001-5l01-wake-eater', null)) < 0.002)
   check('weight text: grams below a kilo, kilos above', formatWeight(0.25) === '250 g' && formatWeight(0.05) === '50 g' && formatWeight(2.44) === '2.4 kg' && formatWeight(0.9996) === '1.0 kg' && formatWeight(143.26) === '143.3 kg')
 }
 
@@ -281,29 +295,29 @@ const mulberry32 = (seed) => () => {
   }
   const storage = memory()
   const book = createLogbookStore(storage)
-  check('logbook: starts empty', book.species() === 0 && book.total() === 0 && book.get('dusk-herring') === null)
-  const first = book.record({ id: 'dusk-herring', weight: 0.5 })
+  check('logbook: starts empty', book.species() === 0 && book.total() === 0 && book.get('f_001-1c01-dusk-herring') === null)
+  const first = book.record({ id: 'f_001-1c01-dusk-herring', weight: 0.5 })
   check('logbook: the first catch of a species is new, not a record', first.isNew && !first.isRecord)
-  const heavier = book.record({ id: 'dusk-herring', weight: 0.7 })
-  const lighter = book.record({ id: 'dusk-herring', weight: 0.3 })
+  const heavier = book.record({ id: 'f_001-1c01-dusk-herring', weight: 0.7 })
+  const lighter = book.record({ id: 'f_001-1c01-dusk-herring', weight: 0.3 })
   check('logbook: a heavier catch is a personal best, a lighter one is neither', !heavier.isNew && heavier.isRecord && !lighter.isNew && !lighter.isRecord)
-  book.record({ id: 'wake-eater', weight: 200 })
-  check('logbook: counts species, catches and the best weight', book.species() === 2 && book.total() === 4 && book.get('dusk-herring').count === 3 && book.get('dusk-herring').best === 0.7)
+  book.record({ id: 'f_001-5l01-wake-eater', weight: 200 })
+  check('logbook: counts species, catches and the best weight', book.species() === 2 && book.total() === 4 && book.get('f_001-1c01-dusk-herring').count === 3 && book.get('f_001-1c01-dusk-herring').best === 0.7)
 
   const reopened = createLogbookStore(storage)
-  check('logbook: is saved and read back', reopened.species() === 2 && reopened.get('dusk-herring').count === 3 && reopened.get('wake-eater').best === 200)
+  check('logbook: is saved and read back', reopened.species() === 2 && reopened.get('f_001-1c01-dusk-herring').count === 3 && reopened.get('f_001-5l01-wake-eater').best === 200)
 
   const damaged = memory()
   damaged.setItem('wake.logbook', '{ this is not json')
   check('logbook: a damaged save gives an empty book instead of an error', createLogbookStore(damaged).species() === 0)
   const odd = memory()
-  odd.setItem('wake.logbook', JSON.stringify({ version: 1, fish: { 'dusk-herring': { count: 2, best: 0.4 }, 'removed-fish': { count: 1, best: 3 }, mudgrubber: { count: -5, best: 1 }, 'ember-eel': { count: 'many', best: 2 }, 'bonewhistle': null } }))
+  odd.setItem('wake.logbook', JSON.stringify({ version: 1, fish: { 'f_001-1c01-dusk-herring': { count: 2, best: 0.4 }, 'removed-fish': { count: 1, best: 3 }, mudgrubber: { count: -5, best: 1 }, 'f_001-2u01-ember-eel': { count: 'many', best: 2 }, 'f_001-3r01-bonewhistle': null } }))
   const sane = createLogbookStore(odd)
-  check('logbook: unknown species and nonsense numbers in a save are ignored', sane.species() === 1 && sane.get('dusk-herring').count === 2)
+  check('logbook: unknown species and nonsense numbers in a save are ignored', sane.species() === 1 && sane.get('f_001-1c01-dusk-herring').count === 2)
   const broken = { getItem: () => { throw new Error('blocked') }, setItem: () => { throw new Error('blocked') } }
   const unsaved = createLogbookStore(broken)
-  check('logbook: without usable storage it still works for the session', unsaved.record({ id: 'mudgrubber', weight: 1 }).isNew && unsaved.species() === 1)
-  check('logbook: ... and with no storage at all', createLogbookStore(null).record({ id: 'mudgrubber', weight: 1 }).isNew)
+  check('logbook: without usable storage it still works for the session', unsaved.record({ id: 'f_001-1c02-mudgrubber', weight: 1 }).isNew && unsaved.species() === 1)
+  check('logbook: ... and with no storage at all', createLogbookStore(null).record({ id: 'f_001-1c02-mudgrubber', weight: 1 }).isNew)
   let threw = false
   try {
     book.record({ id: 'sea-monkey', weight: 1 })

@@ -36,7 +36,7 @@ import { createWorld } from './scene/world.js'
 import { createFishingSpots } from './scene/fishingSpots.js'
 import { createFishingMinigame } from './fishing/fishingMinigame.js'
 import { createLogbook } from './fishing/logbook.js'
-import { rollFish, fishSet as fishSetOf } from './fishing/fishDatabase.js'
+import { rollFish, fishSet as fishSetOf, HOME } from './fishing/fishDatabase.js'
 import { createBoatState, createBoatPose, computeBoatPose } from './physics/boat.js'
 import { createBoatDynamics, applyBoatWeight } from './physics/boatDynamics.js'
 import { stepBoat } from './physics/boatMotion.js'
@@ -102,7 +102,7 @@ async function main() {
 
   const { sun, moon, fill } = createLighting()
   const boat = createBoat()
-  await boat.ready // your own boat model (public/models/boat.glb), if there is one, replaces the built-in boat
+  await boat.ready // the built-in boat (there is no model file for it now: the standard boat is swapped in below)
   // Where islands, rocks and buoys are (also used for collisions): the game's own world, or a world made in Blender that the
   // developer panel asked for (src/worlds.js, world/importWorld.js). A world that cannot be read falls back to the own one.
   const worlds = await loadWorlds()
@@ -121,7 +121,7 @@ async function main() {
   const fishSet = fishSetOf(activeWorld.fish) // the 32 fish that live in this world
   const fishPages = [] // the logbook has a tab per world: { id: its fish set, name, set }
   for (const entry of worlds) {
-    const id = entry.fish ?? 'home'
+    const id = entry.fish ?? HOME
     if (!fishPages.some((page) => page.id === id)) fishPages.push({ id, name: entry.name, set: fishSetOf(id) })
   }
   const world = createWorld(layout, waterEdge(QUALITY.waterDetail))
@@ -170,7 +170,7 @@ async function main() {
   let fishingSpot = null // the spot being fished
   let fightOutcome = null // how the last fight ended: 'caught', 'snapped' or 'released'
   let logbookReturn = 'playing' // where the logbook goes back to: the game, or the pause screen it was opened from
-  const logbook = createLogbook({ pages: fishPages, current: activeWorld.fish ?? 'home', onClose: () => state === 'logbook' && setState(logbookReturn) })
+  const logbook = createLogbook({ pages: fishPages, current: activeWorld.fish ?? HOME, onClose: () => state === 'logbook' && setState(logbookReturn) })
   const fishing = createFishingMinigame({
     logbook,
     onFrame: (fight) => audio.reel(fight),

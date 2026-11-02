@@ -65,8 +65,9 @@ export const WATER = {
 export const BOAT = {
   length: 0.9,
   width: 0.38,
-  // Optional own model (public/models/boat.glb): see scene/boat.js loadBoatModel.
-  model: { file: 'models/boat.glb', fitLength: true, flat: true },
+  // Optional own model of the built-in boat (a file under public/models/boats/ without a card): see scene/boat.js
+  // loadBoatModel. None now: the standard boat (the Little Tug) is swapped in at start-up.
+  model: { file: null, fitLength: true, flat: true },
   // How far the whole model is lifted above the waterline. The hull's dark underwater part is
   // 0.12 deep, so at 0.05 a little of it shows above the water. Measured in a full storm over 4 minutes,
   // water washes over the hull's edge: 7% of the time at 0, 0.6% at 0.05 (up to 5 cm, brief spray),

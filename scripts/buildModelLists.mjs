@@ -1,7 +1,7 @@
 // Reads the cards next to the models and writes the lists the game reads:
 //   public/models/boats/<id>.txt   -> public/models/boats/boats.json     (blender/BOATS.md)
 //   public/models/worlds/<id>.txt  -> public/models/worlds/worlds.json   (blender/WORLDS.md)
-// A model is a pair of files: <id>.glb and <id>.txt. Runs before `npm run dev` and `npm run build`
+// A model is a pair of files: <id>.glb and <id>.txt (the naming rules: blender/NAMING.md). Runs before `npm run dev` and `npm run build`
 // (and by hand: npm run models).
 //
 // Cards may also give the economy numbers (src/economy.js): a boat's `price` (coins) and `hold` (kg of fish it
@@ -43,6 +43,10 @@ function build(kind, extra) {
       continue
     }
     const card = readCard(`${dir}${file}`)
+    // The id is the file name (blender/NAMING.md): lowercase words joined by dashes, and the card's `id:` must agree.
+    const pattern = kind === 'boats' ? /^b_\d{3}-[a-z0-9]+(-[a-z0-9]+)*$/ : /^w_\d{3}-[a-z0-9]+(-[a-z0-9]+)*$/
+    if (!pattern.test(id)) console.warn(`[models] ${kind}/${file}: "${id}" is not a valid id (${kind === 'boats' ? 'b_001-tug' : 'w_001-harbour'}: a letter, three digits, a dash, lowercase words joined by dashes)`)
+    if (card.id && card.id !== id) console.warn(`[models] ${kind}/${file} says id: ${card.id}, but the file is called ${id}: the file name wins`)
     list.push({
       id,
       name: card.name ?? id,

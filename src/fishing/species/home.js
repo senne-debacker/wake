@@ -5,7 +5,7 @@
 export const HOME_NEW = [
   // --- Common -----------------------------------------------------------------------------------
   {
-    id: 'sandskipper',
+    id: 'f_001-1c07-sandskipper',
     name: 'Sandskipper',
     rarity: 'common',
     weight: [0.1, 0.5],
@@ -13,7 +13,7 @@ export const HOME_NEW = [
     art: { body: 'blunt', h: 11, back: '#c9a86a', belly: '#efe0b8', accent: '#8a6a3a', tail: 'round', dorsal: 'long', spots: 5, seed: 3 },
   },
   {
-    id: 'pebblefin',
+    id: 'f_001-1c08-pebblefin',
     name: 'Pebblefin',
     rarity: 'common',
     weight: [0.3, 1.2],
@@ -21,7 +21,7 @@ export const HOME_NEW = [
     art: { body: 'deep', h: 14, back: '#6f8f7a', belly: '#d8e0c8', accent: '#3d5a4a', tail: 'round', dorsal: 'tri', spots: 8, seed: 5 },
   },
   {
-    id: 'kelpback-smelt',
+    id: 'f_001-1c09-kelpback-smelt',
     name: 'Kelpback Smelt',
     rarity: 'common',
     weight: [0.08, 0.4],
@@ -29,7 +29,7 @@ export const HOME_NEW = [
     art: { body: 'long', h: 7, back: '#5f8f4a', belly: '#d6e6b8', tail: 'fork', dorsal: 'tri', dorsalHeight: 6 },
   },
   {
-    id: 'gullbait-minnow',
+    id: 'f_001-1c10-gullbait-minnow',
     name: 'Gullbait Minnow',
     rarity: 'common',
     weight: [0.03, 0.2],
@@ -39,7 +39,7 @@ export const HOME_NEW = [
 
   // --- Uncommon ---------------------------------------------------------------------------------
   {
-    id: 'copperscale-bream',
+    id: 'f_001-2u06-copperscale-bream',
     name: 'Copperscale Bream',
     rarity: 'uncommon',
     weight: [1, 4.2],
@@ -47,7 +47,7 @@ export const HOME_NEW = [
     art: { body: 'deep', h: 19, back: '#b0622c', belly: '#e8b878', accent: '#7a3d16', tail: 'fork', dorsal: 'spiny', spots: 10, seed: 8 },
   },
   {
-    id: 'reedtooth-pike',
+    id: 'f_001-2u07-reedtooth-pike',
     name: 'Reedtooth Pike',
     rarity: 'uncommon',
     weight: [2, 8],
@@ -55,7 +55,7 @@ export const HOME_NEW = [
     art: { body: 'long', h: 9, back: '#4f7a3a', belly: '#cfd89a', accent: '#355526', tail: 'fork', dorsal: 'tri', stripes: 5, teeth: true },
   },
   {
-    id: 'lacewing-ray',
+    id: 'f_001-2u08-lacewing-ray',
     name: 'Lacewing Ray',
     rarity: 'uncommon',
     weight: [2, 9],
@@ -63,7 +63,7 @@ export const HOME_NEW = [
     art: { body: 'ray', back: '#9a7fb0', belly: '#e6dcef', accent: '#f4eefa', spots: 7, seed: 2 },
   },
   {
-    id: 'candlefin-trout',
+    id: 'f_001-2u09-candlefin-trout',
     name: 'Candlefin Trout',
     rarity: 'uncommon',
     weight: [0.9, 3.6],
@@ -73,7 +73,7 @@ export const HOME_NEW = [
 
   // --- Rare -------------------------------------------------------------------------------------
   {
-    id: 'ghostlight-cod',
+    id: 'f_001-3r04-ghostlight-cod',
     name: 'Ghostlight Cod',
     rarity: 'rare',
     habitat: { weather: 'rain', hours: [21, 3], boost: 2, hint: 'Prefers rain after dark.' },
@@ -82,7 +82,7 @@ export const HOME_NEW = [
     art: { body: 'blunt', h: 18, back: '#7f93a8', belly: '#e8eef4', accent: '#566a80', tail: 'round', dorsal: 'two', barbels: true, glow: '#9fe8ff', spots: 4, seed: 6 },
   },
   {
-    id: 'gilded-mullet',
+    id: 'f_001-3r05-gilded-mullet',
     name: 'Gilded Mullet',
     rarity: 'rare',
     habitat: { weather: 'clear', hours: [5, 9], boost: 2, hint: 'Prefers clear skies and the first light of day.' },
@@ -91,7 +91,7 @@ export const HOME_NEW = [
     art: { body: 'torpedo', h: 13, back: '#d6a83a', belly: '#fbe9a8', accent: '#9a6a16', tail: 'fork', dorsal: 'two', stripes: 4 },
   },
   {
-    id: 'siren-barbel',
+    id: 'f_001-3r06-siren-barbel',
     name: 'Siren Barbel',
     rarity: 'rare',
     habitat: { weather: 'calm', hours: [18, 22], boost: 2, hint: 'Prefers still water at dusk.' },
@@ -100,7 +100,7 @@ export const HOME_NEW = [
     art: { body: 'deep', h: 15, back: '#a03c5a', belly: '#f0b8c0', accent: '#6a2038', fin: '#c85a78', tail: 'lunate', dorsal: 'sail', barbels: true },
   },
   {
-    id: 'tempest-tuna',
+    id: 'f_001-3r07-tempest-tuna',
     name: 'Tempest Tuna',
     rarity: 'rare',
     habitat: { weather: 'rain', hours: [12, 18], boost: 2, hint: 'Prefers rain in the afternoon.' },
@@ -111,7 +111,7 @@ export const HOME_NEW = [
 
   // --- Epic -------------------------------------------------------------------------------------
   {
-    id: 'crimson-sunfish',
+    id: 'f_001-4e02-crimson-sunfish',
     name: 'Crimson Sunfish',
     rarity: 'epic',
     habitat: { weather: 'clear', hours: [11, 13], boost: 2, hint: 'Prefers a clear sky and the high sun.' },
@@ -120,7 +120,7 @@ export const HOME_NEW = [
     art: { body: 'round', h: 23, back: '#d0503a', belly: '#f6c898', accent: '#8a2a1e', fin: '#a83a2c', tail: 'fan', dorsal: 'tri', dorsalHeight: 16, spots: 6, seed: 9 },
   },
   {
-    id: 'drowned-bell-ray',
+    id: 'f_001-4e03-drowned-bell-ray',
     name: 'Drowned Bell Ray',
     rarity: 'epic',
     habitat: { weather: 'rain', hours: [0, 5], boost: 2, hint: 'Prefers rain in the dead of night.' },
@@ -129,7 +129,7 @@ export const HOME_NEW = [
     art: { body: 'ray', back: '#2a3f5a', belly: '#7a92b0', accent: '#9fe8ff', glow: '#9fe8ff', spots: 6, seed: 7 },
   },
   {
-    id: 'ironjaw-marlin',
+    id: 'f_001-4e04-ironjaw-marlin',
     name: 'Ironjaw Marlin',
     rarity: 'epic',
     habitat: { weather: 'rough', hours: [14, 20], boost: 2, hint: 'Prefers rough water in the afternoon.' },
@@ -138,7 +138,7 @@ export const HOME_NEW = [
     art: { body: 'long', h: 12, back: '#3a5a8a', belly: '#c8d8ea', accent: '#1e3358', tail: 'lunate', dorsal: 'sail', tusk: true, tuskColour: '#9fb4cc', stripes: 4 },
   },
   {
-    id: 'abyss-anglerking',
+    id: 'f_001-4e05-abyss-anglerking',
     name: 'Abyss Anglerking',
     rarity: 'epic',
     habitat: { weather: 'rough', hours: [21, 3], boost: 2, hint: 'Prefers rough water after dark.' },

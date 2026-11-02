@@ -24,8 +24,8 @@ const worlds = [
   { id: 'snow', name: 'Frostmere', price: 600, requires: 'sloop' },
   { id: 'far', name: 'Far' },
 ]
-const herring = FISH_BY_ID.get('dusk-herring')
-const eater = FISH_BY_ID.get('wake-eater')
+const herring = FISH_BY_ID.get('f_001-1c01-dusk-herring')
+const eater = FISH_BY_ID.get('f_001-5l01-wake-eater')
 
 // values
 check('value: weight times the rarity price, at least 1 coin', fishValue(herring, 0.5) === Math.max(1, Math.round(0.5 * RARITIES.common.price)) && fishValue(eater, 200) === 200 * RARITIES.legendary.price && fishValue(herring, 0.01) === 1)
@@ -64,7 +64,7 @@ check('defaults: a card without numbers gets the default price and hold', priceO
   const a = createEconomy({ boats, worlds, storage })
   a.addCoins(2000); a.buyBoat('sloop'); a.equipBoat('sloop'); a.addCatch(herring, 0.5)
   const b = createEconomy({ boats, worlds, storage })
-  check('save: everything comes back', b.coins === a.coins && b.boat.id === 'sloop' && b.ownsBoat('sloop') && b.hold.length === 1 && b.hold[0].fish.id === 'dusk-herring')
+  check('save: everything comes back', b.coins === a.coins && b.boat.id === 'sloop' && b.ownsBoat('sloop') && b.hold.length === 1 && b.hold[0].fish.id === 'f_001-1c01-dusk-herring')
   // a boat that was removed from the list: no longer offered, the game's own is used instead, coins stay
   const c = createEconomy({ boats: boats.filter((x) => x.id !== 'sloop'), worlds, storage })
   check('save: a boat that is gone falls back to the first and keeps the coins', c.boat.id === 'fishing-boat' && c.coins === a.coins)
@@ -74,7 +74,7 @@ check('defaults: a card without numbers gets the default price and hold', priceO
   check('save: a changed price on a card applies at once', d.buyBoat('dinghy').ok)
   storage.setItem('wake.save', '{ not json')
   check('save: a damaged save gives a fresh start', createEconomy({ boats, worlds, storage }).coins === 0)
-  storage.setItem('wake.save', JSON.stringify({ version: 1, coins: 5, hold: [{ id: 'no-such-fish', weight: 1 }, { id: 'dusk-herring', weight: -2 }, { id: 'dusk-herring', weight: 0.3 }], boats: ['ghost'], boat: 'ghost', worlds: [], world: 'nowhere' }))
+  storage.setItem('wake.save', JSON.stringify({ version: 1, coins: 5, hold: [{ id: 'no-such-fish', weight: 1 }, { id: 'f_001-1c01-dusk-herring', weight: -2 }, { id: 'f_001-1c01-dusk-herring', weight: 0.3 }], boats: ['ghost'], boat: 'ghost', worlds: [], world: 'nowhere' }))
   const f = createEconomy({ boats, worlds, storage })
   check('save: unknown fish and bad numbers are dropped, an unknown boat or world falls back', f.coins === 5 && f.hold.length === 1 && f.boat.id === 'fishing-boat' && f.world.id === 'wake')
 }
@@ -90,7 +90,22 @@ check('defaults: a card without numbers gets the default price and hold', priceO
   // The cards of the real game: the Little Tug and Harbour are the standard ones (boats.json / worlds.json are made from them).
   const boats = JSON.parse(readFileSync(new URL('../public/models/boats/boats.json', import.meta.url), 'utf8'))
   const worlds = JSON.parse(readFileSync(new URL('../public/models/worlds/worlds.json', import.meta.url), 'utf8'))
-  check('standard: exactly one boat card and one world card say `standard: yes`: the Little Tug and Harbour', boats.filter((b) => b.standard).map((b) => b.id).join() === 'tug' && worlds.filter((w) => w.standard).map((w) => w.id).join() === 'harbour' && boats.find((b) => b.id === 'tug').size === 0.8)
+  check('standard: exactly one boat card and one world card say `standard: yes`: the Little Tug and Harbour', boats.filter((b) => b.standard).map((b) => b.id).join() === 'b_001-tug' && worlds.filter((w) => w.standard).map((w) => w.id).join() === 'w_001-harbour' && boats.find((b) => b.id === 'b_001-tug').size === 0.8 && boats.length === 1)
+}
+
+// ---- renamed ids (the first names of the boats, worlds and fish, before blender/NAMING.md) -------------------------------------
+{
+  const storage = memory()
+  storage.setItem('wake.save', JSON.stringify({ version: 1, coins: 5, hold: [{ id: 'dusk-herring', weight: 0.4 }, { id: 'wake-eater', weight: 200 }, { id: 'no-such-fish', weight: 1 }], boats: ['tug', 'dinghy'], boat: 'tug', worlds: ['harbour', 'snow'], world: 'snow' }))
+  const e = createEconomy({ boats: [{ id: 'b_001-tug' }], worlds: [{ id: 'w_001-harbour' }, { id: 'w_002-frostmere' }], storage })
+  check('renamed: an old save with the world `snow` owns and uses `w_002-frostmere`', e.ownsWorld('w_002-frostmere') && e.ownsWorld('w_001-harbour') && e.world.id === 'w_002-frostmere')
+  check('renamed: the boat `tug` is `b_001-tug`, a retired boat is still remembered by id but cannot be used', e.ownsBoat('b_001-tug') && e.boat.id === 'b_001-tug')
+  check('renamed: the fish in an old hold get their new ids, an unknown one is dropped', e.hold.map((h) => h.id).join() === 'f_001-1c01-dusk-herring,f_001-5l01-wake-eater', e.hold.map((h) => h.id).join())
+  // the retired boats are not offered and an old save that was sailing one starts in the standard boat
+  const old = memory()
+  old.setItem('wake.save', JSON.stringify({ version: 1, coins: 5, hold: [], boats: ['fishing-boat', 'sloop'], boat: 'sloop', worlds: ['wake'], world: 'wake' }))
+  const f = createEconomy({ boats: [{ id: 'b_001-tug' }], worlds: [{ id: 'w_001-harbour' }], storage: old })
+  check('retired: an old save that used the sloop starts in the standard boat; a world that is gone (`wake`) is not used', f.boat.id === 'b_001-tug' && f.world.id === 'w_001-harbour', `${f.boat.id} ${f.world.id}`)
 }
 
 console.log(failed ? `\n${failed} economy check(s) FAILED` : '\nall economy checks passed')

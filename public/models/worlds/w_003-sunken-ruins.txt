@@ -1,0 +1,19 @@
+id:           w_003-sunken-ruins
+name:         The Sunken Ruins
+description:  An old stone city sunk into a warm green swamp: canals, a leaning bell tower and mangroves in the ruins.
+price:        1200
+fish:         w_001-harbour
+anything special:
+  - Made from blender/worlds/w_003-sunken-ruins.blend. You arrive outside a
+    flooded city gate and sail in under its arch (0.96 clearance; the arch is a prop, Gate_Arch).
+  - The Canal Quarter: eight roofless houses with canals 1.2 wide between them, several ways through.
+    The Drowned Plaza (a toppled bronze statue, the top of a fountain), the leaning Bell Tower (3.3
+    high, the landmark), the Temple Steps, the Deep Cistern (entered from the west), and the Old Hulls:
+    six half-sunken boats with a long shape carved on each stern.
+  - Sigrid the boatbuilder's yard in a half-sunken warehouse, with her unfinished boat in three
+    separate stages (Sigrid_Boat_Keel, Sigrid_Boat_Planks, Sigrid_Boat_Mast; all shown for now).
+    Her dock is the selling point (Dock_Sigrid) and is solid (the Sigrid_Dock group).
+  - Mangroves, lily pads, and mangrove islets and ruin fragments round open water on the far side.
+  - Markers the game does not read yet: Area_*, Quest_KeelTimber, Quest_SailCloth, Quest_Planks,
+    HousePlot and Resident_Sigrid.
+  - It fishes the home waters' fish until it has its own set.

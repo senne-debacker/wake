@@ -1,43 +1,10 @@
 [
   {
-    "id": "dinghy",
-    "name": "Patched Dinghy",
-    "description": "A leaky rowing boat with a rusty outboard: cheap, small and nobody's pride.",
-    "special": "the cheapest boat; open hull with no cabin, so no windows glow at night (only the bow lantern)",
-    "file": "models/boats/dinghy.glb",
-    "speed": "slow",
-    "handling": "nimble",
-    "price": 150,
-    "hold": 10
-  },
-  {
-    "id": "sloop",
-    "name": "Classic Sloop",
-    "description": "A white wooden sailboat with brass portholes and a red-striped mainsail.",
-    "special": "tallest boat (mast 1.08 above the waterline) with a deep keel (0.25 below); a red pennant flies at the masthead",
-    "file": "models/boats/sloop.glb",
-    "speed": "medium",
-    "handling": "medium",
-    "price": 900,
-    "hold": 30
-  },
-  {
-    "id": "speedboat",
-    "name": "Red Runabout",
-    "description": "A low deep-V speedboat with twin outboards and a racing stripe.",
-    "special": "the fastest boat; low and open, so it has no flag and no windows that glow (the nav light is the lamp)",
-    "file": "models/boats/speedboat.glb",
-    "speed": "fast",
-    "handling": "nimble",
-    "price": 1500,
-    "hold": 15
-  },
-  {
-    "id": "tug",
+    "id": "b_001-tug",
     "name": "Little Tug",
     "description": "A stubby red harbour tug with a cream wheelhouse, round portholes and a striped funnel.",
     "special": "the standard boat: a stubby harbour tug drawn at 0.8 of the size it was modelled (hull about 0.84 long and 0.34 wide); its wheelhouse windows and portholes glow warm when the lamp is on, a teal pennant flies from the mast and its funnel smokes",
-    "file": "models/boats/tug.glb",
+    "file": "models/boats/b_001-tug.glb",
     "speed": "medium",
     "handling": "heavy",
     "price": 0,
@@ -45,16 +12,5 @@
     "light": 0.8,
     "size": 0.8,
     "standard": true
-  },
-  {
-    "id": "yacht",
-    "name": "Gilded Yacht",
-    "description": "A navy and gold motor yacht with two decks, a hot tub and chrome railings.",
-    "special": "the most expensive boat; its window bands and portholes glow warm when the lamp is on, and a gold flag flies at the stern",
-    "file": "models/boats/yacht.glb",
-    "speed": "medium",
-    "handling": "heavy",
-    "price": 4000,
-    "hold": 60
   }
 ]

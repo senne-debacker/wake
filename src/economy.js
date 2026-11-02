@@ -1,4 +1,5 @@
 import { RARITIES, FISH_BY_ID } from './fishing/fishDatabase.js'
+import { LEGACY_FISH } from './fishing/legacyIds.js'
 
 // The player's money and belongings: coins, the hold (the fish caught and not sold yet), the boats and the
 // charts (worlds) owned, and which boat and world are in use. Saved in localStorage (`wake.save`).
@@ -15,6 +16,15 @@ const STORAGE_KEY = 'wake.save'
 const VERSION = 1
 
 export const DEFAULTS = { boatPrice: 600, boatHold: 20, worldPrice: 500 }
+
+// Ids that were renamed after a game could have saved them (old id -> new id): an old save keeps what it owned.
+// An id should never change (blender/NAMING.md); when one has to, add it here.
+export const RENAMED = {
+  boats: { tug: 'b_001-tug' },
+  worlds: { snow: 'w_002-frostmere', frostmere: 'w_002-frostmere', harbour: 'w_001-harbour', 'sunken-ruins': 'w_003-sunken-ruins', wake: 'w_000-wake' },
+  fish: LEGACY_FISH, // (64 old fish ids: fishing/legacyIds.js)
+}
+const renamed = (kind, id) => RENAMED[kind][id] ?? id
 
 export const priceOfBoat = (entry) => Math.max(0, Math.round(Number(entry.price ?? DEFAULTS.boatPrice)))
 export const holdOfBoat = (entry) => Math.max(1, Number(entry.hold ?? DEFAULTS.boatHold))
@@ -40,11 +50,11 @@ export function createEconomy({ boats, worlds, storage = browserStorage() }) {
     const saved = JSON.parse(storage?.getItem(STORAGE_KEY) ?? 'null')
     if (saved && saved.version === VERSION) {
       if (Number.isFinite(saved.coins) && saved.coins > 0) own.coins = Math.floor(saved.coins)
-      for (const item of saved.hold ?? []) if (FISH_BY_ID.has(item?.id) && Number.isFinite(item.weight) && item.weight > 0) own.hold.push({ id: item.id, weight: item.weight })
-      for (const id of saved.boats ?? []) if (typeof id === 'string' && !own.boats.includes(id)) own.boats.push(id)
-      for (const id of saved.worlds ?? []) if (typeof id === 'string' && !own.worlds.includes(id)) own.worlds.push(id)
-      if (typeof saved.boat === 'string') own.boat = saved.boat
-      if (typeof saved.world === 'string') own.world = saved.world
+      for (const item of saved.hold ?? []) if (typeof item?.id === 'string' && FISH_BY_ID.has(renamed('fish', item.id)) && Number.isFinite(item.weight) && item.weight > 0) own.hold.push({ id: renamed('fish', item.id), weight: item.weight })
+      for (const id of saved.boats ?? []) if (typeof id === 'string' && !own.boats.includes(renamed('boats', id))) own.boats.push(renamed('boats', id))
+      for (const id of saved.worlds ?? []) if (typeof id === 'string' && !own.worlds.includes(renamed('worlds', id))) own.worlds.push(renamed('worlds', id))
+      if (typeof saved.boat === 'string') own.boat = renamed('boats', saved.boat)
+      if (typeof saved.world === 'string') own.world = renamed('worlds', saved.world)
     }
   } catch {
     // unreadable: a fresh start

@@ -16,7 +16,7 @@
 //                like the game's low-poly look, and use no id= / url(#) so the same picture can be on
 //                the page several times. No scripts or external references.
 //
-//   set          'home' | 'frostmere' (added below: the fish set it belongs to)
+//   set          'w_001-harbour' | 'w_002-frostmere' (added below: the world whose fish set it belongs to)
 //   habitat      (rare, epic and legendary only, optional) when the species is likelier to bite, see
 //                fishing/habitat.js: { weather, hours, boost, hint }. The logbook shows the vague `hint`
 //                until you have caught one, then the whole rule
@@ -45,7 +45,7 @@ const SVG = 'xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60"'
 const HOME_BASE = [
   // --- Common ---------------------------------------------------------------------------------
   {
-    id: 'dusk-herring',
+    id: 'f_001-1c01-dusk-herring',
     name: 'Dusk Herring',
     rarity: 'common',
     weight: [0.2, 0.8],
@@ -63,7 +63,7 @@ const HOME_BASE = [
 </svg>`,
   },
   {
-    id: 'mudgrubber',
+    id: 'f_001-1c02-mudgrubber',
     name: 'Mudgrubber',
     rarity: 'common',
     weight: [0.6, 2.8],
@@ -83,7 +83,7 @@ const HOME_BASE = [
 </svg>`,
   },
   {
-    id: 'rustback-flounder',
+    id: 'f_001-1c03-rustback-flounder',
     name: 'Rustback Flounder',
     rarity: 'common',
     weight: [0.8, 3.2],
@@ -105,7 +105,7 @@ const HOME_BASE = [
 </svg>`,
   },
   {
-    id: 'lantern-sprat',
+    id: 'f_001-1c04-lantern-sprat',
     name: 'Lantern Sprat',
     rarity: 'common',
     weight: [0.05, 0.25],
@@ -126,7 +126,7 @@ const HOME_BASE = [
 </svg>`,
   },
   {
-    id: 'brine-mackerel',
+    id: 'f_001-1c05-brine-mackerel',
     name: 'Brine Mackerel',
     rarity: 'common',
     weight: [0.6, 2.2],
@@ -145,7 +145,7 @@ const HOME_BASE = [
 </svg>`,
   },
   {
-    id: 'thornback-perch',
+    id: 'f_001-1c06-thornback-perch',
     name: 'Thornback Perch',
     rarity: 'common',
     weight: [0.4, 1.6],
@@ -165,7 +165,7 @@ const HOME_BASE = [
 
   // --- Uncommon -------------------------------------------------------------------------------
   {
-    id: 'ember-eel',
+    id: 'f_001-2u01-ember-eel',
     name: 'Ember Eel',
     rarity: 'uncommon',
     weight: [1.2, 4.5],
@@ -187,7 +187,7 @@ const HOME_BASE = [
 </svg>`,
   },
   {
-    id: 'lamplit-angler',
+    id: 'f_001-2u02-lamplit-angler',
     name: 'Lamplit Angler',
     rarity: 'uncommon',
     weight: [2, 9],
@@ -208,7 +208,7 @@ const HOME_BASE = [
 </svg>`,
   },
   {
-    id: 'sourpuss-puffer',
+    id: 'f_001-2u03-sourpuss-puffer',
     name: 'Sourpuss Puffer',
     rarity: 'uncommon',
     weight: [0.8, 3.4],
@@ -241,7 +241,7 @@ const HOME_BASE = [
 </svg>`,
   },
   {
-    id: 'mossback-gar',
+    id: 'f_001-2u04-mossback-gar',
     name: 'Mossback Gar',
     rarity: 'uncommon',
     weight: [3, 11],
@@ -262,7 +262,7 @@ const HOME_BASE = [
 </svg>`,
   },
   {
-    id: 'glasswing-skate',
+    id: 'f_001-2u05-glasswing-skate',
     name: 'Glasswing Skate',
     rarity: 'uncommon',
     weight: [2.5, 12],
@@ -285,7 +285,7 @@ const HOME_BASE = [
 
   // --- Rare -----------------------------------------------------------------------------------
   {
-    id: 'bonewhistle',
+    id: 'f_001-3r01-bonewhistle',
     name: 'Bonewhistle',
     rarity: 'rare',
     habitat: { weather: 'rough', boost: 2, hint: 'Prefers wind and rough water.' },
@@ -308,7 +308,7 @@ const HOME_BASE = [
 </svg>`,
   },
   {
-    id: 'brasscrown-sturgeon',
+    id: 'f_001-3r02-brasscrown-sturgeon',
     name: 'Brasscrown Sturgeon',
     rarity: 'rare',
     habitat: { weather: 'clear', hours: [10, 14], boost: 2, hint: 'Prefers clear skies and the middle of the day.' },
@@ -328,7 +328,7 @@ const HOME_BASE = [
 </svg>`,
   },
   {
-    id: 'argus-grouper',
+    id: 'f_001-3r03-argus-grouper',
     name: 'Argus Grouper',
     rarity: 'rare',
     habitat: { weather: 'clear', hours: [22, 4], boost: 2, hint: 'Prefers clear skies and the small hours.' },
@@ -365,7 +365,7 @@ const HOME_BASE = [
 
   // --- Legendary ------------------------------------------------------------------------------
   {
-    id: 'old-moonfin',
+    id: 'f_001-4e01-old-moonfin',
     name: 'Old Moonfin',
     rarity: 'epic',
     habitat: { weather: 'calm', hours: [22, 2], boost: 2, hint: 'Prefers still water and the dead of night.' },
@@ -387,7 +387,7 @@ const HOME_BASE = [
 </svg>`,
   },
   {
-    id: 'wake-eater',
+    id: 'f_001-5l01-wake-eater',
     name: 'The Wake-Eater',
     rarity: 'legendary',
     habitat: { weather: 'thunderstorm', hours: [2, 4], boost: 2, hint: 'Prefers storm and darkness.' },
@@ -419,10 +419,12 @@ const HOME_BASE = [
 
 const finish = (list, set) => list.map((fish) => ({ ...fish, set, imgUrl: fish.imgUrl ?? drawFish(fish.art) }))
 
-export const HOME = 'home'
+// A fish set is named after its world (w_001-harbour), and its fish carry the world's number: f_001-1c01-dusk-herring is
+// world 001, rarity 1 (c = common), number 01 (blender/NAMING.md).
+export const HOME = 'w_001-harbour'
 export const FISH_SETS = {
-  home: finish([...HOME_BASE, ...HOME_NEW], 'home'),
-  frostmere: finish(FROSTMERE, 'frostmere'),
+  'w_001-harbour': finish([...HOME_BASE, ...HOME_NEW], 'w_001-harbour'),
+  'w_002-frostmere': finish(FROSTMERE, 'w_002-frostmere'),
 }
 export const FISH_SPECIES = Object.values(FISH_SETS).flat() // every species in every world
 export const FISH_BY_ID = new Map(FISH_SPECIES.map((fish) => [fish.id, fish]))

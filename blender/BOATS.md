@@ -1,12 +1,13 @@
 # Exporting a boat for Wake
 
 One boat per file. Save it as `public/models/boats/<id>.glb`, where `<id>` is a short lowercase name with
-dashes (`trawler`, `sloop`, `old-tug`), and write a boat card (the last section) next to it.
+dashes with a number in front (`b_001-tug`: blender/NAMING.md), and write a boat card (the last section) next to it. Keep the Blender
+file as `blender/boats/<id>.blend` (the naming rules: `NAMING.md`).
 
 ## In Blender
 
-1. **Scale.** 1 Blender unit = 1 game unit. Import `blender/boats/wake-boat.glb` into the same scene as a
-   reference and model next to it: it is 0.9 long and 0.38 wide. A bigger boat is simply bigger than it
+1. **Scale.** 1 Blender unit = 1 game unit. Import `blender/boats/archive/fishing-boat-v1.glb` (the boat
+   the game builds in code) into the same scene as a reference and model next to it: it is 0.9 long and 0.38 wide. A bigger boat is simply bigger than it
    (a boat twice as long = 1.8). The game keeps the size you model, and measures the hull from it.
 2. **Orientation.** The bow points towards **+Y**: in Blender's Front view (numpad 1) the bow points away from you.
    The keel runs along the Y axis. The boat is centred on X and Y.
@@ -41,7 +42,7 @@ File > Export > glTF 2.0 (.glb):
 - Lighting Mode / Cameras / Lights: nothing
 
 Check: import the exported .glb into a fresh Blender scene. It should lie the same way and be the same size
-as `wake-boat.glb` next to it.
+as `fishing-boat-v1.glb` next to it.
 
 ## The boat card (a few lines, in a text file or in the message)
 

@@ -1,4 +1,5 @@
 import { RARITIES, FISH_SETS, HOME, FISH_BY_ID, fishInRarity, formatWeight } from './fishDatabase.js'
+import { LEGACY_FISH } from './legacyIds.js'
 import { describeHabitat } from './habitat.js'
 
 // The fish logbook: which species you have caught, how many, and the heaviest of each. Saved in
@@ -21,7 +22,8 @@ export function createLogbookStore(storage = browserStorage()) {
   const caught = new Map() // species id -> { count, best (kg) }
   try {
     const saved = JSON.parse(storage?.getItem(STORAGE_KEY) ?? 'null')
-    for (const [id, entry] of Object.entries(saved?.fish ?? {})) {
+    for (const [oldId, entry] of Object.entries(saved?.fish ?? {})) {
+      const id = LEGACY_FISH[oldId] ?? oldId // (a book saved before the fish had the world and the rarity in their ids)
       // Only species that still exist, with sane numbers.
       if (FISH_BY_ID.has(id) && Number.isFinite(entry?.count) && entry.count > 0 && Number.isFinite(entry.best) && entry.best > 0) {
         caught.set(id, { count: Math.floor(entry.count), best: entry.best })

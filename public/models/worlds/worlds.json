@@ -1,21 +1,30 @@
 [
   {
-    "id": "harbour",
+    "id": "w_001-harbour",
     "name": "Harbour",
     "description": "The home waters with a sheltered bay: rocky arms close in round the lighthouse.",
-    "special": "A new version of the original world: the same start, buoy route, open ocean, six fishing spots, rocks and seven islands (lighthouse, pines, autumn and four more), plus eight new rock islands: bay-arm-1 to bay-arm-7 and wims-ledge, and a Lighthouse_Bay object round the lighthouse. The standard world: owned and used from the start (the game's own generated world, \"Wake\", is a chart now). It fishes the same 32 fish as the home waters (fish: home).",
-    "file": "models/worlds/harbour.glb",
+    "special": "A new version of the original world: the same start, buoy route, open ocean, six fishing spots, rocks and seven islands (lighthouse, pines, autumn and four more), plus eight new rock islands: bay-arm-1 to bay-arm-7 and wims-ledge, and a Lighthouse_Bay object round the lighthouse. The standard world: owned and used from the start (the game's own generated world, \"Wake\", is a chart now). It fishes the same 32 fish as the home waters (fish: w_001-harbour).",
+    "file": "models/worlds/w_001-harbour.glb",
     "price": 0,
-    "fish": "home",
+    "fish": "w_001-harbour",
     "standard": true
   },
   {
-    "id": "snow",
+    "id": "w_002-frostmere",
     "name": "Frostmere",
-    "description": "A cold northern sea of snow-capped islands, a blue glacier and drifting icebergs.",
-    "special": "9 islands with new ground types: \"snow\" (white plateaus, snow-laden pines), \"ice\" (blue ice domes, no trees: Island_glacier, Island_floe) and \"rock\" (snowy rock, the lighthouse on Island_beacon). 23 rocks: Rock_001-009 are snowy rocks on the islands, Rock_010-015 snowy sea rocks, and Rock_016-023 are icebergs (material \"Ice\": white with blue sides, 0.35-0.6 across, sunk 0.08). They are all in the Rocks group so they collide like rocks. 81 snowy pines (Pine_001...), no autumn trees. Start, buoy route and ocean side are like the wake world: same start position and heading, 3 route buoys towards the lighthouse (now 20 degrees to port), the open ocean behind the start (radius 4.4). Suggested mood if the game ever reads one: colder sea colour (the Water material is a darker blue-green), snow instead of rain, a pale low sun.",
-    "file": "models/worlds/snow.glb",
+    "description": "A cold, quiet sea of steep snowy cliffs, a winding fjord, a blue glacier and drifting ice.",
+    "special": "Made from blender/worlds/w_002-frostmere.blend. Tall white ridges (peaks up to 2.0) form the Long Fjord, a winding channel about 1.3 wide that ends at Ezra's Inlet, where Ezra the cartographer lives in a hut on stilts. A wider way leaves the inlet to the north-east. Ezra's dock is the selling point (Dock_Ezra) and is solid (the Ezra_Dock group). Waterfall Cove, under the tallest cliffs, has a sea cave you can sail into (the cave roof is a prop, Cave_Roof). A blocky glacier with broken ice chunks, the Icefield of drifting floes and small bergs, the Black Skerries, five low pine holms and three outer crags near the fjord; on the far side a ring of eight snowy islands (most with pines) round the Cold Deep, the open water at the south pole. Seven orange survey flags, and markers the game does not read yet: Area_*, Quest_CompassPiece_1-4 and Resident_Ezra. Suggested mood if the game ever reads one: colder sea colour, snow instead of rain, a pale low sun, the aurora at night.",
+    "file": "models/worlds/w_002-frostmere.glb",
     "price": 600,
-    "fish": "frostmere"
+    "fish": "w_002-frostmere"
+  },
+  {
+    "id": "w_003-sunken-ruins",
+    "name": "The Sunken Ruins",
+    "description": "An old stone city sunk into a warm green swamp: canals, a leaning bell tower and mangroves in the ruins.",
+    "special": "Made from blender/worlds/w_003-sunken-ruins.blend. You arrive outside a flooded city gate and sail in under its arch (0.96 clearance; the arch is a prop, Gate_Arch). The Canal Quarter: eight roofless houses with canals 1.2 wide between them, several ways through. The Drowned Plaza (a toppled bronze statue, the top of a fountain), the leaning Bell Tower (3.3 high, the landmark), the Temple Steps, the Deep Cistern (entered from the west), and the Old Hulls: six half-sunken boats with a long shape carved on each stern. Sigrid the boatbuilder's yard in a half-sunken warehouse, with her unfinished boat in three separate stages (Sigrid_Boat_Keel, Sigrid_Boat_Planks, Sigrid_Boat_Mast; all shown for now). Her dock is the selling point (Dock_Sigrid) and is solid (the Sigrid_Dock group). Mangroves, lily pads, and mangrove islets and ruin fragments round open water on the far side. Markers the game does not read yet: Area_*, Quest_KeelTimber, Quest_SailCloth, Quest_Planks, HousePlot and Resident_Sigrid. It fishes the home waters' fish until it has its own set.",
+    "file": "models/worlds/w_003-sunken-ruins.glb",
+    "price": 1200,
+    "fish": "w_001-harbour"
   }
 ]

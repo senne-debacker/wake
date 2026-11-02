@@ -7,7 +7,7 @@ import { BOAT, BOAT_PALETTE as C, BOAT_LIGHT as L } from '../config.js'
 import { createLightCone } from '../tsl/lightCone.js'
 import { setupFlag } from './flag.js'
 
-// Low-poly fishing boat: built in code, or your own model from public/models/boat.glb (see
+// Low-poly fishing boat: built in code, or your own model (there is none now) (see
 // `loadBoatModel` below and public/models/README.txt) when that file exists.
 // Procedural low-poly fishing boat. Local axes: +Y up, bow towards -Z, origin on
 // the waterline in the middle of the hull. Physics (physics/boat.js) moves and
@@ -242,8 +242,7 @@ export function createBoat() {
 
 // ---- your own model ---------------------------------------------------------------------------
 
-// Loads a boat model: public/models/boat.glb for the game's own boat (see public/models/README.txt for how
-// to make it in Blender) or a file of public/models/boats/ (see blender/BOATS.md). The model is used as it
+// Loads a boat model: a file of public/models/boats/ (how to make one in Blender: blender/BOATS.md). The model is used as it
 // is, except that it is scaled to the hull length `BOAT.length` (so the physics, the collisions and the
 // camera keep fitting) when `fitLength` is on (the game's own boat); the other boats keep their size and
 // the hull is measured from them.
@@ -257,6 +256,7 @@ export function createBoat() {
 //                                             used; without one the base colour / a warm white is)
 // Returns null when there is no file.
 async function loadBoatModel(file, fitLength, size = 1) {
+  if (!file) return null // no model file for the built-in boat
   let gltf
   try {
     gltf = await new GLTFLoader().loadAsync(new URL(file, document.baseURI).href)

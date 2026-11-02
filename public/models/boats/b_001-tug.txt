@@ -1,4 +1,4 @@
-id:           tug
+id:           b_001-tug
 name:         Little Tug
 description:  A stubby red harbour tug with a cream wheelhouse, round portholes and a striped funnel.
 speed:        medium
