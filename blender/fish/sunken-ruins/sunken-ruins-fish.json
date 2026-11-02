@@ -1,0 +1,315 @@
+{
+  "world": "The Sunken Ruins (Planet 4)",
+  "notes": [
+    "All 16 names are as in the brief.",
+    "The game gives every world 32 fish in five rarities (10 common, 9 uncommon, 7 rare, 5 epic, 1 legendary) and exactly one legendary fish per world, so `gameRarity` is what the fish would be there: The Drowned King stays legendary, Temple Arowana becomes epic.",
+    "The brief has 16 fish and the game wants 32: 16 more would have to be designed (or the world given a smaller set) before it can go in the game.",
+    "Rod groups, map areas and conditions (horn, lamp) are not mechanics of the game yet: they are written down here as designed."
+  ],
+  "areas": [
+    "Flooded Gate",
+    "Canal Quarter",
+    "Sigrid's Slipway",
+    "Drowned Plaza",
+    "Bell Tower",
+    "Old Hulls",
+    "Temple Steps",
+    "Deep Cistern"
+  ],
+  "priceRanges": {
+    "common": "14-30",
+    "uncommon": "60-100",
+    "rare": "260-340",
+    "legendary": "900-1,200"
+  },
+  "fish": [
+    {
+      "name": "Moss Perch",
+      "rarity": "common",
+      "gameRarity": "common",
+      "rodGroup": "none",
+      "where": "Anywhere",
+      "when": "Any time",
+      "weightKg": {
+        "min": 0.3,
+        "max": 1.2
+      },
+      "weight": "300 g to 1.2 kg",
+      "valueCoins": 18,
+      "logbookLine": "Wears the swamp like a sweater.",
+      "illustration": "MossPerch.svg",
+      "silhouette": "MossPerch_silhouette.svg",
+      "shapes": 24
+    },
+    {
+      "name": "Brickfish",
+      "rarity": "common",
+      "gameRarity": "common",
+      "rodGroup": "bottom",
+      "where": "Anywhere",
+      "when": "Any time",
+      "weightKg": {
+        "min": 0.5,
+        "max": 2
+      },
+      "weight": "500 g to 2 kg",
+      "valueCoins": 22,
+      "logbookLine": "Square, sturdy, and slightly confused about whether it's a fish or a wall.",
+      "illustration": "Brickfish.svg",
+      "silhouette": "Brickfish_silhouette.svg",
+      "shapes": 30
+    },
+    {
+      "name": "Bog Bream",
+      "rarity": "common",
+      "gameRarity": "common",
+      "rodGroup": "none",
+      "where": "Anywhere",
+      "when": "Any time",
+      "weightKg": {
+        "min": 0.4,
+        "max": 1.5
+      },
+      "weight": "400 g to 1.5 kg",
+      "valueCoins": 16,
+      "logbookLine": "Unremarkable, and perfectly happy that way.",
+      "illustration": "BogBream.svg",
+      "silhouette": "BogBream_silhouette.svg",
+      "shapes": 19
+    },
+    {
+      "name": "Silt Loach",
+      "rarity": "common",
+      "gameRarity": "common",
+      "rodGroup": "bottom",
+      "where": "Anywhere",
+      "when": "Any time",
+      "weightKg": {
+        "min": 0.05,
+        "max": 0.25
+      },
+      "weight": "50 g to 250 g",
+      "valueCoins": 14,
+      "logbookLine": "Wriggles through the silt between old cobbles.",
+      "illustration": "SiltLoach.svg",
+      "silhouette": "SiltLoach_silhouette.svg",
+      "shapes": 25
+    },
+    {
+      "name": "Lily Gourami",
+      "rarity": "common",
+      "gameRarity": "common",
+      "rodGroup": "none",
+      "where": "Anywhere",
+      "when": "Any time",
+      "weightKg": {
+        "min": 0.1,
+        "max": 0.4
+      },
+      "weight": "100 g to 400 g",
+      "valueCoins": 26,
+      "logbookLine": "Drifts between the lily pads like it has nowhere to be.",
+      "illustration": "LilyGourami.svg",
+      "silhouette": "LilyGourami_silhouette.svg",
+      "shapes": 20
+    },
+    {
+      "name": "Cobble Carp",
+      "rarity": "common",
+      "gameRarity": "common",
+      "rodGroup": "bottom",
+      "where": "Anywhere",
+      "when": "Any time",
+      "weightKg": {
+        "min": 1,
+        "max": 3
+      },
+      "weight": "1 kg to 3 kg",
+      "valueCoins": 30,
+      "logbookLine": "Grazes the old streets as if it still pays rent.",
+      "illustration": "CobbleCarp.svg",
+      "silhouette": "CobbleCarp_silhouette.svg",
+      "shapes": 37
+    },
+    {
+      "name": "Gargoyle Goby",
+      "rarity": "uncommon",
+      "gameRarity": "uncommon",
+      "rodGroup": "bottom",
+      "where": "Anywhere",
+      "when": "Any time",
+      "weightKg": {
+        "min": 0.3,
+        "max": 1
+      },
+      "weight": "300 g to 1 kg",
+      "valueCoins": 65,
+      "logbookLine": "Sits on ledges pulling faces. Harmless.",
+      "illustration": "GargoyleGoby.svg",
+      "silhouette": "GargoyleGoby_silhouette.svg",
+      "shapes": 18
+    },
+    {
+      "name": "Bronzescale",
+      "rarity": "uncommon",
+      "gameRarity": "uncommon",
+      "rodGroup": "none",
+      "where": "Anywhere",
+      "when": "Dusk",
+      "weightKg": {
+        "min": 1,
+        "max": 3
+      },
+      "weight": "1 kg to 3 kg",
+      "valueCoins": 80,
+      "logbookLine": "Looks like it swam off a fountain and never went back.",
+      "illustration": "Bronzescale.svg",
+      "silhouette": "Bronzescale_silhouette.svg",
+      "shapes": 36
+    },
+    {
+      "name": "Swamp Snakehead",
+      "rarity": "uncommon",
+      "gameRarity": "uncommon",
+      "rodGroup": "night",
+      "where": "Anywhere",
+      "when": "Night",
+      "weightKg": {
+        "min": 2,
+        "max": 5
+      },
+      "weight": "2 kg to 5 kg",
+      "valueCoins": 95,
+      "logbookLine": "Hunts at night between the roots. Polite enough by day.",
+      "illustration": "SwampSnakehead.svg",
+      "silhouette": "SwampSnakehead_silhouette.svg",
+      "shapes": 22
+    },
+    {
+      "name": "Wisp Ghostfish",
+      "rarity": "uncommon",
+      "gameRarity": "uncommon",
+      "rodGroup": "night",
+      "where": "Anywhere",
+      "when": "Night, lamp on",
+      "weightKg": {
+        "min": 0.3,
+        "max": 1
+      },
+      "weight": "300 g to 1 kg",
+      "valueCoins": 100,
+      "logbookLine": "The swamp’s little lantern. Follows your lamp like it wants to talk.",
+      "illustration": "WispGhostfish.svg",
+      "silhouette": "WispGhostfish_silhouette.svg",
+      "shapes": 16
+    },
+    {
+      "name": "Mosaic Ray",
+      "rarity": "uncommon",
+      "gameRarity": "uncommon",
+      "rodGroup": "deep",
+      "where": "Anywhere",
+      "when": "Day",
+      "weightKg": {
+        "min": 2,
+        "max": 6
+      },
+      "weight": "2 kg to 6 kg",
+      "valueCoins": 75,
+      "logbookLine": "Its back is a mosaic. Nobody knows who laid it.",
+      "illustration": "MosaicRay.svg",
+      "silhouette": "MosaicRay_silhouette.svg",
+      "shapes": 30
+    },
+    {
+      "name": "Statue Grouper",
+      "rarity": "rare",
+      "gameRarity": "rare",
+      "rodGroup": "bottom",
+      "where": "Drowned Plaza",
+      "when": "Dusk",
+      "weightKg": {
+        "min": 6,
+        "max": 14
+      },
+      "weight": "6 kg to 14 kg",
+      "valueCoins": 300,
+      "logbookLine": "Stays so still by the fallen statue that people have tried to read the inscription on it.",
+      "illustration": "StatueGrouper.svg",
+      "silhouette": "StatueGrouper_silhouette.svg",
+      "shapes": 25
+    },
+    {
+      "name": "Bellringer",
+      "rarity": "rare",
+      "gameRarity": "rare",
+      "rodGroup": "deep",
+      "where": "Bell Tower",
+      "when": "Night, after blowing the horn under the tower",
+      "weightKg": {
+        "min": 4,
+        "max": 9
+      },
+      "weight": "4 kg to 9 kg",
+      "valueCoins": 340,
+      "logbookLine": "Comes up when something rings. Even a boat horn will do.",
+      "illustration": "Bellringer.svg",
+      "silhouette": "Bellringer_silhouette.svg",
+      "shapes": 15
+    },
+    {
+      "name": "Keelback",
+      "rarity": "rare",
+      "gameRarity": "rare",
+      "rodGroup": "none",
+      "where": "Old Hulls",
+      "when": "Night",
+      "weightKg": {
+        "min": 5,
+        "max": 10
+      },
+      "weight": "5 kg to 10 kg",
+      "valueCoins": 280,
+      "logbookLine": "Lives inside the old hulls. Treats them like a house.",
+      "illustration": "Keelback.svg",
+      "silhouette": "Keelback_silhouette.svg",
+      "shapes": 22
+    },
+    {
+      "name": "The Drowned King",
+      "rarity": "legendary",
+      "gameRarity": "legendary",
+      "rodGroup": "deep",
+      "where": "Deep Cistern",
+      "when": "Clear nights",
+      "weightKg": {
+        "min": 18,
+        "max": 25
+      },
+      "weight": "18 kg to 25 kg",
+      "valueCoins": 1200,
+      "logbookLine": "The city’s last ruler, some say. It still sits in the middle of the room.",
+      "illustration": "TheDrownedKing.svg",
+      "silhouette": "TheDrownedKing_silhouette.svg",
+      "shapes": 38
+    },
+    {
+      "name": "Temple Arowana",
+      "rarity": "legendary",
+      "gameRarity": "epic",
+      "rodGroup": "none",
+      "where": "Temple Steps",
+      "when": "Dawn",
+      "weightKg": {
+        "min": 12,
+        "max": 20
+      },
+      "weight": "12 kg to 20 kg",
+      "valueCoins": 1000,
+      "logbookLine": "Swims up the temple steps at sunrise, as if it’s late for something.",
+      "illustration": "TempleArowana.svg",
+      "silhouette": "TempleArowana_silhouette.svg",
+      "shapes": 31
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Lily Gourami</title>
+  <polygon points="29,27 13.7,13.9 10.6,30" fill="#7bb0c8"/>
+  <polygon points="29,33 10.6,30 13.7,46.1" fill="#6996aa"/>
+  <polygon points="42.8,21.5 42.8,16.3 54.6,9.6 68,8.2 81.4,11.9 93.2,18.4 93.2,23.2" fill="#7bb0c8"/>
+  <polygon points="44.5,40 40.5,47.8 59.6,42.5" fill="#7bb0c8"/>
+  <polygon points="69.7,42.5 66.7,49.6 79.8,41.1" fill="#6c9bb0"/>
+  <polygon points="110,30 99.9,23.7 84.8,18.1 69.7,15.3 54.6,16 40.3,20.2 26,26.1 26,30" fill="#8fc5b8"/>
+  <polygon points="110,30 99.9,37 84.8,41.9 69.7,44 54.6,44 40.3,40.5 26,34.2 26,30" fill="#dff2e6"/>
+  <polygon points="40.3,20.2 54.6,16 69.7,15.3 84.8,18.1 84.8,30 69.7,30 54.6,30 40.3,30" fill="#a5d2c5"/>
+  <polygon points="54.6,16 69.7,15.3 69.7,25.1" fill="#78a59b"/>
+  <polygon points="84.8,18.1 99.9,23.7 110,30 99.9,30" fill="#9fcdc2"/>
+  <polygon points="54.6,44 69.7,44 84.8,41.9 84.8,31.7 54.6,31.7" fill="#e9f6ee"/>
+  <circle cx="63.9" cy="23.6" r="1.1" fill="#5f9fa8"/>
+  <circle cx="77.7" cy="25" r="1.3" fill="#5f9fa8"/>
+  <circle cx="71.7" cy="30.9" r="1.4" fill="#5f9fa8"/>
+  <polygon points="76.4,42.1 73.9,44.1 42.4,60.1 44.4,57.1" fill="#95c0d3"/>
+  <polygon points="83.4,42.1 80.9,44.1 52.4,62.1 54.4,59.1" fill="#86adbe"/>
+  <polygon points="81.4,29.3 72.4,33.9 80.4,35.9" fill="#6f9eb4"/>
+  <path d="M91.5 24.6 Q87.5 30 91.5 35.7" fill="none" stroke="#56766e" stroke-width="1.5"/>
+  <circle cx="101.6" cy="27.5" r="2.8" fill="#0b0f14"/>
+  <circle cx="102.6" cy="26.5" r="1.1" fill="#ffffff"/>
+</svg>

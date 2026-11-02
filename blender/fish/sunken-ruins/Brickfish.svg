@@ -1,0 +1,33 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Brickfish</title>
+  <polygon points="29,27 12.8,12.8 9.5,30" fill="#a8452f"/>
+  <polygon points="29,33 9.5,30 12.8,47.3" fill="#8f3b28"/>
+  <polygon points="53.9,16.5 60.4,8 80.1,16.5" fill="#a8452f"/>
+  <polygon points="44,43.5 40,51.8 58.8,43.5" fill="#a8452f"/>
+  <polygon points="68.6,43.5 65.6,51 78.5,43.5" fill="#943d29"/>
+  <polygon points="108,30 98.2,16.5 83.4,15 68.6,15 53.9,15 39.9,15 26,17.3 26,30" fill="#c4553a"/>
+  <polygon points="108,30 98.2,43.5 83.4,45 68.6,45 53.9,45 39.9,45 26,42.8 26,30" fill="#dc8a62"/>
+  <polygon points="39.9,15 53.9,15 68.6,15 83.4,15 83.4,30 68.6,30 53.9,30 39.9,30" fill="#cb6445"/>
+  <polygon points="53.9,15 68.6,15 68.6,24.8" fill="#a54731"/>
+  <polygon points="83.4,15 98.2,16.5 108,30 98.2,30" fill="#cc6d56"/>
+  <polygon points="53.9,45 68.6,45 83.4,45 83.4,31.8 53.9,31.8" fill="#e7ad91"/>
+  <polygon points="42.4,21.5 94.9,21.5 94.9,22.9 42.4,22.9" fill="#8f3a28"/>
+  <polygon points="49.7,16.5 51.1,16.5 51.1,21.5 49.7,21.5" fill="#8f3a28"/>
+  <polygon points="63.7,16.5 65.1,16.5 65.1,21.5 63.7,21.5" fill="#8f3a28"/>
+  <polygon points="77.7,16.5 79.1,16.5 79.1,21.5 77.7,21.5" fill="#8f3a28"/>
+  <polygon points="42.4,29.3 94.9,29.3 94.9,30.7 42.4,30.7" fill="#8f3a28"/>
+  <polygon points="56.7,22.9 58.1,22.9 58.1,29.3 56.7,29.3" fill="#8f3a28"/>
+  <polygon points="70.7,22.9 72.1,22.9 72.1,29.3 70.7,29.3" fill="#8f3a28"/>
+  <polygon points="84.7,22.9 86.1,22.9 86.1,29.3 84.7,29.3" fill="#8f3a28"/>
+  <polygon points="42.4,37.1 94.9,37.1 94.9,38.5 42.4,38.5" fill="#8f3a28"/>
+  <polygon points="49.7,30.7 51.1,30.7 51.1,37.1 49.7,37.1" fill="#8f3a28"/>
+  <polygon points="63.7,30.7 65.1,30.7 65.1,37.1 63.7,37.1" fill="#8f3a28"/>
+  <polygon points="77.7,30.7 79.1,30.7 79.1,37.1 77.7,37.1" fill="#8f3a28"/>
+  <polygon points="56.7,38.5 58.1,38.5 58.1,43.5 56.7,43.5" fill="#8f3a28"/>
+  <polygon points="70.7,38.5 72.1,38.5 72.1,43.5 70.7,43.5" fill="#8f3a28"/>
+  <polygon points="84.7,38.5 86.1,38.5 86.1,43.5 84.7,43.5" fill="#8f3a28"/>
+  <polygon points="80.1,29.3 71.1,34.2 79.1,36.3" fill="#973e2a"/>
+  <path d="M90 19.7 Q86 30 90 40.3" fill="none" stroke="#763323" stroke-width="1.5"/>
+  <circle cx="99.8" cy="27.3" r="3" fill="#0b0f14"/>
+  <circle cx="100.9" cy="26.3" r="1.1" fill="#ffffff"/>
+</svg>

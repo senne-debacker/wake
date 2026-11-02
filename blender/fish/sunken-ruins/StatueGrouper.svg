@@ -1,0 +1,28 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Statue Grouper</title>
+  <polygon points="25,27 6,16.4 2,30" fill="#66696c"/>
+  <polygon points="25,33 2,30 6,43.6" fill="#57595c"/>
+  <polygon points="48.4,19.4 49.3,0.3 57.2,16.7" fill="#66696c"/>
+  <polygon points="57.2,16.7 58.1,-2.8 66,14" fill="#66696c"/>
+  <polygon points="66,14 66.9,-4.6 74.8,12.6" fill="#66696c"/>
+  <polygon points="74.8,12.6 75.7,-6.2 83.6,11.5" fill="#66696c"/>
+  <polygon points="41.4,37.6 37.4,48.1 57.2,41.3" fill="#66696c"/>
+  <polygon points="67.8,43.7 64.8,53.2 78.3,46.2" fill="#5a5c5f"/>
+  <polygon points="110,30 99.4,14.4 83.6,10 67.8,12 51.9,16.8 37,21.6 22,26 22,30" fill="#8d9296"/>
+  <polygon points="110,30 99.4,44.8 83.6,49 67.8,45.2 51.9,41.6 37,38 22,34 22,30" fill="#c2c6c7"/>
+  <polygon points="37,21.6 51.9,16.8 67.8,12 83.6,10 83.6,30 67.8,30 51.9,30 37,30" fill="#9ca1a4"/>
+  <polygon points="51.9,16.8 67.8,12 67.8,23" fill="#767b7e"/>
+  <polygon points="83.6,10 99.4,14.4 110,30 99.4,30" fill="#9da1a5"/>
+  <polygon points="51.9,41.6 67.8,45.2 83.6,49 83.6,32.4 51.9,32.4" fill="#d4d7d8"/>
+  <circle cx="76.8" cy="25.2" r="3.2" fill="#5f8f3a"/>
+  <circle cx="66.7" cy="27.5" r="4.5" fill="#5f8f3a"/>
+  <circle cx="45.6" cy="33.1" r="4.2" fill="#5f8f3a"/>
+  <circle cx="75.7" cy="34.8" r="3.3" fill="#5f8f3a"/>
+  <circle cx="87.4" cy="36.1" r="5.5" fill="#5f8f3a"/>
+  <circle cx="54.9" cy="25.9" r="4.1" fill="#5f8f3a"/>
+  <polygon points="80.1,29 71.1,35.6 79.1,38.4" fill="#5c5f61"/>
+  <path d="M90.6 16 Q86.6 30 90.6 43.1" fill="none" stroke="#55585a" stroke-width="1.5"/>
+  <circle cx="101.2" cy="26.4" r="4" fill="#0b0f14"/>
+  <circle cx="102.6" cy="25" r="1.5" fill="#ffffff"/>
+  <polygon points="82.2,13.9 85.2,3.3 88.2,12.9 91.2,2.1 94.2,11.9 97.2,4.5 99.2,14.9" fill="#5f9a3a"/>
+</svg>

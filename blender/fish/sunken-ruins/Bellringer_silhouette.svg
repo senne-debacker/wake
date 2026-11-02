@@ -1,0 +1,12 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Bellringer (silhouette)</title>
+  <polygon points="27,30 8,20 14,30 8,40" fill="#222831"/>
+  <polygon points="40,42 34,53 54,47" fill="#222831"/>
+  <polygon points="78,52 76,59 94,54" fill="#222831"/>
+  <polygon points="24,30 28,25 34,21 44,16 58,12 74,9 88,7 98,6 102,30" fill="#222831"/>
+  <polygon points="24,30 28,35 34,39 44,44 58,48 74,51 88,53 98,54 102,30" fill="#222831"/>
+  <polygon points="34,21 44,16 58,12 66,22 44,27" fill="#222831"/>
+  <polygon points="58,12 74,9 88,7 98,6 90,18" fill="#222831"/>
+  <polygon points="34,39 44,44 58,48 62,40 42,35" fill="#222831"/>
+  <ellipse cx="101" cy="30" rx="9" ry="25" fill="#222831"/>
+</svg>

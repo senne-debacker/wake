@@ -1,0 +1,27 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Moss Perch</title>
+  <polygon points="29,30 8.4,14 16.3,30" fill="#587539"/>
+  <polygon points="29,30 16.3,30 8.4,46" fill="#4b6330"/>
+  <polygon points="51.2,16.6 52,4.8 59.6,15.2" fill="#587539"/>
+  <polygon points="59.6,15.2 60.4,4.1 68,14.8" fill="#587539"/>
+  <polygon points="68,14.8 68.8,3.8 76.4,16.1" fill="#587539"/>
+  <polygon points="76.4,16.1 77.2,4.9 84.8,17.9" fill="#587539"/>
+  <polygon points="44.5,41.7 40.5,50.4 59.6,44.5" fill="#587539"/>
+  <polygon points="69.7,44.5 66.7,52.4 79.8,42.9" fill="#4d6732"/>
+  <polygon points="110,30 99.9,22.8 84.8,16.4 69.7,13.2 54.6,14 40.3,18.8 26,25.5 26,30" fill="#7aa24f"/>
+  <polygon points="110,30 99.9,38 84.8,43.6 69.7,46 54.6,46 40.3,42 26,34.8 26,30" fill="#d4e2a0"/>
+  <polygon points="40.3,18.8 54.6,14 69.7,13.2 84.8,16.4 84.8,30 69.7,30 54.6,30 40.3,30" fill="#93b466"/>
+  <polygon points="54.6,14 69.7,13.2 69.7,24.4" fill="#668842"/>
+  <polygon points="84.8,16.4 99.9,22.8 110,30 99.9,30" fill="#8daf68"/>
+  <polygon points="54.6,46 69.7,46 84.8,43.6 84.8,31.9 54.6,31.9" fill="#e1ebbd"/>
+  <circle cx="57" cy="38.3" r="3.6" fill="#4f7a32"/>
+  <circle cx="75.5" cy="25.2" r="4.9" fill="#4f7a32"/>
+  <circle cx="65.9" cy="27.3" r="3.8" fill="#4f7a32"/>
+  <circle cx="87.7" cy="33.4" r="3.5" fill="#4f7a32"/>
+  <circle cx="74.5" cy="33.4" r="2.7" fill="#4f7a32"/>
+  <circle cx="85.6" cy="33.7" r="4.7" fill="#4f7a32"/>
+  <polygon points="81.4,29.2 72.4,34.5 80.4,36.7" fill="#4f6933"/>
+  <path d="M91.5 23.2 Q87.5 30 91.5 37.1" fill="none" stroke="#49612f" stroke-width="1.5"/>
+  <circle cx="101.6" cy="27.1" r="3.2" fill="#0b0f14"/>
+  <circle cx="102.7" cy="26" r="1.2" fill="#ffffff"/>
+</svg>

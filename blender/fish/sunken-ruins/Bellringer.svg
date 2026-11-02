@@ -1,0 +1,18 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Bellringer</title>
+  <polygon points="27,30 8,20 14,30 8,40" fill="#8a5a24"/>
+  <polygon points="40,42 34,53 54,47" fill="#8a5a24"/>
+  <polygon points="78,52 76,59 94,54" fill="#8a5a24"/>
+  <polygon points="24,30 28,25 34,21 44,16 58,12 74,9 88,7 98,6 102,30" fill="#b07a3a"/>
+  <polygon points="24,30 28,35 34,39 44,44 58,48 74,51 88,53 98,54 102,30" fill="#d9a85a"/>
+  <polygon points="34,21 44,16 58,12 66,22 44,27" fill="#bc8844"/>
+  <polygon points="58,12 74,9 88,7 98,6 90,18" fill="#be925d"/>
+  <polygon points="34,39 44,44 58,48 62,40 42,35" fill="#e3be83"/>
+  <ellipse cx="101" cy="30" rx="9" ry="25" fill="#deb26e"/>
+  <polygon points="48,15.4 52,14.2 52,45.8 48,44.6" fill="#5a3c1c" opacity="0.75"/>
+  <polygon points="70,10.3 74,9.5 74,50.5 70,49.8" fill="#5a3c1c" opacity="0.75"/>
+  <ellipse cx="101" cy="30" rx="6" ry="20" fill="#2a2018"/>
+  <circle cx="99" cy="38" r="4.5" fill="#7b5529"/>
+  <circle cx="74" cy="22" r="3.6" fill="#0b0f14"/>
+  <circle cx="75.3" cy="20.7" r="1.4" fill="#ffffff"/>
+</svg>
