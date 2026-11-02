@@ -497,6 +497,9 @@ User asked for: effects in planet view (rain, ripples, fog, fishing particles), 
 - [x] `fishing/fishArt.js` got opt-in extras for them (the 64 game fish are drawn exactly as before, checked by re-running `npm run export:fish`: no file changed): a black eye with a white highlight (`eyeDark`), round `scales`, `bricks`, floor `tiles` on a ray, `trailing` filaments, a faint `aura`, a `bigMouth`, a jutting `jaw`, `crestSize`, `spotSize`, the bodies `box` and `bell` (flared, the opening at the nose), and `silhouette: true` (one dark colour, details and halos left out)
 - Differences from the game, written in the JSON `notes`: the game has 32 fish per world in five rarities and **one** legendary per world, so `gameRarity` makes The Drowned King legendary and Temple Arowana epic; 16 more fish would be needed to fill a world; rod groups, map areas and the horn / lamp conditions are not game mechanics yet. The set is not registered in `FISH_SETS`, so nothing in the game reads it (and `npm run export:fish` does not touch the folder)
 
+### Step 61 — Harbour v2  *(done, on `dev`)*
+- [x] The user's `harbour_v2.glb` (same layout, markers, dock (`Dock_Wim`), 15 islands, 9 rocks, 6 spots as the first Harbour, about 40,000 triangles instead of 34,700) replaces `public/models/worlds/harbour.glb`, so the world keeps its id `harbour`, its card and everybody's saves; the first version is kept as `blender/worlds/harbour-v1.glb` (the workshop folder: the game does not read it; it is also in git history, `8b63188`). Checked: `npm run check` (the world test), and in headless Chrome: it loads with the own dock (no generated dock), the bay is closed in by more rock, the hint shows near the pier and anchoring there opens the shop, anchoring at the start does not
+
 ## Final requirements check (re-run before handing in)
 
 ```
