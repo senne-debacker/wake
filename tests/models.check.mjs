@@ -37,7 +37,7 @@ for (const kind of ['boats', 'worlds']) {
   check(`${kind}: every model in public/models/${kind} has blender/${kind}/<id>.blend`, noBlend.length === 0, noBlend.join())
   const noModel = blends.filter((id) => !live.includes(id) && !ONLY_IN_BLENDER[kind].includes(id))
   check(`${kind}: every .blend has its model in public/models/${kind} (or is listed as Blender only)`, noModel.length === 0, noModel.join())
-  const stray = existsSync(`blender/${kind}`) ? readdirSync(`blender/${kind}`).filter((f) => f.endsWith('.glb') && !(kind === 'worlds' && f === 'w_000-wake.glb')) : []
+  const stray = existsSync(`blender/${kind}`) ? readdirSync(`blender/${kind}`).filter((f) => f.endsWith('.glb') && !(kind === 'worlds' && ['w_000-wake.glb', 'wake-base-world.glb'].includes(f))) : []
   check(`${kind}: no .glb files in blender/${kind} except templates (they belong in public/models or archive/)`, stray.length === 0, stray.join())
 }
 
