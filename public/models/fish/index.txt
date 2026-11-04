@@ -68,3 +68,37 @@ w_002-frostmere  (32 fish)
   w_002-frostmere/f_002-4e04-aurora-moonfish.svg   Aurora Moonfish, Epic, 70.0 kg to 220.0 kg
   w_002-frostmere/f_002-4e05-ghostwhite-pike.svg   Ghostwhite Pike, Epic, 30.0 kg to 95.0 kg
   w_002-frostmere/f_002-5l01-glacier-maw.svg   The Glacier Maw, Legendary, 180.0 kg to 520.0 kg
+
+w_005-riverlands  (32 fish)
+  w_005-riverlands/f_005-1c01-river-roach.svg   River Roach, Common, 100 g to 400 g
+  w_005-riverlands/f_005-1c02-mudpout.svg   Mudpout, Common, 300 g to 1.5 kg
+  w_005-riverlands/f_005-1c03-reed-perch.svg   Reed Perch, Common, 200 g to 1.0 kg
+  w_005-riverlands/f_005-1c04-silver-bream.svg   Silver Bream, Common, 300 g to 1.2 kg
+  w_005-riverlands/f_005-1c05-gudgeon.svg   Gudgeon, Common, 50 g to 200 g
+  w_005-riverlands/f_005-1c06-brook-minnow.svg   Brook Minnow, Common, 20 g to 80 g
+  w_005-riverlands/f_005-1c07-surface-bleak.svg   Surface Bleak, Common, 20 g to 100 g
+  w_005-riverlands/f_005-1c08-spotted-dace.svg   Spotted Dace, Common, 100 g to 300 g
+  w_005-riverlands/f_005-1c09-stone-loach.svg   Stone Loach, Common, 20 g to 100 g
+  w_005-riverlands/f_005-1c10-prickle-ruffe.svg   Prickle Ruffe, Common, 50 g to 200 g
+  w_005-riverlands/f_005-2u01-rope-eel.svg   Rope Eel, Uncommon, 800 g to 3.0 kg
+  w_005-riverlands/f_005-2u02-golden-tench.svg   Golden Tench, Uncommon, 1.0 kg to 3.0 kg
+  w_005-riverlands/f_005-2u03-striped-zander.svg   Striped Zander, Uncommon, 1.5 kg to 4.0 kg
+  w_005-riverlands/f_005-2u04-golden-rudd.svg   Golden Rudd, Uncommon, 400 g to 1.5 kg
+  w_005-riverlands/f_005-2u05-bristle-barbel.svg   Bristle Barbel, Uncommon, 1.0 kg to 4.0 kg
+  w_005-riverlands/f_005-2u06-mirror-chub.svg   Mirror Chub, Uncommon, 500 g to 2.5 kg
+  w_005-riverlands/f_005-2u07-sailfin-grayling.svg   Sailfin Grayling, Uncommon, 400 g to 1.5 kg
+  w_005-riverlands/f_005-2u08-orange-ide.svg   Orange Ide, Uncommon, 500 g to 2.0 kg
+  w_005-riverlands/f_005-2u09-night-burbot.svg   Night Burbot, Uncommon, 1.0 kg to 3.0 kg
+  w_005-riverlands/f_005-3r01-millrace-trout.svg   Millrace Trout, Rare, 2.0 kg to 5.0 kg
+  w_005-riverlands/f_005-3r02-willow-carp.svg   Willow Carp, Rare, 4.0 kg to 9.0 kg
+  w_005-riverlands/f_005-3r03-gorge-sturgeon.svg   Gorge Sturgeon, Rare, 6.0 kg to 12.0 kg
+  w_005-riverlands/f_005-3r04-silver-shad.svg   Silver Shad, Rare, 1.0 kg to 3.0 kg
+  w_005-riverlands/f_005-3r05-meander-pike.svg   Meander Pike, Rare, 3.0 kg to 8.0 kg
+  w_005-riverlands/f_005-3r06-marsh-bowfin.svg   Marsh Bowfin, Rare, 2.0 kg to 5.0 kg
+  w_005-riverlands/f_005-3r07-ghost-koi.svg   Ghost Koi, Rare, 2.0 kg to 6.0 kg
+  w_005-riverlands/f_005-4e01-moon-carp.svg   Moon Carp, Epic, 8.0 kg to 14.0 kg
+  w_005-riverlands/f_005-4e02-golden-mahseer.svg   Golden Mahseer, Epic, 6.0 kg to 12.0 kg
+  w_005-riverlands/f_005-4e03-lily-king.svg   Lily King, Epic, 5.0 kg to 10.0 kg
+  w_005-riverlands/f_005-4e04-reed-ghost.svg   Reed Ghost, Epic, 4.0 kg to 9.0 kg
+  w_005-riverlands/f_005-4e05-millpond-grayling.svg   Millpond Grayling, Epic, 2.0 kg to 5.0 kg
+  w_005-riverlands/f_005-5l01-old-knot.svg   Old Knot, Legendary, 12.0 kg to 18.0 kg

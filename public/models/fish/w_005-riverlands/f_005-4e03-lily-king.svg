@@ -1,0 +1,27 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Lily King (Epic)</title>
+  <polygon points="29,27 10,10.5 6,30" fill="#566e2e"/>
+  <polygon points="29,33 6,30 10,49.6" fill="#495e27"/>
+  <polygon points="54.6,11.5 61.3,0 81.4,13.6" fill="#566e2e"/>
+  <polygon points="44.5,45 40.5,55.5 59.6,48.5" fill="#566e2e"/>
+  <polygon points="69.7,48.5 66.7,58 79.8,46.5" fill="#4c6128"/>
+  <polygon points="110,30 99.9,21 84.8,13 69.7,9 54.6,10 40.3,16 26,24.4 26,30" fill="#6a8a3a"/>
+  <polygon points="110,30 99.9,40 84.8,47 69.7,50 54.6,50 40.3,45 26,36 26,30" fill="#c8b84a"/>
+  <polygon points="40.3,16 54.6,10 69.7,9 84.8,13 84.8,30 69.7,30 54.6,30 40.3,30" fill="#84973e"/>
+  <polygon points="54.6,10 69.7,9 69.7,23" fill="#597431"/>
+  <polygon points="84.8,13 99.9,21 110,30 99.9,30" fill="#7f9a56"/>
+  <polygon points="54.6,50 69.7,50 84.8,47 84.8,32.4 54.6,32.4" fill="#d9cd80"/>
+  <circle cx="82.3" cy="29.9" r="2.3" fill="#f6f4e8"/>
+  <circle cx="78.9" cy="36.9" r="2.3" fill="#f6f4e8"/>
+  <circle cx="70.5" cy="41.5" r="2.3" fill="#f6f4e8"/>
+  <circle cx="60.9" cy="40.3" r="2.3" fill="#f6f4e8"/>
+  <circle cx="54.6" cy="34.1" r="2.3" fill="#f6f4e8"/>
+  <circle cx="54.6" cy="25.9" r="2.3" fill="#f6f4e8"/>
+  <circle cx="60.9" cy="19.3" r="2.3" fill="#f6f4e8"/>
+  <circle cx="70.5" cy="17.5" r="2.3" fill="#f6f4e8"/>
+  <circle cx="78.9" cy="22.7" r="2.3" fill="#f6f4e8"/>
+  <polygon points="81.4,29 72.4,35.6 80.4,38.4" fill="#4d6329"/>
+  <path d="M91.5 20.6 Q87.5 30 91.5 39.9" fill="none" stroke="#405323" stroke-width="1.5"/>
+  <circle cx="101.6" cy="26.4" r="3.2" fill="#0b0f14"/>
+  <circle cx="102.7" cy="25.3" r="1.2" fill="#ffffff"/>
+</svg>

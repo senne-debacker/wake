@@ -1,0 +1,30 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Gorge Sturgeon (Rare)</title>
+  <polygon points="25,30 7.7,17 14.1,30" fill="#414951"/>
+  <polygon points="25,30 14.1,30 7.7,43" fill="#373e45"/>
+  <polygon points="53.3,22.7 60.6,14.2 82.7,22.7" fill="#414951"/>
+  <polygon points="42.2,35.5 38.2,42.8 58.8,36.7" fill="#414951"/>
+  <polygon points="69.8,37.1 66.8,43.8 80.9,36.6" fill="#394047"/>
+  <polygon points="114,30 103,24.5 86.4,21.4 69.8,20.6 53.3,21.2 37.6,22.9 22,25.6 22,30" fill="#5a6670"/>
+  <polygon points="114,30 103,34.9 86.4,37.8 69.8,38.6 53.3,38.1 37.6,36.5 22,33.9 22,30" fill="#a8b0b4"/>
+  <polygon points="37.6,22.9 53.3,21.2 69.8,20.6 86.4,21.4 86.4,30 69.8,30 53.3,30 37.6,30" fill="#707b83"/>
+  <polygon points="53.3,21.2 69.8,20.6 69.8,25.5" fill="#4c565e"/>
+  <polygon points="86.4,21.4 103,24.5 114,30 103,30" fill="#717b84"/>
+  <polygon points="53.3,38.1 69.8,38.6 86.4,37.8 86.4,31.6 53.3,31.6" fill="#c2c8cb"/>
+  <polygon points="45.2,26.2 47.8,23 50.4,26.2 47.8,29.4" fill="#c8cdd0"/>
+  <polygon points="52.8,25.9 55.4,22.7 58,25.9 55.4,29.1" fill="#c8cdd0"/>
+  <polygon points="60.5,25.8 63.1,22.6 65.7,25.8 63.1,29" fill="#c8cdd0"/>
+  <polygon points="68.2,25.7 70.8,22.5 73.4,25.7 70.8,28.9" fill="#c8cdd0"/>
+  <polygon points="75.8,25.8 78.4,22.6 81,25.8 78.4,29" fill="#c8cdd0"/>
+  <polygon points="83.5,26 86.1,22.8 88.7,26 86.1,29.2" fill="#c8cdd0"/>
+  <polygon points="91.2,26.6 93.8,23.4 96.4,26.6 93.8,29.8" fill="#c8cdd0"/>
+  <polygon points="82.7,29.4 73.7,33.6 81.7,35.5" fill="#3b4249"/>
+  <path d="M93.8 26.8 Q89.8 30 93.8 32.5" fill="none" stroke="#363d43" stroke-width="1.5"/>
+  <circle cx="104.8" cy="27.7" r="2.6" fill="#0b0f14"/>
+  <circle cx="105.7" cy="26.8" r="1" fill="#ffffff"/>
+  <path d="M110 32 Q118 39.1 110 44.3 M104 34 Q108 41.7 100 46.3" fill="none" stroke="#5c6163" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M111 32 Q116 36.5 107 41.1" fill="none" stroke="#5c6163" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M106 32.6 Q111 37.5 101 42.4" fill="none" stroke="#5c6163" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M101 33.2 Q106 38.6 95 43.7" fill="none" stroke="#5c6163" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M96 33.8 Q101 39.6 89 45" fill="none" stroke="#5c6163" stroke-width="1.8" stroke-linecap="round"/>
+</svg>

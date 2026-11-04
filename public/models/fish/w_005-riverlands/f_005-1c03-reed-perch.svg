@@ -1,0 +1,25 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Reed Perch (Common)</title>
+  <polygon points="29,30 9.5,15 16.9,30" fill="#73782d"/>
+  <polygon points="29,30 16.9,30 9.5,45" fill="#626626"/>
+  <polygon points="51.2,17.6 52,4.9 59.6,16.3" fill="#73782d"/>
+  <polygon points="59.6,16.3 60.4,4.1 68,15.8" fill="#73782d"/>
+  <polygon points="68,15.8 68.8,3.8 76.4,17.1" fill="#73782d"/>
+  <polygon points="76.4,17.1 77.2,4.8 84.8,18.8" fill="#73782d"/>
+  <polygon points="44.5,40.9 40.5,49.1 59.6,43.5" fill="#73782d"/>
+  <polygon points="69.7,43.5 66.7,51 79.8,42" fill="#656a28"/>
+  <polygon points="110,30 99.9,23.3 84.8,17.3 69.7,14.3 54.6,15 40.3,19.5 26,25.8 26,30" fill="#a0a63e"/>
+  <polygon points="110,30 99.9,37.5 84.8,42.8 69.7,45 54.6,45 40.3,41.3 26,34.5 26,30" fill="#e6df98"/>
+  <polygon points="40.3,19.5 54.6,15 69.7,14.3 84.8,17.3 84.8,30 69.7,30 54.6,30 40.3,30" fill="#b4b657"/>
+  <polygon points="54.6,15 69.7,14.3 69.7,24.8" fill="#868b34"/>
+  <polygon points="84.8,17.3 99.9,23.3 110,30 99.9,30" fill="#adb259"/>
+  <polygon points="54.6,45 69.7,45 84.8,42.8 84.8,31.8 54.6,31.8" fill="#eee9b7"/>
+  <polygon points="53,16.5 58.3,15.8 58.3,44 53,43.6" fill="#3d4a22" opacity="0.85"/>
+  <polygon points="61.8,15.6 67.1,15.4 67.1,44 61.8,44" fill="#3d4a22" opacity="0.85"/>
+  <polygon points="70.6,15.4 75.9,16.5 75.9,43.1 70.6,43.9" fill="#3d4a22" opacity="0.85"/>
+  <polygon points="79.4,17.2 84.7,18.2 84.7,41.8 79.4,42.6" fill="#3d4a22" opacity="0.85"/>
+  <polygon points="81.4,29.3 72.4,34.2 80.4,36.3" fill="#686c29"/>
+  <path d="M91.5 23.9 Q87.5 30 91.5 36.4" fill="none" stroke="#606425" stroke-width="1.5"/>
+  <circle cx="101.6" cy="27.3" r="3" fill="#0b0f14"/>
+  <circle cx="102.7" cy="26.3" r="1.1" fill="#ffffff"/>
+</svg>

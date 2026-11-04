@@ -16,8 +16,8 @@
 //                like the game's low-poly look, and use no id= / url(#) so the same picture can be on
 //                the page several times. No scripts or external references.
 //
-//   set          'w_001-harbour' | 'w_002-frostmere' (added below: the world whose fish set it belongs to)
-//   habitat      (rare, epic and legendary only, optional) when the species is likelier to bite, see
+//   set          'w_001-harbour' | 'w_002-frostmere' | 'w_005-riverlands' (added below: the world whose fish set it belongs to)
+//   habitat      (uncommon and above, optional) when the species is likelier to bite, see
 //                fishing/habitat.js: { weather, hours, boost, hint }. The logbook shows the vague `hint`
 //                until you have caught one, then the whole rule
 //
@@ -28,6 +28,7 @@ import { habitatActive } from './habitat.js'
 import { drawFish } from './fishArt.js'
 import { HOME_NEW } from './species/home.js'
 import { FROSTMERE } from './species/frostmere.js'
+import { RIVERLANDS } from './species/riverlands.js'
 
 // Order = display order of the logbook. `rate` is the chance that a catch is of this rarity
 // (the five add up to 1); `difficulty` scales the fight (see fishing/fishingMinigame.js);
@@ -417,7 +418,7 @@ const HOME_BASE = [
   },
 ]
 
-const finish = (list, set) => list.map((fish) => ({ ...fish, set, imgUrl: fish.imgUrl ?? drawFish(fish.art) }))
+const finish = (list, set) => list.map((fish) => ({ ...fish, set, description: fish.description ?? fish.logbook, imgUrl: fish.imgUrl ?? drawFish(fish.art) }))
 
 // A fish set is named after its world (w_001-harbour), and its fish carry the world's number: f_001-1c01-dusk-herring is
 // world 001, rarity 1 (c = common), number 01 (blender/NAMING.md).
@@ -425,6 +426,7 @@ export const HOME = 'w_001-harbour'
 export const FISH_SETS = {
   'w_001-harbour': finish([...HOME_BASE, ...HOME_NEW], 'w_001-harbour'),
   'w_002-frostmere': finish(FROSTMERE, 'w_002-frostmere'),
+  'w_005-riverlands': finish(RIVERLANDS, 'w_005-riverlands'),
 }
 export const FISH_SPECIES = Object.values(FISH_SETS).flat() // every species in every world
 export const FISH_BY_ID = new Map(FISH_SPECIES.map((fish) => [fish.id, fish]))

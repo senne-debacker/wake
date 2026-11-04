@@ -2,7 +2,7 @@ id:           w_005-riverlands
 name:         The Riverlands
 description:  Rolling green hills with slow rivers, reed beds and willow lakes winding between them.
 price:        900
-fish:         w_001-harbour
+fish:         w_005-riverlands
 anything special:
   - Made from blender/worlds/w_005-riverlands.blend on top of the Wake base file. Mostly land (about
     two thirds): you start in the River Mouth and sail up the Meanders; the rivers (1.0-1.6 wide) form one
@@ -16,4 +16,5 @@ anything special:
     (Mill_Jam): the game does not turn it yet.
   - Markers the game does not read yet: Area_*, Quest_Logjam, Quest_WheelPaddle_1-3 (the paddles float
     as WheelPaddle_1-3), HousePlot and Resident_Bram.
-  - It fishes the home waters' fish until it has its own set.
+  - It has its own 32 fish (fish: w_005-riverlands): river fish, with the times of day and the weather of the design brief.
+    Map areas, rod groups and the lamp / mill wheel conditions are not mechanics of the game yet.

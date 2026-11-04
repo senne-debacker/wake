@@ -36,7 +36,7 @@ const mulberry32 = (seed) => () => {
 
 // ---- 1. database -----------------------------------------------------------------------------------
 {
-  check('database: 32 species in each world, 64 in all', Object.values(FISH_SETS).every((set) => set.length === 32) && FISH_SPECIES.length === 64 && Object.keys(FISH_SETS).join() === 'w_001-harbour,w_002-frostmere', `${FISH_SPECIES.length}`)
+  check('database: 32 species in each world, 96 in all', Object.values(FISH_SETS).every((set) => set.length === 32) && FISH_SPECIES.length === 96 && Object.keys(FISH_SETS).join() === 'w_001-harbour,w_002-frostmere,w_005-riverlands', `${FISH_SPECIES.length}`)
   for (const [name, set] of Object.entries(FISH_SETS)) {
     const counts = Object.keys(RARITIES).map((rarity) => fishInRarity(rarity, set).length)
     check(`database: ${name} has 10 common, 9 uncommon, 7 rare, 5 epic and exactly 1 legendary`, counts.join() === '10,9,7,5,1', counts.join(' / '))
@@ -45,7 +45,7 @@ const mulberry32 = (seed) => () => {
   check('database: every species knows its set, and no species is in two', FISH_SPECIES.every((f) => FISH_SETS[f.set].includes(f)) && FISH_SETS[HOME].every((f) => f.set === HOME) && FISH_SETS['w_002-frostmere'].every((f) => f.set === 'w_002-frostmere'))
   check('database: a missing or unknown fish set is the home waters', fishSet(undefined) === FISH_SETS[HOME] && fishSet('nowhere') === FISH_SETS[HOME] && fishSet('w_002-frostmere') === FISH_SETS['w_002-frostmere'])
   check('database: every species has a known rarity', FISH_SPECIES.every((fish) => fish.rarity in RARITIES))
-  check('database: ids and names are unique', new Set(FISH_SPECIES.map((f) => f.id)).size === 64 && new Set(FISH_SPECIES.map((f) => f.name)).size === 64 && FISH_BY_ID.size === 64)
+  check('database: ids and names are unique', new Set(FISH_SPECIES.map((f) => f.id)).size === 96 && new Set(FISH_SPECIES.map((f) => f.name)).size === 96 && FISH_BY_ID.size === 96)
   {
     // The ids (blender/NAMING.md): f_<world number>-<rarity rank><rarity letter><number>-<name>, e.g. f_001-1c01-dusk-herring.
     const RANK = { common: '1c', uncommon: '2u', rare: '3r', epic: '4e', legendary: '5l' }
@@ -61,7 +61,7 @@ const mulberry32 = (seed) => () => {
     check('database: every first fish id (saves from before the new ids) maps to a fish that exists', Object.values(LEGACY_FISH).every((id) => FISH_BY_ID.has(id)) && Object.keys(LEGACY_FISH).length === 64 && Object.keys(LEGACY_FISH).every((old) => !FISH_BY_ID.has(old)))
   }
   check('database: weight ranges are sane (0 < min < max)', FISH_SPECIES.every((f) => f.weight.length === 2 && f.weight[0] > 0 && f.weight[0] < f.weight[1]))
-  check('database: rarer fish can be heavier', Object.values(FISH_SETS).every((set) => Math.max(...fishInRarity('legendary', set).map((f) => f.weight[1])) > Math.max(...fishInRarity('common', set).map((f) => f.weight[1])) * 20))
+  check('database: rarer fish can be heavier (the legendary of a world over 8 times its heaviest common; the river fish are light)', Object.values(FISH_SETS).every((set) => Math.max(...fishInRarity('legendary', set).map((f) => f.weight[1])) > Math.max(...fishInRarity('common', set).map((f) => f.weight[1])) * 8))
   check('database: every species has a description', FISH_SPECIES.every((f) => typeof f.description === 'string' && f.description.length > 20))
 
   // The pictures: inline SVG, same size, and nothing that could clash or run.
@@ -87,9 +87,9 @@ const mulberry32 = (seed) => () => {
     const { RIVERLANDS } = await import('../src/fishing/species/riverlands.js')
     const { SUNKEN_RUINS } = await import('../src/fishing/species/sunkenRuins.js')
     const RANK = { common: '1c', uncommon: '2u', rare: '3r', epic: '4e', legendary: '5l' }
-    for (const [list, world, field] of [[RIVERLANDS, '005', 'rarity'], [SUNKEN_RUINS, '003', 'gameRarity']]) {
+    for (const [list, world, field, inGame] of [[RIVERLANDS, '005', 'rarity', true], [SUNKEN_RUINS, '003', 'gameRarity', false]]) {
       const bad = list.filter((f) => !new RegExp(`^f_${world}-${RANK[f[field]]}\\d{2}-[a-z0-9]+(-[a-z0-9]+)*$`).test(f.id))
-      check(`designed fish of world ${world}: every id follows f_${world}-<rarity><number>-<name>, none is twice, none clashes with the game`, bad.length === 0 && new Set(list.map((f) => f.id)).size === list.length && list.every((f) => !FISH_BY_ID.has(f.id)), bad.map((f) => f.id).join())
+      check(`designed fish of world ${world}: every id follows f_${world}-<rarity><number>-<name>, none is twice, ${inGame ? 'all are in the game' : 'none is in the game yet'}`, bad.length === 0 && new Set(list.map((f) => f.id)).size === list.length && list.every((f) => FISH_BY_ID.has(f.id) === inGame), bad.map((f) => f.id).join())
     }
     const split = Object.keys(RARITIES).map((r) => RIVERLANDS.filter((f) => f.rarity === r).length).join('/')
     check('designed fish: The Riverlands has 10 / 9 / 7 / 5 / 1 fish like every world, one legendary', split === '10/9/7/5/1', split)
@@ -138,7 +138,7 @@ const mulberry32 = (seed) => () => {
   // Habitats: only rare and legendary fish have one, the rule is checked against the weather and the hour,
   // and a fish whose habitat is right comes up about `boost` times as often.
   const withHabitat = FISH_SPECIES.filter((f) => f.habitat)
-  check('habitat: only rare, epic and legendary species have one, each with a hint and a boost above 1', withHabitat.length > 0 && withHabitat.every((f) => (f.rarity === 'rare' || f.rarity === 'epic' || f.rarity === 'legendary') && f.habitat.hint && f.habitat.boost > 1 && (f.habitat.weather || f.habitat.hours) && (!f.habitat.weather || f.habitat.weather in WEATHER_KINDS)))
+  check('habitat: only uncommon, rare, epic and legendary species have one, each with a hint and a boost above 1', withHabitat.length > 0 && withHabitat.every((f) => f.rarity !== 'common' && f.habitat.hint && f.habitat.boost > 1 && (f.habitat.weather || f.habitat.hours) && (!f.habitat.weather || f.habitat.weather in WEATHER_KINDS)))
   check('habitat: the wake-eater wants a thunderstorm between 02:00 and 04:00', (() => {
     const h = FISH_BY_ID.get('f_001-5l01-wake-eater').habitat
     const storm = { storm: 1, cover: 1, rain: 1 }

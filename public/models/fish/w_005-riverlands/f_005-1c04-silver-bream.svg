@@ -1,0 +1,32 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Silver Bream (Common)</title>
+  <polygon points="29,30 6,13 15,30" fill="#848d93"/>
+  <polygon points="29,30 15,30 6,47" fill="#70787d"/>
+  <polygon points="54.6,9.5 61.3,-1 81.4,11.8" fill="#848d93"/>
+  <polygon points="44.5,46.6 40.5,58 59.6,50.5" fill="#848d93"/>
+  <polygon points="69.7,50.5 66.7,60.8 79.8,48.3" fill="#747c81"/>
+  <polygon points="110,30 99.9,20.1 84.8,11.3 69.7,6.9 54.6,8 40.3,14.6 26,23.8 26,30" fill="#b8c4cc"/>
+  <polygon points="110,30 99.9,41 84.8,48.7 69.7,52 54.6,52 40.3,46.5 26,36.6 26,30" fill="#eef2f4"/>
+  <polygon points="40.3,14.6 54.6,8 69.7,6.9 84.8,11.3 84.8,30 69.7,30 54.6,30 40.3,30" fill="#c7d1d7"/>
+  <polygon points="54.6,8 69.7,6.9 69.7,22.3" fill="#9ba5ab"/>
+  <polygon points="84.8,11.3 99.9,20.1 110,30 99.9,30" fill="#c2ccd3"/>
+  <polygon points="54.6,52 69.7,52 84.8,48.7 84.8,32.6 54.6,32.6" fill="#f3f6f7"/>
+  <circle cx="49.5" cy="24.6" r="3.6" fill="#d8e2e8"/>
+  <circle cx="55.8" cy="23.8" r="3.6" fill="#d8e2e8"/>
+  <circle cx="62.1" cy="23.5" r="3.6" fill="#d8e2e8"/>
+  <circle cx="68.4" cy="23.2" r="3.6" fill="#d8e2e8"/>
+  <circle cx="74.7" cy="23.7" r="3.6" fill="#d8e2e8"/>
+  <circle cx="81" cy="24.4" r="3.6" fill="#d8e2e8"/>
+  <circle cx="87.3" cy="25.2" r="3.6" fill="#d8e2e8"/>
+  <circle cx="52.5" cy="36" r="3.6" fill="#d8e2e8"/>
+  <circle cx="58.8" cy="36.1" r="3.6" fill="#d8e2e8"/>
+  <circle cx="65.1" cy="35.9" r="3.6" fill="#d8e2e8"/>
+  <circle cx="71.4" cy="35.7" r="3.6" fill="#d8e2e8"/>
+  <circle cx="77.7" cy="35.5" r="3.6" fill="#d8e2e8"/>
+  <circle cx="84" cy="35.3" r="3.6" fill="#d8e2e8"/>
+  <circle cx="90.3" cy="34.6" r="3.6" fill="#d8e2e8"/>
+  <polygon points="81.4,28.9 72.4,36.2 80.4,39.2" fill="#777f84"/>
+  <path d="M91.5 19.2 Q87.5 30 91.5 41.3" fill="none" stroke="#6e767a" stroke-width="1.5"/>
+  <circle cx="101.6" cy="26" r="4.2" fill="#0b0f14"/>
+  <circle cx="103.1" cy="24.6" r="1.6" fill="#ffffff"/>
+</svg>
