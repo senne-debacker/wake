@@ -162,6 +162,11 @@ function createImportedWorld(layout) {
 
   // Shore foam in the water shader.
   layout.bodies.forEach((body, i) => uniforms.shoreBodies.array[i].set(body.dir.x, body.dir.y, body.dir.z, body.radius))
+  // The sea's own colours (a lagoon, deep water), painted by the water shader.
+  layout.seaZones.forEach((zone, i) => {
+    uniforms.seaZones.array[i].set(zone.dir.x, zone.dir.y, zone.dir.z, Math.cos(zone.radius / PLANET.radius))
+    uniforms.seaZoneColors.array[i].set(zone.color)
+  })
 
   const buoys = createBuoys(layout.buoys)
   group.add(buoys.group)

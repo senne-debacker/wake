@@ -35,6 +35,13 @@ sphere: keep the `Water` sphere as it is and change what stands on it.
 5. Write a world card next to the file: `id`, `name`, one line of description, and anything special
    (it only rains here, it is always night, ...).
 
+## The sea's colours (optional)
+
+The game draws its own sea and ignores the `Water` mesh, but a world can paint round patches of it: a lagoon, deep water, a blue
+hole. Each patch is a mesh under `Water` named `Sea_<name>` (the mesh is for looking at in Blender; the game does not show it), with the custom
+properties `sea_colour` (`#3FB7B0`), `centre` (the unit direction of its centre in Blender axes, as a list of 3) and `radius_to` (its radius along the
+sea). At most 4; the biggest is painted first. The colour is the sea's colour by day: it follows the time of day and the weather like the rest of the water. See `w_004-reef.blend`.
+
 ## Putting a new world in the game
 
 Export it as glTF Binary the same way as the boats (+Y Up, Apply Modifiers) and save it as

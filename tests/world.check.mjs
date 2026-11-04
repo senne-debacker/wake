@@ -126,6 +126,7 @@ for (const file of readdirSync('public/models/worlds').filter((f) => f.endsWith(
     const out = arc(boat.dir, collider.dir)
     if (!(out > reachHere * 0.5 + 0.02)) problems.push(`a boat inside a ${collider.kind} is not pushed out`)
   }
+  if (id === 'w_004-reef' && !(layout.seaZones.length === 3 && layout.seaZones.at(-1).name === 'Sea_BlueHole' && arc(layout.seaZones[0].dir, layout.seaZones[1].dir) > 15)) problems.push('the sea colours (lagoon, deep, Blue Hole) are not read correctly')
   for (const spot of layout.fishingSpots) if (layout.colliders.some((c) => arc(spot.dir, c.dir) < (c.kind === 'island' ? c.shape.maxShoreline : c.radius))) problems.push('a fishing spot is on land')
   check(`world "${id}": ${layout.islands.length} islands, ${layout.rocks.length} rocks, ${layout.buoys.length} buoys, ${layout.fishingSpots.length} spots`, problems.length === 0, problems.join('; '))
 }

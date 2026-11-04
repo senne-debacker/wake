@@ -12,7 +12,7 @@ const check = (name, ok, detail = '') => {
 }
 
 // Blender files that have no model in the game on purpose (work in progress, or a model loaded without a card).
-const ONLY_IN_BLENDER = { boats: [], worlds: ['w_004-reef'] }
+const ONLY_IN_BLENDER = { boats: [], worlds: [] }
 // b_001-tug, w_001-harbour: a letter for the kind, a number of three digits, a dash, the name (words joined by dashes)
 const ID = { boats: /^b_\d{3}-[a-z0-9]+(-[a-z0-9]+)*$/, worlds: /^w_\d{3}-[a-z0-9]+(-[a-z0-9]+)*$/ }
 

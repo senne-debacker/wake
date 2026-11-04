@@ -61,6 +61,14 @@ export const WATER = {
   flatColor: true,
 }
 
+// Round patches of the sea with a colour of their own, from a world file's Sea_ layers (tsl/seaZones.js).
+export const SEA_ZONES = {
+  count: 4, // at most this many patches in a world
+  edge: 0.1, // half the width of the soft edge, world units
+  trough: 0.8, // the patch colour is this much darker in the wave troughs ...
+  crest: 1.2, // ... and this much lighter on the crests (the facets keep their contrast)
+}
+
 // Boat conventions: local +Y is up, local -Z is forward (the bow), +X is starboard.
 export const BOAT = {
   length: 0.9,

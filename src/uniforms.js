@@ -1,6 +1,6 @@
 import { uniform, uniformArray } from 'three/tsl'
 import { Color, Vector3, Vector4 } from 'three/webgpu'
-import { PALETTE, WAKE, CLOUDS, WORLD, FISHING } from './config.js'
+import { PALETTE, WAKE, CLOUDS, WORLD, FISHING, SEA_ZONES } from './config.js'
 
 const CLOUD_FAIR = CLOUDS.fairColor
 
@@ -50,4 +50,9 @@ export const uniforms = {
   // The fishing spots: x, y, z = direction from the planet centre, w = how full of fish / bubbles it
   // is (0 = empty). Written by scene/fishingSpots.js; read by the bubbles and by the water's foam patch.
   fishingSpots: uniformArray(Array.from({ length: FISHING.spots.count }, () => new Vector4(0, 1, 0, 0)), 'vec4'),
+
+  // Round patches of the sea with a colour of their own (a world file's Sea_ layers, see tsl/seaZones.js): x, y, z = direction
+  // of the centre, w = cosine of the angular radius (2 = unused: nothing is that close). Painted in order, the last on top.
+  seaZones: uniformArray(Array.from({ length: SEA_ZONES.count }, () => new Vector4(0, 1, 0, 2)), 'vec4'),
+  seaZoneColors: uniformArray(Array.from({ length: SEA_ZONES.count }, () => new Color()), 'color'),
 }

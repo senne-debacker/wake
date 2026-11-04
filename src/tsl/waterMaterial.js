@@ -1,6 +1,6 @@
 import { MeshStandardNodeMaterial } from 'three/webgpu'
 import { float, vec3, color, positionLocal, positionView, smoothstep, mix, vertexStage } from 'three/tsl'
-import { PLANET, WATER, WAKE, BOAT_LIGHT, FISH, FISHING } from '../config.js'
+import { PLANET, WATER, WAKE, BOAT_LIGHT, FISH, FISHING, SEA_ZONES, SKY_KEYS } from '../config.js'
 import { Color } from 'three/webgpu'
 import { uniforms } from '../uniforms.js'
 import { waveNoise, waveAmplitude } from './waves.js'
@@ -13,6 +13,7 @@ import { rainHeight, surfaceBump } from './raindrops.js'
 import { wakeWaves } from './wakeWaves.js'
 import { QUALITY } from '../quality.js'
 import { fishShadow } from './fishShadows.js'
+import { seaZones } from './seaZones.js'
 
 export function createWaterMaterial(fish) {
   const material = new MeshStandardNodeMaterial({
@@ -42,7 +43,14 @@ export function createWaterMaterial(fish) {
   }
 
   const slope = smoothstep(float(-0.4), float(0.5), n) // 0 in troughs -> 1 near crests
-  const body = mix(uniforms.deepColor, uniforms.shallowColor, slope)
+  const normalBody = mix(uniforms.deepColor, uniforms.shallowColor, slope)
+  // Where the world paints the sea (a lagoon, deep water, tsl/seaZones.js): the patch colour is its colour by day. The light of the
+  // moment comes from the palette: today's palette divided by the day's, so a lagoon dims at night and greys under cloud with the rest.
+  const fragmentDir = positionLocal.normalize() // the interpolated position, per pixel
+  const zones = seaZones(fragmentDir)
+  const dayKey = SKY_KEYS[SKY_KEYS.length - 1]
+  const light = normalBody.div(mix(color(new Color(dayKey.deep)), color(new Color(dayKey.shallow)), slope))
+  const body = mix(normalBody, zones.tint.mul(mix(float(SEA_ZONES.trough), float(SEA_ZONES.crest), slope)).mul(light), zones.cover)
 
   const foamLevel = mix(float(WATER.foamThreshold), float(WATER.stormFoamThreshold), uniforms.storm)
   const waveFoam = smoothstep(foamLevel, foamLevel.add(0.1), n).max(shore.mul(0.7)).max(spots.mul(FISHING.spots.patchFoam)) // crests, shores and fishing spots
@@ -53,7 +61,6 @@ export function createWaterMaterial(fish) {
   // resolution, much finer than the triangles) and cut off sharply. The result is lacy foam with a
   // crisp edge, in a brighter white than the waves, with a lighter, aerated halo around it.
   const wake = vertexStage(wakeFoam(dir))
-  const fragmentDir = positionLocal.normalize() // the interpolated position, per pixel
   const lace = simplex3d(fragmentDir.mul(PLANET.radius * WAKE.breakupScale).add(vec3(0, 0, uniforms.time.mul(0.4))))
   const wakeMask = smoothstep(float(WAKE.edge[0]), float(WAKE.edge[1]), wake.add(lace.mul(WAKE.breakup)))
   const wakeHalo = smoothstep(float(0.04), float(0.3), wake).mul(WAKE.halo)

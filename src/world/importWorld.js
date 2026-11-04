@@ -1,6 +1,6 @@
 import { Vector3, Quaternion, Box3, Raycaster, Mesh } from 'three/webgpu'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
-import { PLANET, WORLD, BOAT } from '../config.js'
+import { PLANET, WORLD, BOAT, SEA_ZONES } from '../config.js'
 import { fromStart } from './layout.js'
 import { islandFrame, shorelineFromContour, CONTOUR_COUNT } from '../physics/islandShape.js'
 
@@ -16,7 +16,9 @@ import { islandFrame, shorelineFromContour, CONTOUR_COUNT } from '../physics/isl
 // The coastline of every island is measured from its mesh (rays down onto the land, outwards from the
 // island's centre), so the collisions follow what you see.
 //
-// Returns { start, islands, rocks, buoys, colliders, bodies, ocean, fishingSpots, imported } with
+// Water > Sea_<name>: optional round patches of the sea with their own colour (extras: sea_colour, centre, radius_to).
+//
+// Returns { start, islands, rocks, buoys, colliders, bodies, ocean, fishingSpots, seaZones, imported } with
 // `imported` = { scene, islands: [{ mesh }], trees, rocks, lighthouse: { position, quaternion } | null }.
 
 const R = PLANET.radius
@@ -121,6 +123,17 @@ export function layoutFromScene(scene) {
     })
   }
 
+  // ---- the sea's colours: the Sea_ layers under Water (the layers themselves are not shown, the water shader paints them) ----
+  // Their custom properties hold the colour, the centre (Blender axes) and the radius. Big ones first, so the small ones lie on top.
+  const seaZones = (find(scene, 'Water')?.children ?? [])
+    .filter((node) => /^Sea_/.test(node.name) && node.userData?.sea_colour && node.userData?.centre)
+    .map((node) => {
+      const [x, y, z] = node.userData.centre
+      return { name: node.name, dir: new Vector3(x, z, -y).normalize(), radius: node.userData.radius_to, color: node.userData.sea_colour }
+    })
+    .sort((a, b) => b.radius - a.radius)
+    .slice(0, SEA_ZONES.count)
+
   // ---- what the rest of the game reads (as in world/layout.js) -------------------------------------------
   const colliders = [
     ...islands.map((island) => ({ kind: 'island', dir: island.dir, shape: island.shape, reach: island.shape.maxShoreline + BOAT.shoreMargin * 2 })),
@@ -144,6 +157,7 @@ export function layoutFromScene(scene) {
     ocean,
     fishingSpots,
     harbour,
+    seaZones,
     imported: { scene, trees, lighthouse },
   }
 }

@@ -1,0 +1,17 @@
+id:           w_004-reef
+name:         The Reef
+description:  A sunny atoll: a broken ring of sand and pale reef round a huge shallow turquoise lagoon, with deep blue sea outside.
+price:        1500
+fish:         w_001-harbour
+anything special:
+  - Made from blender/worlds/w_004-reef.blend on top of the Wake base file. You arrive outside the main gap in
+    the ring; two more gaps lead in as well. Its Sea_ layers colour the water: turquoise lagoon, deep blue outside, the round
+    dark Blue Hole.
+  - The Palm Keys with two hammocks and the house plot, the Coral Gardens, Shipwreck Shoal with the bow of an old boat and a
+    crate of coral cuttings (Seedlings_Crate), and the Blue Hole ringed with coral.
+  - Marisol the dyer's stilt house with lines of dyed cloth. Her dock is the selling point (Dock_Marisol) and is solid
+    (the Marisol_Dock group).
+  - 25 coral clusters (Coral_nn, in Rocks so they are solid), all pale; each names its coloured material
+    (Reef_CoralColour_nn) for the replanting quest, which the game does not have yet.
+  - Markers the game does not read yet: Area_*, Quest_CoralBed_1-5, Quest_Seedlings, HousePlot and Resident_Marisol.
+  - It fishes the home waters' fish until it has its own set.
