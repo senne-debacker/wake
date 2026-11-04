@@ -1,0 +1,28 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Gudgeon</title>
+  <polygon points="27,30 13,21 18,30" fill="#796f4c"/>
+  <polygon points="27,30 18,30 13,39" fill="#675e41"/>
+  <polygon points="53.9,23.6 61,15.1 82.1,23.8" fill="#796f4c"/>
+  <polygon points="43.4,34.1 39.4,39.7 59.2,36.1" fill="#796f4c"/>
+  <polygon points="69.8,36.8 66.8,41.9 80.3,35.9" fill="#6a6243"/>
+  <polygon points="112,30 101.4,26 85.6,22.6 69.8,21 53.9,22.1 39,24.4 24,27.3 24,30" fill="#a89a6a"/>
+  <polygon points="112,30 101.4,33.8 85.6,37 69.8,38.3 53.9,37.2 39,35 24,32.3 24,30" fill="#e8e0c0"/>
+  <polygon points="39,24.4 53.9,22.1 69.8,21 85.6,22.6 85.6,30 69.8,30 53.9,30 39,30" fill="#baae82"/>
+  <polygon points="53.9,22.1 69.8,21 69.8,26.9" fill="#8d8159"/>
+  <polygon points="85.6,22.6 101.4,26 112,30 101.4,30" fill="#b4a87f"/>
+  <polygon points="53.9,37.2 69.8,38.3 85.6,37 85.6,31.1 53.9,31.1" fill="#efe9d3"/>
+  <circle cx="56.4" cy="33.7" r="1.2" fill="#4a4030"/>
+  <circle cx="75.8" cy="27.3" r="1.7" fill="#4a4030"/>
+  <circle cx="65.8" cy="28.4" r="1.3" fill="#4a4030"/>
+  <circle cx="88.7" cy="31.6" r="1.2" fill="#4a4030"/>
+  <circle cx="74.8" cy="31.7" r="0.9" fill="#4a4030"/>
+  <circle cx="86.4" cy="31.8" r="1.6" fill="#4a4030"/>
+  <circle cx="54" cy="27.2" r="1.2" fill="#4a4030"/>
+  <polygon points="82.1,29.6 73.1,32.5 81.1,33.8" fill="#6d6444"/>
+  <path d="M92.6 28.1 Q88.6 30 92.6 31.6" fill="none" stroke="#655c40" stroke-width="1.5"/>
+  <circle cx="103.2" cy="28.4" r="2.2" fill="#0b0f14"/>
+  <circle cx="104" cy="27.6" r="0.8" fill="#ffffff"/>
+  <path d="M108 32 Q116 36.3 108 39.9 M102 34 Q106 38.1 98 41.3" fill="none" stroke="#807b6a" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M109 32 Q114 34.5 105 37.7" fill="none" stroke="#807b6a" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M104 32.6 Q109 35.2 99 38.6" fill="none" stroke="#807b6a" stroke-width="1.6" stroke-linecap="round"/>
+</svg>

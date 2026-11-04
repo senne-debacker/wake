@@ -14,7 +14,8 @@
     "export:world": "node scripts/exportWorld.mjs",
     "models": "node scripts/buildModelLists.mjs",
     "export:fish": "node scripts/exportFish.mjs",
-    "export:ruins-fish": "node scripts/exportRuinsFish.mjs"
+    "export:ruins-fish": "node scripts/exportFishDesign.mjs ruins",
+    "export:riverlands-fish": "node scripts/exportFishDesign.mjs riverlands"
   },
   "devDependencies": {
     "vite": "^8.3.0"

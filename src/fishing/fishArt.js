@@ -22,6 +22,11 @@
 //   trailing true: two long trailing filaments      aura  colour: a faint halo round the whole fish
 //   bigMouth true: a wide dark mouth                jaw   true: a lower jaw that juts out and up    crestSize  size of the crest
 //   silhouette true: the same shape in one dark colour, for a fish that has not been caught yet
+// And for the river fish:
+//   eyeRing (a colour: a ring round the eye)   eyeScale (a bigger or smaller eye)   lateral (a colour: a stripe along the side)
+//   spotRow (n dots in a row, spotFrom / spotTo along the body, spotLine how far down)   spotRing (n dots in a ring)
+//   diagonal (with stripes: slanted bands, like a rope)   barbels as a number (4, 6...) and chinBarbel (one whisker)
+//   barbelWidth   dorsalSpots (a colour: dots on a sail fin)   tailSpot (a dark dot near the tail)   knot (a whisker tied in a knot)
 
 const clamp = (x, a, b) => Math.min(b, Math.max(a, x))
 const channel = (hex, i) => parseInt(hex.slice(1 + i * 2, 3 + i * 2), 16)
@@ -204,6 +209,7 @@ export function drawFish(art) {
     const a = at(0.28)
     const b = at(0.72)
     out.push(poly([[a.x, a.top + 2], [a.x + 4, a.top - dh * 1.6], [b.x - 6, a.top - dh * 1.25], [b.x, b.top + 2]], fin), poly([[a.x + 4, a.top - dh * 1.6], [(a.x + b.x) / 2, a.top - dh * 0.5], [b.x - 6, a.top - dh * 1.25]], lighter(fin, 0.2)))
+    if (art.dorsalSpots && !sil) for (const [px, py] of [[0.3, 0.95], [0.5, 0.78], [0.5, 1.1], [0.7, 0.9], [0.25, 0.7]]) out.push(`  <circle cx="${f(a.x + (b.x - a.x) * px)}" cy="${f(a.top - dh * py)}" r="1.6" fill="${art.dorsalSpots}"/>`)
   } else if (dorsal === 'spiny') {
     for (const [u0, u1] of [[0.3, 0.4], [0.4, 0.5], [0.5, 0.6], [0.6, 0.7]]) out.push(place(u0, u1, dh * (0.9 + u0 * 0.3), 0.1))
   } else if (dorsal === 'long') {
@@ -236,7 +242,8 @@ export function drawFish(art) {
     const half = (0.42 / bands) * 0.3
     const a = at(u - half)
     const b = at(u + half)
-    decor(poly([[a.x, a.top + 1], [b.x, b.top + 1], [b.x, b.bottom - 1], [a.x, a.bottom - 1]], accent, ' opacity="0.85"'))
+    const lean = art.diagonal ? 3 : 0
+    decor(poly([[a.x + lean, a.top + 1], [b.x + lean, b.top + 1], [b.x - lean, b.bottom - 1], [a.x - lean, a.bottom - 1]], accent, ' opacity="0.85"'))
   }
   const dots = random(art.seed)
   for (let i = 0; i < (art.spots ?? 0); i++) {
@@ -249,6 +256,30 @@ export function drawFish(art) {
     const p = at(0.28 + (0.5 * i) / Math.max(1, plates - 1))
     const y = p.top + (p.bottom - p.top) * 0.28
     decor(poly([[p.x - 2.6, y], [p.x, y - 3.2], [p.x + 2.6, y], [p.x, y + 3.2]], accent))
+  }
+  if (art.lateral) {
+    const a = at(0.12)
+    const b = at(0.86)
+    decor(poly([[a.x, a.mid - 1.5], [b.x, b.mid - 1.5], [b.x, b.mid + 1.5], [a.x, a.mid + 1.5]], art.lateral))
+  }
+  if (art.spotRow) {
+    const from = art.spotFrom ?? 0.3
+    const to = art.spotTo ?? 0.8
+    for (let i = 0; i < art.spotRow; i++) {
+      const p = at(from + ((to - from) * i) / Math.max(1, art.spotRow - 1))
+      decor(`  <circle cx="${f(p.x)}" cy="${f(p.top + (p.bottom - p.top) * (art.spotLine ?? 0.4))}" r="${f(clamp(h * 0.14, 1.4, 2.4))}" fill="${accent}"/>`)
+    }
+  }
+  if (art.spotRing) {
+    for (let i = 0; i < art.spotRing; i++) {
+      const angle = (i / art.spotRing) * Math.PI * 2
+      const p = at(0.5 + Math.cos(angle) * 0.17)
+      decor(`  <circle cx="${f(p.x)}" cy="${f(p.top + (p.bottom - p.top) * (0.5 + Math.sin(angle) * 0.3))}" r="2.3" fill="${art.spotRingColour ?? '#f6f4e8'}"/>`)
+    }
+  }
+  if (art.tailSpot) {
+    const p = at(0.14)
+    decor(`  <circle cx="${f(p.x)}" cy="${f(p.mid - h * 0.1)}" r="${f(clamp(h * 0.16, 1.8, 3))}" fill="${accent}"/>`)
   }
   if (art.spikes) {
     for (let i = 0; i < 6; i++) {
@@ -310,7 +341,8 @@ export function drawFish(art) {
   decor(`  <path d="M${f(gill.x)} ${f(gill.top + 4)} Q${f(gill.x - 4)} ${f(gill.mid)} ${f(gill.x)} ${f(gill.bottom - 4)}" fill="none" stroke="${darker(back, 0.4)}" stroke-width="1.5"/>`)
   const eyeAt = at(0.9)
   const eye = [eyeAt.x, eyeAt.mid - h * 0.18]
-  const eyeR = clamp(h * 0.2, 2.2, 4.2)
+  const eyeR = clamp(h * 0.2, 2.2, 4.2) * (art.eyeScale ?? 1)
+  if (art.eyeRing) decor(`  <circle cx="${f(eye[0])}" cy="${f(eye[1])}" r="${f(eyeR * 1.5)}" fill="${art.eyeRing}"/>`)
   if (art.glow && !art.lure) decor(`  <circle cx="${f(eye[0])}" cy="${f(eye[1])}" r="${f(eyeR * 2.3)}" fill="${art.glow}" opacity="0.3"/>`)
   decor(...eyeMarkup(eye[0], eye[1], eyeR, art))
 
@@ -318,6 +350,22 @@ export function drawFish(art) {
   const mouth = [nose, centre(nose)]
   if (art.barbels) {
     out.push(`  <path d="M${f(nose - 4)} ${f(mouth[1] + 2)} Q${f(nose + 4)} ${f(mouth[1] + h * 0.7)} ${f(nose - 4)} ${f(mouth[1] + h * 1.1)} M${f(nose - 10)} ${f(mouth[1] + 4)} Q${f(nose - 6)} ${f(mouth[1] + h * 0.9)} ${f(nose - 14)} ${f(mouth[1] + h * 1.25)}" fill="none" stroke="${darker(belly, 0.45)}" stroke-width="1.8" stroke-linecap="round"/>`)
+  }
+  if (typeof art.barbels === 'number') {
+    const colour = darker(belly, 0.45)
+    for (let i = 0; i < art.barbels; i++) {
+      const x0 = nose - 3 - i * 5
+      const y0 = mouth[1] + 2 + i * 0.6
+      out.push(`  <path d="M${f(x0)} ${f(y0)} Q${f(x0 + 5)} ${f(mouth[1] + h * (0.5 + i * 0.08))} ${f(x0 - 4 - i)} ${f(mouth[1] + h * (0.85 + i * 0.1))}" fill="none" stroke="${colour}" stroke-width="${art.barbelWidth ?? 1.6}" stroke-linecap="round"/>`)
+    }
+  }
+  if (art.chinBarbel) out.push(`  <path d="M${f(nose - 14)} ${f(mouth[1] + h * 0.55)} Q${f(nose - 12)} ${f(mouth[1] + h * 0.9)} ${f(nose - 17)} ${f(mouth[1] + h * 1.1)}" fill="none" stroke="${darker(belly, 0.45)}" stroke-width="1.8" stroke-linecap="round"/>`)
+  if (art.knot) {
+    // two long whiskers under the chin, one of them tied in a loose knot
+    const colour = darker(belly, 0.5)
+    const m = mouth[1]
+    out.push(`  <path d="M${f(nose - 6)} ${f(m + 5)} C${f(nose - 8)} ${f(m + 15)} ${f(nose - 18)} ${f(m + 19)} ${f(nose - 25)} ${f(m + 16)} C${f(nose - 32)} ${f(m + 12)} ${f(nose - 26)} ${f(m + 6)} ${f(nose - 20)} ${f(m + 10)} C${f(nose - 13)} ${f(m + 15)} ${f(nose - 16)} ${f(m + 26)} ${f(nose - 24)} ${f(m + 28)}" fill="none" stroke="${colour}" stroke-width="2.2" stroke-linecap="round"/>`)
+    out.push(`  <path d="M${f(nose - 2)} ${f(m + 5)} C${f(nose - 1)} ${f(m + 16)} ${f(nose - 8)} ${f(m + 24)} ${f(nose - 15)} ${f(m + 27)}" fill="none" stroke="${colour}" stroke-width="2.2" stroke-linecap="round"/>`)
   }
   if (art.teeth) {
     const row = [0, 1, 2, 3, 4].map((i) => {

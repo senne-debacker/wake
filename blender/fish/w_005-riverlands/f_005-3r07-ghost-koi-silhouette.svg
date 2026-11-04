@@ -1,0 +1,17 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Ghost Koi (silhouette)</title>
+  <polygon points="29,27 11,10.5 7.3,30" fill="#222831"/>
+  <polygon points="29,33 7.3,30 11,49.6" fill="#222831"/>
+  <polygon points="54.6,14.5 61.3,4 81.4,16.3" fill="#222831"/>
+  <polygon points="44.5,42.5 40.5,51.7 59.6,45.5" fill="#222831"/>
+  <polygon points="69.7,45.5 66.7,53.8 79.8,43.8" fill="#222831"/>
+  <polygon points="110,30 99.9,22.4 84.8,15.6 69.7,12.1 54.6,13 40.3,18.1 26,25.2 26,30" fill="#222831"/>
+  <polygon points="110,30 99.9,38.5 84.8,44.5 69.7,47 54.6,47 40.3,42.8 26,35.1 26,30" fill="#222831"/>
+  <polygon points="40.3,18.1 54.6,13 69.7,12.1 84.8,15.6 84.8,30 69.7,30 54.6,30 40.3,30" fill="#222831"/>
+  <polygon points="54.6,13 69.7,12.1 69.7,24.1" fill="#222831"/>
+  <polygon points="84.8,15.6 99.9,22.4 110,30 99.9,30" fill="#222831"/>
+  <polygon points="54.6,47 69.7,47 84.8,44.5 84.8,32 54.6,32" fill="#222831"/>
+  <path d="M106 32 Q114 41.9 106 48.7 M100 34 Q104 45.3 96 51.3" fill="none" stroke="#222831" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M107 32 Q112 38.5 103 44.5" fill="none" stroke="#222831" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M102 32.6 Q107 39.9 97 46.2" fill="none" stroke="#222831" stroke-width="1.6" stroke-linecap="round"/>
+</svg>

@@ -82,6 +82,18 @@ const mulberry32 = (seed) => () => {
   }
   check('database: every picture is a clean, balanced 120 x 60 inline svg without ids, references or scripts', problems.length === 0, problems.join('; '))
   check('database: every species has a SVG file in public/models/fish (npm run export:fish)', FISH_SPECIES.every((f) => existsSync(new URL(`../public/models/fish/${f.set}/${f.id}.svg`, import.meta.url))), FISH_SPECIES.filter((f) => !existsSync(new URL(`../public/models/fish/${f.set}/${f.id}.svg`, import.meta.url))).map((f) => f.id).join())
+  {
+    // The fish designed for the other worlds (not in the game yet): the ids follow the convention and the Riverlands has the split every world has.
+    const { RIVERLANDS } = await import('../src/fishing/species/riverlands.js')
+    const { SUNKEN_RUINS } = await import('../src/fishing/species/sunkenRuins.js')
+    const RANK = { common: '1c', uncommon: '2u', rare: '3r', epic: '4e', legendary: '5l' }
+    for (const [list, world, field] of [[RIVERLANDS, '005', 'rarity'], [SUNKEN_RUINS, '003', 'gameRarity']]) {
+      const bad = list.filter((f) => !new RegExp(`^f_${world}-${RANK[f[field]]}\\d{2}-[a-z0-9]+(-[a-z0-9]+)*$`).test(f.id))
+      check(`designed fish of world ${world}: every id follows f_${world}-<rarity><number>-<name>, none is twice, none clashes with the game`, bad.length === 0 && new Set(list.map((f) => f.id)).size === list.length && list.every((f) => !FISH_BY_ID.has(f.id)), bad.map((f) => f.id).join())
+    }
+    const split = Object.keys(RARITIES).map((r) => RIVERLANDS.filter((f) => f.rarity === r).length).join('/')
+    check('designed fish: The Riverlands has 10 / 9 / 7 / 5 / 1 fish like every world, one legendary', split === '10/9/7/5/1', split)
+  }
   check('database: drop rates add up to 1 and difficulty rises with rarity', Math.abs(Object.values(RARITIES).reduce((sum, r) => sum + r.rate, 0) - 1) < 1e-9 && Object.values(RARITIES).every((r, i, all) => i === 0 || (r.difficulty > all[i - 1].difficulty && r.rate < all[i - 1].rate)))
 
   // Rolling: the observed shares match the rates, every species can come up, weights stay in range.

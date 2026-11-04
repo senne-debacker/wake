@@ -1,0 +1,23 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Mudpout</title>
+  <polygon points="25,27 9.7,18.8 6.6,30" fill="#4c3523"/>
+  <polygon points="25,33 6.6,30 9.7,41.2" fill="#412d1e"/>
+  <polygon points="51.9,22.3 59,8.3 80.1,17.8" fill="#4c3523"/>
+  <polygon points="41.4,34.8 37.4,42.6 57.2,37.5" fill="#4c3523"/>
+  <polygon points="67.8,39.1 64.8,46.2 78.3,40.9" fill="#432f1f"/>
+  <polygon points="110,30 99.4,19.1 83.6,16 67.8,17.4 51.9,20.8 37,24.1 22,27.2 22,30" fill="#6a4a30"/>
+  <polygon points="110,30 99.4,40.4 83.6,43.3 67.8,40.6 51.9,38.1 37,35.6 22,32.8 22,30" fill="#a88358"/>
+  <polygon points="37,24.1 51.9,20.8 67.8,17.4 83.6,16 83.6,30 67.8,30 51.9,30 37,30" fill="#7b5a3b"/>
+  <polygon points="51.9,20.8 67.8,17.4 67.8,25.1" fill="#593e28"/>
+  <polygon points="83.6,16 99.4,19.1 110,30 99.4,30" fill="#7f634d"/>
+  <polygon points="51.9,38.1 67.8,40.6 83.6,43.3 83.6,31.7 51.9,31.7" fill="#c2a88a"/>
+  <polygon points="80.1,29.3 71.1,33.9 79.1,35.9" fill="#443020"/>
+  <path d="M90.6 21.4 Q86.6 30 90.6 38" fill="none" stroke="#402c1d" stroke-width="1.5"/>
+  <circle cx="101.2" cy="27.5" r="2.8" fill="#0b0f14"/>
+  <circle cx="102.2" cy="26.5" r="1.1" fill="#ffffff"/>
+  <path d="M106 32 Q114 39.8 106 45.4 M100 34 Q104 42.6 96 47.5" fill="none" stroke="#5c4830" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M107 32 Q112 37 103 41.9" fill="none" stroke="#5c4830" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M102 32.6 Q107 38.1 97 43.3" fill="none" stroke="#5c4830" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M97 33.2 Q102 39.2 91 44.7" fill="none" stroke="#5c4830" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M92 33.8 Q97 40.4 85 46.1" fill="none" stroke="#5c4830" stroke-width="1.8" stroke-linecap="round"/>
+</svg>

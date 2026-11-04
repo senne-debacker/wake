@@ -1,0 +1,18 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Golden Rudd</title>
+  <polygon points="29,30 9.5,15 16.9,30" fill="#d0382a"/>
+  <polygon points="29,30 16.9,30 9.5,45" fill="#b13024"/>
+  <polygon points="54.6,16.5 61.3,5 81.4,18.1" fill="#d0382a"/>
+  <polygon points="44.5,40.9 40.5,49.1 59.6,43.5" fill="#d0382a"/>
+  <polygon points="69.7,43.5 66.7,51 79.8,42" fill="#b73125"/>
+  <polygon points="110,30 99.9,23.3 84.8,17.3 69.7,14.3 54.6,15 40.3,19.5 26,25.8 26,30" fill="#e0b030"/>
+  <polygon points="110,30 99.9,37.5 84.8,42.8 69.7,45 54.6,45 40.3,41.3 26,34.5 26,30" fill="#f6dd7a"/>
+  <polygon points="40.3,19.5 54.6,15 69.7,14.3 84.8,17.3 84.8,30 69.7,30 54.6,30 40.3,30" fill="#e6bd45"/>
+  <polygon points="54.6,15 69.7,14.3 69.7,24.8" fill="#bc9428"/>
+  <polygon points="84.8,17.3 99.9,23.3 110,30 99.9,30" fill="#e4bb4d"/>
+  <polygon points="54.6,45 69.7,45 84.8,42.8 84.8,31.8 54.6,31.8" fill="#f9e7a2"/>
+  <polygon points="81.4,29.3 72.4,34.2 80.4,36.3" fill="#bb3226"/>
+  <path d="M91.5 23.9 Q87.5 30 91.5 36.4" fill="none" stroke="#866a1d" stroke-width="1.5"/>
+  <circle cx="101.6" cy="27.3" r="3" fill="#0b0f14"/>
+  <circle cx="102.7" cy="26.3" r="1.1" fill="#ffffff"/>
+</svg>

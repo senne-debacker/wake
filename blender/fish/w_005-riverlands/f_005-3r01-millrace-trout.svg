@@ -1,0 +1,27 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Millrace Trout</title>
+  <polygon points="27,30 8.6,16 15.5,30" fill="#634c2b"/>
+  <polygon points="27,30 15.5,30 8.6,44" fill="#544125"/>
+  <polygon points="53.9,19.2 61,8.7 82.1,19.5" fill="#634c2b"/>
+  <polygon points="43.4,37.2 39.4,45 59.2,40.3" fill="#634c2b"/>
+  <polygon points="69.8,41.4 66.8,48.5 80.3,40.1" fill="#574326"/>
+  <polygon points="112,30 101.4,23.7 85.6,18.5 69.8,16 53.9,17.7 39,21.3 24,25.8 24,30" fill="#8a6a3c"/>
+  <polygon points="112,30 101.4,35.9 85.6,40.9 69.8,42.9 53.9,41.2 39,37.7 24,33.6 24,30" fill="#e8b84a"/>
+  <polygon points="39,21.3 53.9,17.7 69.8,16 85.6,18.5 85.6,30 69.8,30 53.9,30 39,30" fill="#a48040"/>
+  <polygon points="53.9,17.7 69.8,16 69.8,25.1" fill="#745932"/>
+  <polygon points="85.6,18.5 101.4,23.7 112,30 101.4,30" fill="#9a7f57"/>
+  <polygon points="53.9,41.2 69.8,42.9 85.6,40.9 85.6,31.7 53.9,31.7" fill="#efcd80"/>
+  <circle cx="86" cy="30" r="1.7" fill="#c03a2a"/>
+  <circle cx="71.1" cy="27.6" r="1" fill="#c03a2a"/>
+  <circle cx="53.7" cy="36.2" r="1.4" fill="#c03a2a"/>
+  <circle cx="52" cy="32.8" r="1.4" fill="#c03a2a"/>
+  <circle cx="84.5" cy="24.2" r="1.5" fill="#c03a2a"/>
+  <circle cx="81.4" cy="28.9" r="1.2" fill="#c03a2a"/>
+  <circle cx="61.2" cy="25" r="1.6" fill="#c03a2a"/>
+  <circle cx="86" cy="33.7" r="1.4" fill="#c03a2a"/>
+  <circle cx="86.3" cy="31.5" r="1.8" fill="#c03a2a"/>
+  <polygon points="82.1,29.3 73.1,33.9 81.1,35.9" fill="#594427"/>
+  <path d="M92.6 24.8 Q88.6 30 92.6 34.7" fill="none" stroke="#534024" stroke-width="1.5"/>
+  <circle cx="103.2" cy="27.5" r="2.8" fill="#0b0f14"/>
+  <circle cx="104.2" cy="26.5" r="1.1" fill="#ffffff"/>
+</svg>

@@ -1,0 +1,30 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Old Knot</title>
+  <polygon points="25,27 6,16.4 2,30" fill="#54463a"/>
+  <polygon points="25,33 2,30 6,43.6" fill="#473c31"/>
+  <polygon points="51.9,17.6 59,-0.5 80.1,11" fill="#54463a"/>
+  <polygon points="41.4,38 37.4,49 57.2,41.9" fill="#54463a"/>
+  <polygon points="67.8,44.5 64.8,54.4 78.3,47.1" fill="#4a3e33"/>
+  <polygon points="110,30 99.4,13.6 83.6,9 67.8,11.1 51.9,16.1 37,21.2 22,25.8 22,30" fill="#6a5a48"/>
+  <polygon points="110,30 99.4,45.5 83.6,50 67.8,46 51.9,42.2 37,38.4 22,34.2 22,30" fill="#a89878"/>
+  <polygon points="37,21.2 51.9,16.1 67.8,11.1 83.6,9 83.6,30 67.8,30 51.9,30 37,30" fill="#7b6b55"/>
+  <polygon points="51.9,16.1 67.8,11.1 67.8,22.7" fill="#594c3c"/>
+  <polygon points="83.6,9 99.4,13.6 110,30 99.4,30" fill="#7f7162"/>
+  <polygon points="51.9,42.2 67.8,46 83.6,50 83.6,32.5 51.9,32.5" fill="#c2b7a1"/>
+  <circle cx="69.6" cy="20.4" r="1.8" fill="#4a3c2c"/>
+  <circle cx="64.4" cy="28.8" r="1.6" fill="#4a3c2c"/>
+  <circle cx="83.6" cy="31.7" r="2" fill="#4a3c2c"/>
+  <circle cx="57.4" cy="33.9" r="2.3" fill="#4a3c2c"/>
+  <circle cx="48.2" cy="29.3" r="1.8" fill="#4a3c2c"/>
+  <circle cx="74.4" cy="21.2" r="2.2" fill="#4a3c2c"/>
+  <circle cx="66.3" cy="22" r="1.5" fill="#4a3c2c"/>
+  <circle cx="86.2" cy="40.6" r="1.6" fill="#4a3c2c"/>
+  <circle cx="64.4" cy="37.7" r="1.7" fill="#4a3c2c"/>
+  <polygon points="32.6,28.5 97.7,28.5 97.7,31.5 32.6,31.5" fill="#8a7a64"/>
+  <polygon points="80.1,29 71.1,35.9 79.1,38.8" fill="#4c3f34"/>
+  <path d="M90.6 15.1 Q86.6 30 90.6 44" fill="none" stroke="#40362b" stroke-width="1.5"/>
+  <circle cx="101.2" cy="26.2" r="4.2" fill="#0b0f14"/>
+  <circle cx="102.7" cy="24.8" r="1.6" fill="#ffffff"/>
+  <path d="M104 35 C102 45 92 49 85 46 C78 42 84 36 90 40 C97 45 94 56 86 58" fill="none" stroke="#544c3c" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M108 35 C109 46 102 54 95 57" fill="none" stroke="#544c3c" stroke-width="2.2" stroke-linecap="round"/>
+</svg>

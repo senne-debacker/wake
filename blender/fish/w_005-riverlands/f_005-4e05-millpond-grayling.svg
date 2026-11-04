@@ -1,0 +1,24 @@
+<svg width="480" height="240" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+  <title>Millpond Grayling</title>
+  <polygon points="27,30 10.8,18 16.7,30" fill="#a898d4"/>
+  <polygon points="27,30 16.7,30 10.8,42" fill="#8f81b4"/>
+  <polygon points="48.6,22.5 52.6,-1.9 81.4,3 87.4,22.7" fill="#a898d4"/>
+  <polygon points="52.6,-1.9 68,13.5 81.4,3" fill="#b9addd"/>
+  <circle cx="60.3" cy="7.2" r="1.6" fill="#e8b83a"/>
+  <circle cx="68" cy="9.6" r="1.6" fill="#e8b83a"/>
+  <circle cx="68" cy="5.1" r="1.6" fill="#e8b83a"/>
+  <circle cx="75.7" cy="7.9" r="1.6" fill="#e8b83a"/>
+  <circle cx="58.3" cy="10.7" r="1.6" fill="#e8b83a"/>
+  <polygon points="43.4,36 39.4,42.9 59.2,38.6" fill="#a898d4"/>
+  <polygon points="69.8,39.5 66.8,45.8 80.3,38.4" fill="#9486bb"/>
+  <polygon points="112,30 101.4,24.6 85.6,20.2 69.8,18 53.9,19.4 39,22.6 24,26.4 24,30" fill="#8a7ac0"/>
+  <polygon points="112,30 101.4,35 85.6,39.4 69.8,41 53.9,39.6 39,36.6 24,33.1 24,30" fill="#d6d0ec"/>
+  <polygon points="39,22.6 53.9,19.4 69.8,18 85.6,20.2 85.6,30 69.8,30 53.9,30 39,30" fill="#9f92cc"/>
+  <polygon points="53.9,19.4 69.8,18 69.8,25.8" fill="#7466a1"/>
+  <polygon points="85.6,20.2 101.4,24.6 112,30 101.4,30" fill="#9a8dc9"/>
+  <polygon points="53.9,39.6 69.8,41 85.6,39.4 85.6,31.4 53.9,31.4" fill="#e2def2"/>
+  <polygon points="82.1,29.4 73.1,33.4 81.1,35" fill="#9789bf"/>
+  <path d="M92.6 26.1 Q88.6 30 92.6 33.4" fill="none" stroke="#534973" stroke-width="1.5"/>
+  <circle cx="103.2" cy="27.8" r="2.4" fill="#0b0f14"/>
+  <circle cx="104" cy="27" r="0.9" fill="#ffffff"/>
+</svg>

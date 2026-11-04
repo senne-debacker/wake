@@ -1,0 +1,636 @@
+{
+  "world": "The Riverlands (Planet 3)",
+  "notes": [
+    "All 32 names are as in the brief (10 common, 9 uncommon, 7 rare, 5 epic, 1 legendary), the same split as every world of the game.",
+    "The files are named by the game’s ids (f_005-1c01-river-roach, and -silhouette), not <FishName>.svg: see blender/NAMING.md.",
+    "Not in the game yet: the card of the world still says it fishes the Harbour’s fish. Rod groups, map areas and the conditions (lamp on, the wheel turning again, fast water after rain) are not mechanics of the game, and the game’s fish are priced per kilo by rarity, not per fish: they are written down here as designed.",
+    "The Golden Mahseer: the game has rain, so its condition stays \"dawn, in fast water after rain\"."
+  ],
+  "areas": [
+    "River Mouth",
+    "The Meanders",
+    "Bram's Mill",
+    "Willow Lake",
+    "The Narrows",
+    "Reedmarsh",
+    "Stone Bridge",
+    "Wide Water"
+  ],
+  "priceRanges": {
+    "common": "10-24",
+    "uncommon": "45-80",
+    "rare": "150-220",
+    "epic": "260-400",
+    "legendary": "900"
+  },
+  "fish": [
+    {
+      "id": "f_005-1c01-river-roach",
+      "name": "River Roach",
+      "rarity": "common",
+      "gameRarity": "common",
+      "rodGroup": "none",
+      "where": "Anywhere",
+      "when": "Any time",
+      "weightKg": {
+        "min": 0.1,
+        "max": 0.4
+      },
+      "weight": "100 g to 400 g",
+      "valueCoins": 12,
+      "logbookLine": "Small, silver, and everywhere. The river’s welcome committee.",
+      "illustration": "f_005-1c01-river-roach.svg",
+      "silhouette": "f_005-1c01-river-roach-silhouette.svg",
+      "shapes": 16
+    },
+    {
+      "id": "f_005-1c02-mudpout",
+      "name": "Mudpout",
+      "rarity": "common",
+      "gameRarity": "common",
+      "rodGroup": "bottom",
+      "where": "Anywhere",
+      "when": "Any time",
+      "weightKg": {
+        "min": 0.3,
+        "max": 1.5
+      },
+      "weight": "300 g to 1.5 kg",
+      "valueCoins": 14,
+      "logbookLine": "Lives in the mud, likes the mud, will tell you about the mud.",
+      "illustration": "f_005-1c02-mudpout.svg",
+      "silhouette": "f_005-1c02-mudpout-silhouette.svg",
+      "shapes": 20
+    },
+    {
+      "id": "f_005-1c03-reed-perch",
+      "name": "Reed Perch",
+      "rarity": "common",
+      "gameRarity": "common",
+      "rodGroup": "none",
+      "where": "Anywhere",
+      "when": "Any time",
+      "weightKg": {
+        "min": 0.2,
+        "max": 1
+      },
+      "weight": "200 g to 1 kg",
+      "valueCoins": 18,
+      "logbookLine": "Hides in the reeds and dares you to find it.",
+      "illustration": "f_005-1c03-reed-perch.svg",
+      "silhouette": "f_005-1c03-reed-perch-silhouette.svg",
+      "shapes": 22
+    },
+    {
+      "id": "f_005-1c04-silver-bream",
+      "name": "Silver Bream",
+      "rarity": "common",
+      "gameRarity": "common",
+      "rodGroup": "none",
+      "where": "Anywhere",
+      "when": "Any time",
+      "weightKg": {
+        "min": 0.3,
+        "max": 1.2
+      },
+      "weight": "300 g to 1.2 kg",
+      "valueCoins": 16,
+      "logbookLine": "Flat as a dinner plate and about as shiny.",
+      "illustration": "f_005-1c04-silver-bream.svg",
+      "silhouette": "f_005-1c04-silver-bream-silhouette.svg",
+      "shapes": 29
+    },
+    {
+      "id": "f_005-1c05-gudgeon",
+      "name": "Gudgeon",
+      "rarity": "common",
+      "gameRarity": "common",
+      "rodGroup": "bottom",
+      "where": "Anywhere",
+      "when": "Any time",
+      "weightKg": {
+        "min": 0.05,
+        "max": 0.2
+      },
+      "weight": "50 g to 200 g",
+      "valueCoins": 10,
+      "logbookLine": "Tiny, curious, and always first to the bait.",
+      "illustration": "f_005-1c05-gudgeon.svg",
+      "silhouette": "f_005-1c05-gudgeon-silhouette.svg",
+      "shapes": 25
+    },
+    {
+      "id": "f_005-1c06-brook-minnow",
+      "name": "Brook Minnow",
+      "rarity": "common",
+      "gameRarity": "common",
+      "rodGroup": "none",
+      "where": "Anywhere",
+      "when": "Any time",
+      "weightKg": {
+        "min": 0.02,
+        "max": 0.08
+      },
+      "weight": "20 g to 80 g",
+      "valueCoins": 11,
+      "logbookLine": "Barely a fish. Very proud of it anyway.",
+      "illustration": "f_005-1c06-brook-minnow.svg",
+      "silhouette": "f_005-1c06-brook-minnow-silhouette.svg",
+      "shapes": 16
+    },
+    {
+      "id": "f_005-1c07-surface-bleak",
+      "name": "Surface Bleak",
+      "rarity": "common",
+      "gameRarity": "common",
+      "rodGroup": "none",
+      "where": "Anywhere",
+      "when": "Any time",
+      "weightKg": {
+        "min": 0.02,
+        "max": 0.1
+      },
+      "weight": "20 g to 100 g",
+      "valueCoins": 10,
+      "logbookLine": "Flickers at the surface like someone’s dropping coins.",
+      "illustration": "f_005-1c07-surface-bleak.svg",
+      "silhouette": "f_005-1c07-surface-bleak-silhouette.svg",
+      "shapes": 15
+    },
+    {
+      "id": "f_005-1c08-spotted-dace",
+      "name": "Spotted Dace",
+      "rarity": "common",
+      "gameRarity": "common",
+      "rodGroup": "none",
+      "where": "Anywhere",
+      "when": "Any time",
+      "weightKg": {
+        "min": 0.1,
+        "max": 0.3
+      },
+      "weight": "100 g to 300 g",
+      "valueCoins": 13,
+      "logbookLine": "Quick, tidy and never late.",
+      "illustration": "f_005-1c08-spotted-dace.svg",
+      "silhouette": "f_005-1c08-spotted-dace-silhouette.svg",
+      "shapes": 22
+    },
+    {
+      "id": "f_005-1c09-stone-loach",
+      "name": "Stone Loach",
+      "rarity": "common",
+      "gameRarity": "common",
+      "rodGroup": "bottom",
+      "where": "Anywhere",
+      "when": "Any time",
+      "weightKg": {
+        "min": 0.02,
+        "max": 0.1
+      },
+      "weight": "20 g to 100 g",
+      "valueCoins": 12,
+      "logbookLine": "Looks exactly like a pebble until it doesn’t.",
+      "illustration": "f_005-1c09-stone-loach.svg",
+      "silhouette": "f_005-1c09-stone-loach-silhouette.svg",
+      "shapes": 32
+    },
+    {
+      "id": "f_005-1c10-prickle-ruffe",
+      "name": "Prickle Ruffe",
+      "rarity": "common",
+      "gameRarity": "common",
+      "rodGroup": "bottom",
+      "where": "Anywhere",
+      "when": "Any time",
+      "weightKg": {
+        "min": 0.05,
+        "max": 0.2
+      },
+      "weight": "50 g to 200 g",
+      "valueCoins": 14,
+      "logbookLine": "Prickly to hold, sweet-natured underneath.",
+      "illustration": "f_005-1c10-prickle-ruffe.svg",
+      "silhouette": "f_005-1c10-prickle-ruffe-silhouette.svg",
+      "shapes": 26
+    },
+    {
+      "id": "f_005-2u01-rope-eel",
+      "name": "Rope Eel",
+      "rarity": "uncommon",
+      "gameRarity": "uncommon",
+      "rodGroup": "night",
+      "where": "Anywhere",
+      "when": "Night",
+      "weightKg": {
+        "min": 0.8,
+        "max": 3
+      },
+      "weight": "800 g to 3 kg",
+      "valueCoins": 65,
+      "logbookLine": "Bram swears he didn’t name it. Bram named it.",
+      "illustration": "f_005-2u01-rope-eel.svg",
+      "silhouette": "f_005-2u01-rope-eel-silhouette.svg",
+      "shapes": 27
+    },
+    {
+      "id": "f_005-2u02-golden-tench",
+      "name": "Golden Tench",
+      "rarity": "uncommon",
+      "gameRarity": "uncommon",
+      "rodGroup": "none",
+      "where": "Anywhere",
+      "when": "Dusk",
+      "weightKg": {
+        "min": 1,
+        "max": 3
+      },
+      "weight": "1 kg to 3 kg",
+      "valueCoins": 55,
+      "logbookLine": "Glows like old brass in the evening light.",
+      "illustration": "f_005-2u02-golden-tench.svg",
+      "silhouette": "f_005-2u02-golden-tench-silhouette.svg",
+      "shapes": 16
+    },
+    {
+      "id": "f_005-2u03-striped-zander",
+      "name": "Striped Zander",
+      "rarity": "uncommon",
+      "gameRarity": "uncommon",
+      "rodGroup": "night",
+      "where": "Anywhere",
+      "when": "Night",
+      "weightKg": {
+        "min": 1.5,
+        "max": 4
+      },
+      "weight": "1.5 kg to 4 kg",
+      "valueCoins": 75,
+      "logbookLine": "Sees in the dark better than you do. Knows it, too.",
+      "illustration": "f_005-2u03-striped-zander.svg",
+      "silhouette": "f_005-2u03-striped-zander-silhouette.svg",
+      "shapes": 23
+    },
+    {
+      "id": "f_005-2u04-golden-rudd",
+      "name": "Golden Rudd",
+      "rarity": "uncommon",
+      "gameRarity": "uncommon",
+      "rodGroup": "none",
+      "where": "Anywhere",
+      "when": "Day",
+      "weightKg": {
+        "min": 0.4,
+        "max": 1.5
+      },
+      "weight": "400 g to 1.5 kg",
+      "valueCoins": 48,
+      "logbookLine": "Sunbathes near the surface on nice days.",
+      "illustration": "f_005-2u04-golden-rudd.svg",
+      "silhouette": "f_005-2u04-golden-rudd-silhouette.svg",
+      "shapes": 15
+    },
+    {
+      "id": "f_005-2u05-bristle-barbel",
+      "name": "Bristle Barbel",
+      "rarity": "uncommon",
+      "gameRarity": "uncommon",
+      "rodGroup": "bottom",
+      "where": "Anywhere",
+      "when": "Any time",
+      "weightKg": {
+        "min": 1,
+        "max": 4
+      },
+      "weight": "1 kg to 4 kg",
+      "valueCoins": 60,
+      "logbookLine": "Sweeps the riverbed like it’s expecting guests.",
+      "illustration": "f_005-2u05-bristle-barbel.svg",
+      "silhouette": "f_005-2u05-bristle-barbel-silhouette.svg",
+      "shapes": 20
+    },
+    {
+      "id": "f_005-2u06-mirror-chub",
+      "name": "Mirror Chub",
+      "rarity": "uncommon",
+      "gameRarity": "uncommon",
+      "rodGroup": "none",
+      "where": "Anywhere",
+      "when": "Any time",
+      "weightKg": {
+        "min": 0.5,
+        "max": 2.5
+      },
+      "weight": "500 g to 2.5 kg",
+      "valueCoins": 50,
+      "logbookLine": "Eats anything. Admires itself in every puddle.",
+      "illustration": "f_005-2u06-mirror-chub.svg",
+      "silhouette": "f_005-2u06-mirror-chub-silhouette.svg",
+      "shapes": 30
+    },
+    {
+      "id": "f_005-2u07-sailfin-grayling",
+      "name": "Sailfin Grayling",
+      "rarity": "uncommon",
+      "gameRarity": "uncommon",
+      "rodGroup": "none",
+      "where": "Anywhere",
+      "when": "Dawn",
+      "weightKg": {
+        "min": 0.4,
+        "max": 1.5
+      },
+      "weight": "400 g to 1.5 kg",
+      "valueCoins": 70,
+      "logbookLine": "Raises its sail at first light, like it’s signalling someone.",
+      "illustration": "f_005-2u07-sailfin-grayling.svg",
+      "silhouette": "f_005-2u07-sailfin-grayling-silhouette.svg",
+      "shapes": 16
+    },
+    {
+      "id": "f_005-2u08-orange-ide",
+      "name": "Orange Ide",
+      "rarity": "uncommon",
+      "gameRarity": "uncommon",
+      "rodGroup": "none",
+      "where": "Anywhere",
+      "when": "Day",
+      "weightKg": {
+        "min": 0.5,
+        "max": 2
+      },
+      "weight": "500 g to 2 kg",
+      "valueCoins": 58,
+      "logbookLine": "So orange the herons think it’s a warning.",
+      "illustration": "f_005-2u08-orange-ide.svg",
+      "silhouette": "f_005-2u08-orange-ide-silhouette.svg",
+      "shapes": 15
+    },
+    {
+      "id": "f_005-2u09-night-burbot",
+      "name": "Night Burbot",
+      "rarity": "uncommon",
+      "gameRarity": "uncommon",
+      "rodGroup": "night",
+      "where": "Anywhere",
+      "when": "Night",
+      "weightKg": {
+        "min": 1,
+        "max": 3
+      },
+      "weight": "1 kg to 3 kg",
+      "valueCoins": 72,
+      "logbookLine": "Only comes out when the river goes quiet.",
+      "illustration": "f_005-2u09-night-burbot.svg",
+      "silhouette": "f_005-2u09-night-burbot-silhouette.svg",
+      "shapes": 25
+    },
+    {
+      "id": "f_005-3r01-millrace-trout",
+      "name": "Millrace Trout",
+      "rarity": "rare",
+      "gameRarity": "rare",
+      "rodGroup": "none",
+      "where": "Bram's Mill",
+      "when": "Dawn",
+      "weightKg": {
+        "min": 2,
+        "max": 5
+      },
+      "weight": "2 kg to 5 kg",
+      "valueCoins": 180,
+      "logbookLine": "Waits in the millrace every morning for whatever the wheel brings down.",
+      "illustration": "f_005-3r01-millrace-trout.svg",
+      "silhouette": "f_005-3r01-millrace-trout-silhouette.svg",
+      "shapes": 24
+    },
+    {
+      "id": "f_005-3r02-willow-carp",
+      "name": "Willow Carp",
+      "rarity": "rare",
+      "gameRarity": "rare",
+      "rodGroup": "bottom",
+      "where": "Willow Lake",
+      "when": "Dawn",
+      "weightKg": {
+        "min": 4,
+        "max": 9
+      },
+      "weight": "4 kg to 9 kg",
+      "valueCoins": 200,
+      "logbookLine": "Rests under the willows, where the light is green and slow.",
+      "illustration": "f_005-3r02-willow-carp.svg",
+      "silhouette": "f_005-3r02-willow-carp-silhouette.svg",
+      "shapes": 39
+    },
+    {
+      "id": "f_005-3r03-gorge-sturgeon",
+      "name": "Gorge Sturgeon",
+      "rarity": "rare",
+      "gameRarity": "rare",
+      "rodGroup": "deep",
+      "where": "The Narrows",
+      "when": "Night",
+      "weightKg": {
+        "min": 6,
+        "max": 12
+      },
+      "weight": "6 kg to 12 kg",
+      "valueCoins": 220,
+      "logbookLine": "Older than the bridge above it. Possibly older than the river.",
+      "illustration": "f_005-3r03-gorge-sturgeon.svg",
+      "silhouette": "f_005-3r03-gorge-sturgeon-silhouette.svg",
+      "shapes": 27
+    },
+    {
+      "id": "f_005-3r04-silver-shad",
+      "name": "Silver Shad",
+      "rarity": "rare",
+      "gameRarity": "rare",
+      "rodGroup": "none",
+      "where": "River Mouth",
+      "when": "Dawn",
+      "weightKg": {
+        "min": 1,
+        "max": 3
+      },
+      "weight": "1 kg to 3 kg",
+      "valueCoins": 150,
+      "logbookLine": "Swims up from the sea every morning, then changes its mind.",
+      "illustration": "f_005-3r04-silver-shad.svg",
+      "silhouette": "f_005-3r04-silver-shad-silhouette.svg",
+      "shapes": 33
+    },
+    {
+      "id": "f_005-3r05-meander-pike",
+      "name": "Meander Pike",
+      "rarity": "rare",
+      "gameRarity": "rare",
+      "rodGroup": "none",
+      "where": "The Meanders",
+      "when": "Day",
+      "weightKg": {
+        "min": 3,
+        "max": 8
+      },
+      "weight": "3 kg to 8 kg",
+      "valueCoins": 170,
+      "logbookLine": "Lies in the slow bends, perfectly still, perfectly smug.",
+      "illustration": "f_005-3r05-meander-pike.svg",
+      "silhouette": "f_005-3r05-meander-pike-silhouette.svg",
+      "shapes": 27
+    },
+    {
+      "id": "f_005-3r06-marsh-bowfin",
+      "name": "Marsh Bowfin",
+      "rarity": "rare",
+      "gameRarity": "rare",
+      "rodGroup": "bottom",
+      "where": "Reedmarsh",
+      "when": "Dusk",
+      "weightKg": {
+        "min": 2,
+        "max": 5
+      },
+      "weight": "2 kg to 5 kg",
+      "valueCoins": 160,
+      "logbookLine": "Breathes air when the water’s too warm. Clever old thing.",
+      "illustration": "f_005-3r06-marsh-bowfin.svg",
+      "silhouette": "f_005-3r06-marsh-bowfin-silhouette.svg",
+      "shapes": 16
+    },
+    {
+      "id": "f_005-3r07-ghost-koi",
+      "name": "Ghost Koi",
+      "rarity": "rare",
+      "gameRarity": "rare",
+      "rodGroup": "night",
+      "where": "Wide Water",
+      "when": "Night",
+      "weightKg": {
+        "min": 2,
+        "max": 6
+      },
+      "weight": "2 kg to 6 kg",
+      "valueCoins": 210,
+      "logbookLine": "Drifts under the lamp like a lost paper lantern.",
+      "illustration": "f_005-3r07-ghost-koi.svg",
+      "silhouette": "f_005-3r07-ghost-koi-silhouette.svg",
+      "shapes": 22
+    },
+    {
+      "id": "f_005-4e01-moon-carp",
+      "name": "Moon Carp",
+      "rarity": "epic",
+      "gameRarity": "epic",
+      "rodGroup": "deep",
+      "where": "Wide Water",
+      "when": "Clear nights",
+      "weightKg": {
+        "min": 8,
+        "max": 14
+      },
+      "weight": "8 kg to 14 kg",
+      "valueCoins": 400,
+      "logbookLine": "Rises on clear nights to look at the moon. Then right back down.",
+      "illustration": "f_005-4e01-moon-carp.svg",
+      "silhouette": "f_005-4e01-moon-carp-silhouette.svg",
+      "shapes": 40
+    },
+    {
+      "id": "f_005-4e02-golden-mahseer",
+      "name": "Golden Mahseer",
+      "rarity": "epic",
+      "gameRarity": "epic",
+      "rodGroup": "none",
+      "where": "The Narrows",
+      "when": "Dawn, in fast water after rain",
+      "weightKg": {
+        "min": 6,
+        "max": 12
+      },
+      "weight": "6 kg to 12 kg",
+      "valueCoins": 360,
+      "logbookLine": "The river’s strongest swimmer. Bram’s best line was made for this one.",
+      "illustration": "f_005-4e02-golden-mahseer.svg",
+      "silhouette": "f_005-4e02-golden-mahseer-silhouette.svg",
+      "shapes": 40
+    },
+    {
+      "id": "f_005-4e03-lily-king",
+      "name": "Lily King",
+      "rarity": "epic",
+      "gameRarity": "epic",
+      "rodGroup": "none",
+      "where": "Willow Lake",
+      "when": "Dusk on clear days",
+      "weightKg": {
+        "min": 5,
+        "max": 10
+      },
+      "weight": "5 kg to 10 kg",
+      "valueCoins": 320,
+      "logbookLine": "Holds court under the lily pads. Never seems surprised.",
+      "illustration": "f_005-4e03-lily-king.svg",
+      "silhouette": "f_005-4e03-lily-king-silhouette.svg",
+      "shapes": 24
+    },
+    {
+      "id": "f_005-4e04-reed-ghost",
+      "name": "Reed Ghost",
+      "rarity": "epic",
+      "gameRarity": "epic",
+      "rodGroup": "night",
+      "where": "Reedmarsh",
+      "when": "Night, lamp on",
+      "weightKg": {
+        "min": 4,
+        "max": 9
+      },
+      "weight": "4 kg to 9 kg",
+      "valueCoins": 300,
+      "logbookLine": "Seen once, then gone between the reeds. Locals argue about it.",
+      "illustration": "f_005-4e04-reed-ghost.svg",
+      "silhouette": "f_005-4e04-reed-ghost-silhouette.svg",
+      "shapes": 22
+    },
+    {
+      "id": "f_005-4e05-millpond-grayling",
+      "name": "Millpond Grayling",
+      "rarity": "epic",
+      "gameRarity": "epic",
+      "rodGroup": "night",
+      "where": "Bram's Mill",
+      "when": "Night, lamp on",
+      "weightKg": {
+        "min": 2,
+        "max": 5
+      },
+      "weight": "2 kg to 5 kg",
+      "valueCoins": 260,
+      "logbookLine": "Comes to the lantern on the mill dock, like a moth with fins.",
+      "illustration": "f_005-4e05-millpond-grayling.svg",
+      "silhouette": "f_005-4e05-millpond-grayling-silhouette.svg",
+      "shapes": 21
+    },
+    {
+      "id": "f_005-5l01-old-knot",
+      "name": "Old Knot",
+      "rarity": "legendary",
+      "gameRarity": "legendary",
+      "rodGroup": "bottom",
+      "where": "Stone Bridge",
+      "when": "Night, only after the mill wheel turns again",
+      "weightKg": {
+        "min": 12,
+        "max": 18
+      },
+      "weight": "12 kg to 18 kg",
+      "valueCoins": 900,
+      "logbookLine": "It only came back when the wheel started turning. Bram says it missed the noise.",
+      "illustration": "f_005-5l01-old-knot.svg",
+      "silhouette": "f_005-5l01-old-knot-silhouette.svg",
+      "shapes": 27
+    }
+  ]
+}
